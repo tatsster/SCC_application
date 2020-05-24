@@ -1,2 +1,2 @@
 # SCC_application
-SCC project code source
+SCC project code source in all supported platform
