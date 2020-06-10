@@ -87,24 +87,32 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushNamed(context, '/setting');
               },
             ),
-            Divider(),
             Expanded(
               child: Container(
                 padding: EdgeInsets.only(left: 3.0),
                 alignment: Alignment.bottomLeft,
-                child: ListTile(
-                  leading: FaIcon(
-                    FontAwesomeIcons.signOutAlt,
-                    size: 26.0,
-                    color: Colors.white,
-                  ),
-                  title: Text(
-                    'Logout',
-                    style: TextStyle(
-                      fontSize: 22.0,
-                      color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Divider(
+                      color: Colors.white60,
+                      thickness: 0.5,
                     ),
-                  ),
+                    ListTile(
+                      leading: FaIcon(
+                        FontAwesomeIcons.signOutAlt,
+                        size: 26.0,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Logout',
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

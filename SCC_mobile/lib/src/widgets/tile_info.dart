@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TileInfo extends StatelessWidget {
-  Widget child;
+  final Widget child;
 
-  TileInfo(Widget child){
-    this.child = child;
-  }
+  TileInfo({this.child});
 
   @override
   Widget build(BuildContext context) {

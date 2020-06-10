@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'blocs/db_provider.dart';
+import 'blocs/BlocProvider.dart';
+
 import 'screen/data_class.dart';
 import 'screen/dashboard.dart';
 import 'screen/report.dart';
@@ -9,7 +10,7 @@ import 'screen/setting.dart';
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DbProvider(
+    return BlocProvider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "SCC",
@@ -36,6 +37,9 @@ Route routes(RouteSettings settings) {
   else
     return MaterialPageRoute(builder: (context) {
       final classId = int.parse(settings.name.replaceFirst('/room/', ''));
+      final db_bloc = BlocProvider.of(context).dbBloc;
+      db_bloc.fetchItem();
+
       return DataClass(classId: classId);
     });
 }
