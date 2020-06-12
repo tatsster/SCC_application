@@ -37,8 +37,8 @@ Route routes(RouteSettings settings) {
   else
     return MaterialPageRoute(builder: (context) {
       final classId = int.parse(settings.name.replaceFirst('/room/', ''));
-      final db_bloc = BlocProvider.of(context).dbBloc;
-      db_bloc.fetchItem();
+      final SSDbBloc = BlocProvider.of(context).ssDbBloc;
+      SSDbBloc.fetchItem();
 
       return DataClass(classId: classId);
     });

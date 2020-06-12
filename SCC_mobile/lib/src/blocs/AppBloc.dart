@@ -2,13 +2,13 @@ import 'db_bloc.dart';
 import 'setting_bloc.dart';
 
 class AppBloc {
-  DbBloc _dbBloc;
+  DbBloc _ssdbBloc;
   SettingBloc _settingBloc;
 
   AppBloc()
-      : _dbBloc = DbBloc(),
+      : _ssdbBloc = DbBloc(),
         _settingBloc = SettingBloc();
 
-  DbBloc get dbBloc => _dbBloc;
+  DbBloc get ssDbBloc => _ssdbBloc;
   SettingBloc get settingBloc => _settingBloc;
 }

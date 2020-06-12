@@ -3,9 +3,10 @@ import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'package:intl/intl.dart';
 
 import '../widgets/main_drawer.dart';
-import '../model/sensor_info.dart';
+import '../model/temp_humid_log.dart';
+import '../blocs/BlocProvider.dart';
 
-var data = generate();
+// var data = generate();
 
 class Report extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -39,30 +40,41 @@ class Report extends StatelessWidget {
   }
 
   Widget buildBody(BuildContext context) {
-    return Container(
-      child: HorizontalDataTable(
-        leftHandSideColumnWidth: 100,
-        rightHandSideColumnWidth: 550,
-        isFixedHeader: true,
-        headerWidgets: _headersWidget(),
-        leftSideItemBuilder: _generateFirstCol,
-        rightSideItemBuilder: _generateRightCols,
-        itemCount: data.length,
-        rowSeparatorWidget: Divider(
-          color: Colors.black54,
-          height: 1.0,
-          thickness: 2.0,
-        ),
-        elevation: 10.0,
-      ),
-      height: MediaQuery.of(context).size.height,
-    );
+    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
+
+    return StreamBuilder(
+        stream: SSDbBloc.temphumidLog,
+        builder: (context, AsyncSnapshot<TempHumidLog> snapshot) {
+          if (snapshot.hasData)
+            return Container(
+              child: HorizontalDataTable(
+                leftHandSideColumnWidth: 100,
+                rightHandSideColumnWidth: 550,
+                isFixedHeader: true,
+                headerWidgets: _headersWidget(),
+                leftSideItemBuilder: _generateFirstCol,
+                rightSideItemBuilder: _generateRightCols,
+                itemCount: snapshot.data.data.length,
+                rowSeparatorWidget: Divider(
+                  color: Colors.black54,
+                  height: 1.0,
+                  thickness: 2.0,
+                ),
+                elevation: 10.0,
+              ),
+              height: MediaQuery.of(context).size.height,
+            );
+          else
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+        });
   }
 
   List<Widget> _headersWidget() {
     return [
       Container(
-        child: Text("Room",
+        child: Text("Sensor ID",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23.0)),
         width: 100,
         height: 56,
@@ -85,17 +97,25 @@ class Report extends StatelessWidget {
         alignment: Alignment.center,
         color: Colors.blueAccent[100],
       ),
+      // Container(
+      //   child: RichText(
+      //     text: TextSpan(
+      //       style: TextStyle(
+      //           fontSize: 20.0,
+      //           color: Colors.black,
+      //           fontWeight: FontWeight.bold),
+      //       children: [TextSpan(text: 'Exceed '), TextSpan(text: 'Threshold')],
+      //     ),
+      //     textAlign: TextAlign.center,
+      //   ),
+      //   width: 150,
+      //   height: 56,
+      //   alignment: Alignment.center,
+      //   color: Colors.blueAccent[100],
+      // ),
       Container(
-        child: RichText(
-          text: TextSpan(
-            style: TextStyle(
-                fontSize: 20.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold),
-            children: [TextSpan(text: 'Exceed '), TextSpan(text: 'Threshold')],
-          ),
-          textAlign: TextAlign.center,
-        ),
+        child: Text("Heat Index",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23.0)),
         width: 150,
         height: 56,
         alignment: Alignment.center,
@@ -113,74 +133,105 @@ class Report extends StatelessWidget {
   }
 
   Widget _generateFirstCol(BuildContext context, int index) {
-    return Container(
-      child: Text(
-        '${data[index].room}',
-        style: TextStyle(fontSize: 23.0, fontWeight: FontWeight.bold),
-      ),
-      width: 100,
-      height: 52,
-      alignment: Alignment.center,
-      color: index % 2 == 0 ? Colors.grey : Colors.white,
+    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
+
+    return StreamBuilder(
+      stream: SSDbBloc.temphumidLog,
+      builder: (context, AsyncSnapshot<TempHumidLog> snapshot) {
+        if (snapshot.hasData)
+          return Container(
+            child: Text(
+              '${snapshot.data.data[index].sensorId}',
+              style: TextStyle(fontSize: 23.0, fontWeight: FontWeight.bold),
+            ),
+            width: 100,
+            height: 52,
+            alignment: Alignment.center,
+            color: index % 2 == 0 ? Colors.grey : Colors.white,
+          );
+        else
+          return Container();
+      },
     );
   }
 
   Widget _generateRightCols(BuildContext context, int index) {
-    return Row(
-      children: <Widget>[
-        Container(
-          child: Text(
-            '${data[index].temp}',
-            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
-          ),
-          width: 150,
-          height: 52,
-          alignment: Alignment.center,
-          color: index % 2 == 0 ? Colors.grey : Colors.white,
-        ),
-        Container(
-          child: Text(
-            '${data[index].humid}',
-            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
-          ),
-          width: 100,
-          height: 52,
-          alignment: Alignment.center,
-          color: index % 2 == 0 ? Colors.grey : Colors.white,
-        ),
-        Container(
-          child: Text(
-            data[index].exceed == true ? 'X' : '',
-            style:
-                TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold, fontSize: 20.0),
-          ),
-          width: 150,
-          height: 52,
-          alignment: Alignment.center,
-          color: index % 2 == 0 ? Colors.grey : Colors.white,
-        ),
-        Container(
-          child: RichText(
-            text: TextSpan(
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
+    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
+
+    return StreamBuilder(
+      stream: SSDbBloc.temphumidLog,
+      builder: (context, AsyncSnapshot<TempHumidLog> snapshot) {
+        if (snapshot.hasData)
+          return Row(
+            children: <Widget>[
+              Container(
+                child: Text(
+                  '${snapshot.data.data[index].sensorTemp}',
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
+                ),
+                width: 150,
+                height: 52,
+                alignment: Alignment.center,
+                color: index % 2 == 0 ? Colors.grey : Colors.white,
               ),
-              children: [
-                TextSpan(
-                    text: '${DateFormat.yMMMMd().format(data[index].time)}\n'),
-                TextSpan(text: DateFormat.jm().format(data[index].time))
-              ],
-            ),
-            textAlign: TextAlign.center,
-          ),
-          width: 150,
-          height: 52,
-          alignment: Alignment.center,
-          color: index % 2 == 0 ? Colors.grey : Colors.white,
-        ),
-      ],
+              Container(
+                child: Text(
+                  '${snapshot.data.data[index].sensorHumid}',
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
+                ),
+                width: 100,
+                height: 52,
+                alignment: Alignment.center,
+                color: index % 2 == 0 ? Colors.grey : Colors.white,
+              ),
+              Container(
+                child: Text(
+                  '${snapshot.data.data[index].sensorHeatIndex}',
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
+                ),
+                width: 100,
+                height: 52,
+                alignment: Alignment.center,
+                color: index % 2 == 0 ? Colors.grey : Colors.white,
+              ),
+              Container(
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    ),
+                    children: [
+                      TextSpan(
+                          text: DateFormat.yMMMMd().format(
+                                  snapshot.data.data[index].sensorTimestamp) +
+                              '\n'),
+                      TextSpan(
+                          text: DateFormat.jm().format(
+                              snapshot.data.data[index].sensorTimestamp))
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                width: 150,
+                height: 52,
+                alignment: Alignment.center,
+                color: index % 2 == 0 ? Colors.grey : Colors.white,
+              ),
+            ],
+          );
+        else
+          return Row(
+            children: <Widget>[
+              Container(),
+              Container(),
+              Container(),
+              Container(),
+              Container(),
+            ],
+          );
+      },
     );
   }
 }

@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
-import '../model/item_model.dart';
+
+import '../model/sensor_info.dart';
+import '../model/temp_humid_log.dart';
+import '../resources/log_db_provider.dart';
 import '../resources/sensor_db_provider.dart';
 
 // TODO: fetch List<double> usage -> total usage
@@ -10,21 +13,20 @@ class DbBloc {
   final isAdmin = true;
 
   // DB fetching
-  final _db = SSDbProvider();
+  final _ssdb = SSDbProvider();
+  final _logDB = LogProvider();
+
   // final _dbFetcher = PublishSubject<int>();
-  final _dbLatest = BehaviorSubject<List<dynamic>>();
+  final _sensorInfo = BehaviorSubject<SensorInfo>();
+  final _log = BehaviorSubject<TempHumidLog>();
 
   // Stream - value of turn device
   final _airc = BehaviorSubject<bool>();
   final _light = BehaviorSubject<bool>();
 
-  DbBloc() {
-    _db.init();
-    // _dbFetcher.stream.transform(_dbTransformer()).pipe(_dbOutput);
-  }
-
   // Stream getter
-  Stream<List<dynamic>> get dbLatest => _dbLatest.stream;
+  Stream<SensorInfo> get sensorInfo => _sensorInfo.stream;
+  Stream<TempHumidLog> get temphumidLog => _log.stream;
   // devices
   Stream<bool> get statusAir => _airc.stream;
   Stream<bool> get statusLight => _light.stream;
@@ -39,17 +41,21 @@ class DbBloc {
     _light.sink.add(value);
     // Send status to DB
   }
-  // Function(bool) get getAirStatus => _airc.sink.add;
-  // Function(bool) get getLightStatus => _light.sink.add;
 
   fetchItem() async {
-    final item = await _db.latestItem();
-    _dbLatest.sink.add(item);
+    final item = await _ssdb.fetchItem();
+    _sensorInfo.sink.add(item);
+  }
+
+  fetchLog() async {
+    final item = await _logDB.fetchItem();
+    _log.sink.add(item);
   }
 
   dispose() {
     // _dbFetcher.close();
-    _dbLatest.close();
+    _sensorInfo.close();
+    _log.close();
     _airc.close();
     _light.close();
   }

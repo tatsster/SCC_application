@@ -1,11 +1,11 @@
-class SensorInfo {
+class TempHumidLog {
   bool success;
   List<Data> data;
   String message;
 
-  SensorInfo({this.success, this.data, this.message});
+  TempHumidLog({this.success, this.data, this.message});
 
-  SensorInfo.fromJson(Map<String, dynamic> json) {
+  TempHumidLog.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     if (json['data'] != null) {
       data = new List<Data>();
@@ -28,38 +28,39 @@ class SensorInfo {
 }
 
 class Data {
-  String floorId;
-  String roomId;
+  int id;
   String sensorId;
-  String sensorName;
   String sensorTemp;
   String sensorHumid;
+  String sensorHeatIndex;
+  DateTime sensorTimestamp;
 
   Data(
-      {this.floorId,
-      this.roomId,
+      {this.id,
       this.sensorId,
-      this.sensorName,
       this.sensorTemp,
-      this.sensorHumid});
+      this.sensorHumid,
+      this.sensorHeatIndex,
+      this.sensorTimestamp});
 
   Data.fromJson(Map<String, dynamic> json) {
-    floorId = json['floor_id'];
-    roomId = json['room_id'];
+    id = json['id'];
     sensorId = json['sensor_id'];
-    sensorName = json['sensor_name'];
     sensorTemp = json['sensor_temp'];
     sensorHumid = json['sensor_humid'];
+    sensorHeatIndex = json['sensor_heat_index'];
+    sensorTimestamp = DateTime.fromMillisecondsSinceEpoch(
+        int.parse(json['sensor_timestamp']) * 1000);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['floor_id'] = this.floorId;
-    data['room_id'] = this.roomId;
+    data['id'] = this.id;
     data['sensor_id'] = this.sensorId;
-    data['sensor_name'] = this.sensorName;
     data['sensor_temp'] = this.sensorTemp;
     data['sensor_humid'] = this.sensorHumid;
+    data['sensor_heat_index'] = this.sensorHeatIndex;
+    data['sensor_timestamp'] = this.sensorTimestamp;
     return data;
   }
 }

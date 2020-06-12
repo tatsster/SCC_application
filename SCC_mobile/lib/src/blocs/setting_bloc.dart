@@ -2,9 +2,12 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 
 import '../blocs/validator.dart';
+import '../resources/device_db_provider.dart';
 
-class SettingBloc with Validator{
+class SettingBloc with Validator {
   final isAdmin = true;
+
+  final _deviceDb = DeviceProvider();
 
   final List<BehaviorSubject<int>> _thresholdFetcher = [];
   final List<BehaviorSubject<int>> _threshold = [];
@@ -18,7 +21,8 @@ class SettingBloc with Validator{
     }
   }
 
-  Stream<int> thresholdFetcher(int type) => _thresholdFetcher[type].stream.transform(thresholdValidator);
+  Stream<int> thresholdFetcher(int type) =>
+      _thresholdFetcher[type].stream.transform(thresholdValidator);
   Stream<int> getThreshold(int type) => _threshold[type].stream;
   Stream<bool> get statusBackup => _backup.stream;
   Stream<bool> get statusMaintance => _maintance.stream;
@@ -31,6 +35,12 @@ class SettingBloc with Validator{
   void getMaintance(bool value) {
     _maintance.sink.add(value);
     // Push status to DB
+  }
+
+  fetchThreshold() async {
+    final item = await _deviceDb.fetchItem();
+    _threshold[0].sink.add(item.data[0].tempThreshold.toInt());
+    _threshold[1].sink.add(item.data[0].humidThreshold.toInt());
   }
 
   updateThreshold(int value, int type) =>

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -7,23 +5,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../widgets/tile_info.dart';
 import '../blocs/BlocProvider.dart';
+import '../model/sensor_info.dart';
 
 class DataClass extends StatelessWidget {
   final int classId;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final List<double> chart = [];
 
-  DataClass({this.classId}) {
-    var rng = Random();
-    for (var i = 0; i < 15; i++) {
-      chart.add(rng.nextInt(100) / 100);
-    }
-    chart.sort();
-  }
+  DataClass({this.classId});
 
   @override
   Widget build(BuildContext context) {
-    final DB_Bloc = BlocProvider.of(context).dbBloc;
+    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -132,7 +125,7 @@ class DataClass extends StatelessWidget {
           ),
 
           // ! Electricity usage
-          buildElectricGraph(context),
+          // buildElectricGraph(context),
 
           // ! Turn Fan
           TileInfo(
@@ -193,13 +186,13 @@ class DataClass extends StatelessWidget {
   }
 
   Widget temperatureValue(BuildContext context) {
-    final DB_Bloc = BlocProvider.of(context).dbBloc;
+    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
     return StreamBuilder(
-      stream: DB_Bloc.dbLatest,
-      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+      stream: SSDbBloc.sensorInfo,
+      builder: (BuildContext context, AsyncSnapshot<SensorInfo> snapshot) {
         if (snapshot.hasData)
           return Text(
-            '${snapshot.data[2].toInt()}\n\u00B0C',
+            '${snapshot.data.data[0].sensorTemp}\n\u00B0C',
             style: TextStyle(
               fontSize: 30.0,
               fontWeight: FontWeight.w700,
@@ -213,13 +206,13 @@ class DataClass extends StatelessWidget {
   }
 
   Widget humidityValue(BuildContext context) {
-    final DB_Bloc = BlocProvider.of(context).dbBloc;
+    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
     return StreamBuilder(
-      stream: DB_Bloc.dbLatest,
-      builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
+      stream: SSDbBloc.sensorInfo,
+      builder: (context, AsyncSnapshot<SensorInfo> snapshot) {
         if (snapshot.hasData)
           return Text(
-            '${snapshot.data[3].toInt()}\n%',
+            '${snapshot.data.data[0].sensorHumid}\n%',
             style: TextStyle(
               fontSize: 30.0,
               fontWeight: FontWeight.w700,
@@ -298,15 +291,15 @@ class DataClass extends StatelessWidget {
   }
 
   Widget airButton(BuildContext context) {
-    final DB_Bloc = BlocProvider.of(context).dbBloc;
+    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
     return StreamBuilder(
-      stream: DB_Bloc.statusAir,
+      stream: SSDbBloc.statusAir,
       builder: (context, snapshot) {
         return Transform.scale(
           scale: 1.25,
           child: Switch.adaptive(
             value: snapshot.hasData == false ? false : snapshot.data,
-            onChanged: DB_Bloc.getAirStatus,
+            onChanged: SSDbBloc.getAirStatus,
           ),
         );
       },
@@ -314,15 +307,15 @@ class DataClass extends StatelessWidget {
   }
 
   Widget lightButton(BuildContext context) {
-    final DB_Bloc = BlocProvider.of(context).dbBloc;
+    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
     return StreamBuilder(
-      stream: DB_Bloc.statusLight,
+      stream: SSDbBloc.statusLight,
       builder: (context, snapshot) {
         return Transform.scale(
           scale: 1.25,
           child: Switch.adaptive(
             value: snapshot.hasData == false ? false : snapshot.data,
-            onChanged: DB_Bloc.getLightStatus,
+            onChanged: SSDbBloc.getLightStatus,
           ),
         );
       },
