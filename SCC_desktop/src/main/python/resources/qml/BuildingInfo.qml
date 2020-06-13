@@ -23,7 +23,6 @@ Rectangle{
 
     ListView {
         id: buildingListView
-        property var buildings: [{"name": "A4 Building"}]
         anchors.top: reportLabel.bottom
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -34,7 +33,7 @@ Rectangle{
 
         ScrollBar.vertical: ScrollBar {}
 
-        model: buildings
+        model: [{"name": "A4 Building"}]
 
         delegate:
             Rectangle {
@@ -107,6 +106,7 @@ Rectangle{
                 ScrollBar.vertical: ScrollBar {}
 
                 model: [{"name": "Floor 5"}, {"name": "Floor 4"}, {"name": "Floor 3"}, {"name": "Floor 2"}, {"name": "Floor 1"},]
+//              model: con.getFloorList()
 
                 delegate: Rectangle {
                     height: 130
@@ -138,6 +138,7 @@ Rectangle{
                         }
                         onReleased: {
                             parent.color = "#f1f1f1"
+                            // con.setCurrentFloor(modelData.id)
                             mainViewLoader.source = "FloorReport.qml"
                         }
                     }
@@ -163,6 +164,7 @@ Rectangle{
                         ScrollBar.vertical: ScrollBar {}
 
                         model: 6
+//                      model: con.getRoomList(floorsLabel.text)
                         delegate: Rectangle {
                             width: 140
                             height: 50
@@ -190,6 +192,7 @@ Rectangle{
                                 }
                                 onReleased: {
                                     parent.color = "#28a745"
+                                    // con.setCurrentRoom(modelData.id)
                                     mainViewLoader.source = "RoomReport.qml"
                                 }
                             }

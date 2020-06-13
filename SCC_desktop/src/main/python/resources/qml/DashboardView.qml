@@ -40,64 +40,13 @@ Rectangle{
             Layout.fillWidth: true
             color: "#28a745"
 
-            Rectangle {
-                id: hoursUsageFooter
-                y: 98
-                height: 30
-                color: "#19000000"
-                radius: 7
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-                anchors.right: parent.right
-                anchors.rightMargin: 0
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-
-                Label {
-                    id: moreInfoLabel
-                    x: 169
-                    y: 4
-                    width: 120
-                    height: 20
-                    color: "#ffffff"
-                    text: qsTr("More Info")
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    font.pointSize: 9
-                    font.family: "Verdana"
-                }
-
-                Image {
-                    id: rightArrowIcon
-                    x: 330
-                    y: 269
-                    width: 21
-                    height: 20
-                    anchors.right: moreInfoLabel.left
-                    anchors.rightMargin: -106
-                    anchors.verticalCenterOffset: 0
-                    anchors.verticalCenter: parent.verticalCenter
-                    fillMode: Image.PreserveAspectFit
-                    source: "icons/right_arrow.png"
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onPressed: {
-                        parent.color = "#30000000"
-                    }
-                    onReleased: {
-                        parent.color = "#19000000"
-                    }
-                }
-            }
-
             Image {
                 id: image
                 x: 417
                 y: 19
                 width: 79
                 height: 72
+                anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: 26
                 fillMode: Image.PreserveAspectFit
@@ -106,24 +55,29 @@ Rectangle{
 
             Label {
                 id: hoursUsageLabel
-                x: 21
-                y: 66
+                y: 74
                 width: 142
                 height: 33
                 color: "#ffffff"
                 text: qsTr("Hours Usage")
+                anchors.left: parent.left
+                anchors.leftMargin: 20
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 20
                 font.family: "Verdana"
                 font.pointSize: 12
             }
 
             Label {
                 id: hoursUsageNumber
-                x: 21
-                y: 15
-                width: 57
+                width: 141
                 height: 44
                 color: "#ffffff"
-                text: qsTr("60")
+                text: "60"
+                anchors.left: parent.left
+                anchors.leftMargin: 20
+                anchors.top: parent.top
+                anchors.topMargin: 25
                 font.pointSize: 20
                 font.bold: true
                 font.family: "Verdana"
@@ -138,56 +92,6 @@ Rectangle{
             radius: 7
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-            Rectangle {
-                id: electricalUsageFooter
-                y: 98
-                height: 30
-                color: "#19000000"
-                radius: 7
-                Label {
-                    id: moreInfoLabel1
-                    x: 169
-                    y: 4
-                    width: 120
-                    height: 20
-                    color: "#000000"
-                    text: qsTr("More Info")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    font.family: "Verdana"
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: 9
-                }
-
-                Image {
-                    id: rightArrowIcon1
-                    x: 330
-                    y: 269
-                    width: 21
-                    height: 20
-                    anchors.right: moreInfoLabel1.left
-                    fillMode: Image.PreserveAspectFit
-                    source: "icons/right_arrow_black.png"
-                    anchors.verticalCenterOffset: 0
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.rightMargin: -106
-                }
-                anchors.right: parent.right
-                anchors.left: parent.left
-                anchors.bottomMargin: 0
-                anchors.leftMargin: 0
-                anchors.bottom: parent.bottom
-                anchors.rightMargin: 0
-
-                MouseArea {
-                    anchors.fill: parent
-                    onPressed: {
-                        parent.color = "#30000000"
-                    }
-                    onReleased: {
-                        parent.color = "#19000000"
-                    }
-                }
-            }
 
             Image {
                 id: image1
@@ -195,6 +99,7 @@ Rectangle{
                 y: 19
                 width: 79
                 height: 72
+                anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 fillMode: Image.PreserveAspectFit
                 source: "icons/electric.png"
@@ -203,24 +108,29 @@ Rectangle{
 
             Label {
                 id: electricalUsageLabel
-                x: 21
                 y: 66
                 width: 162
                 height: 33
                 color: "#000000"
                 text: qsTr("Electrical Usage")
+                anchors.left: parent.left
+                anchors.leftMargin: 20
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 20
                 font.family: "Verdana"
                 font.pointSize: 12
             }
 
             Label {
                 id: electricalUsageNumber
-                x: 21
-                y: 15
-                width: 57
+                width: 162
                 height: 44
                 color: "#000000"
                 text: qsTr("120")
+                anchors.left: parent.left
+                anchors.leftMargin: 20
+                anchors.top: parent.top
+                anchors.topMargin: 25
                 font.bold: true
                 font.family: "Verdana"
                 font.pointSize: 20
@@ -287,7 +197,7 @@ Rectangle{
             x: 873
             width: 270
             height: 27
-            text: qsTr("03/06/2020 08:00:00 PM")
+            text: "03/06/2020 08:00:00 PM"
             anchors.top: parent.top
             anchors.topMargin: 15
             anchors.right: parent.right
@@ -332,7 +242,7 @@ Rectangle{
                 Label {
                     id: tempLabel
                     y: 85
-                    width: 132
+                    width: 147
                     height: 30
                     color: "#ffffff"
                     text: qsTr("Temperature")
@@ -350,7 +260,7 @@ Rectangle{
                     width: 95
                     height: 44
                     color: "#ffffff"
-                    text: qsTr("27°C")
+                    text: "27°C"
                     anchors.top: parent.top
                     anchors.topMargin: 30
                     anchors.left: parent.left
@@ -405,7 +315,7 @@ Rectangle{
                     width: 101
                     height: 44
                     color: "#ffffff"
-                    text: qsTr("50%")
+                    text: "50%"
                     anchors.top: parent.top
                     anchors.topMargin: 30
                     anchors.left: parent.left
@@ -471,7 +381,7 @@ Rectangle{
                     width: 95
                     height: 44
                     color: "#ffffff"
-                    text: qsTr("27°C")
+                    text: "27°C"
                     anchors.top: parent.top
                     anchors.topMargin: 30
                     anchors.left: parent.left
@@ -526,7 +436,7 @@ Rectangle{
                     width: 101
                     height: 44
                     color: "#ffffff"
-                    text: qsTr("50%")
+                    text: "50%"
                     anchors.top: parent.top
                     anchors.topMargin: 30
                     anchors.left: parent.left
@@ -592,7 +502,7 @@ Rectangle{
                     width: 438
                     height: 32
                     color: "#ffffff"
-                    text: qsTr("LIGHT200: 12 Hours")
+                    text: "LIGHT200: 12 Hours"
                     anchors.top: parent.top
                     anchors.topMargin: 30
                     anchors.left: parent.left
@@ -647,7 +557,7 @@ Rectangle{
                     width: 413
                     height: 33
                     color: "#ffffff"
-                    text: qsTr("LIGHT200: 20 kWh")
+                    text: "LIGHT200: 20 kWh"
                     anchors.top: parent.top
                     anchors.topMargin: 30
                     anchors.left: parent.left
@@ -659,13 +569,28 @@ Rectangle{
             }
         }
     }
+
+    Component.onCompleted: {
+        /*
+        hoursUsageNumber.text = con.getHoursUsage()
+        electricalUsageNumber.text = con.getElectricalUsage()
+        lastupdateTime.text = con.getLastUpdateTime()
+        tempDataNumber.text = con.getRealTimeTemp()
+        humidDataNumber.text = con.getRealTimeHumid()
+        avgtempDataNumber.text = con.getAvgTemp()
+        avghumidDataNumber.text = con.getAvgHumid()
+        tophoursDataNumber.text = con.getTopHours()
+        topelectricNumber.text = con.getTopElectrical()
+        */
+    }
 }
 
 
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.75}D{i:2;anchors_width:1160;anchors_x:21;anchors_y:58}D{i:24;anchors_height:150}
-D{i:33;anchors_height:150}D{i:42;anchors_height:150;anchors_y:476}
+    D{i:0;formeditorZoom:0.75}D{i:5;anchors_x:21}D{i:6;anchors_x:21;anchors_y:15}D{i:9;anchors_x:21}
+D{i:10;anchors_x:21;anchors_y:15}D{i:2;anchors_width:1160;anchors_x:21;anchors_y:58}
+D{i:24;anchors_height:150}D{i:33;anchors_height:150}D{i:42;anchors_height:150;anchors_y:476}
 }
 ##^##*/

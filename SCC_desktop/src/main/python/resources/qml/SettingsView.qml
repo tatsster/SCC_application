@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.1
 
 Rectangle{
     id: testView
@@ -60,6 +61,8 @@ Rectangle{
             id: textFieldTemp
             y: 33
             height: 40
+
+            text: ""
             anchors.left: tempLabel.right
             anchors.leftMargin: 22
             anchors.right: parent.right
@@ -74,6 +77,8 @@ Rectangle{
             id: textFieldHumid
             y: 127
             height: 40
+
+            text: ""
             anchors.left: humidLabel.right
             anchors.leftMargin: 22
             anchors.right: parent.right
@@ -141,6 +146,8 @@ Rectangle{
                         parent.color = "#28a745"
                         statusLabel.text = "ON"
                     }
+//                  con.updateBLS()
+                    message.visible = true
                 }
             }
         }
@@ -178,10 +185,24 @@ Rectangle{
                 }
                 onReleased: {
                     parent.color = "#dc3545"
+//                  con.updateThreshold(textFieldTemp.text, textFieldHumid.text)
                 }
             }
         }
     }
+    /*
+    Component.onCompleted: {
+        statusLabel.text = con.getStatusBLS()
+        textFieldTemp.placeholderText = con.getTempThreshold()
+        textFieldHumid.placeholderText = con.getHumidThreshold()
+
+        if (statusLabel === "ON"){
+            statusButton.color = "#28a745"
+        } else {
+            statusButton.color = "#dc3545"
+        }
+    }
+    */
 
 }
 

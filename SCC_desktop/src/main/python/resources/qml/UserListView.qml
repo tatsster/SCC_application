@@ -21,6 +21,7 @@ Rectangle {
     }
 
     GridView {
+        id: userListBox
         anchors.right: parent.right
         anchors.rightMargin: 0
         anchors.left: parent.left
@@ -117,6 +118,10 @@ Rectangle {
 
         }
 
+    }
+
+    Component.onCompleted: {
+//      userListBox.model = con.getUserList()
     }
 
 }

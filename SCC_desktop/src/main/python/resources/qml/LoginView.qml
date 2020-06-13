@@ -4,6 +4,8 @@ import QtQuick.Controls 2.13
 Rectangle {
     id: loginView
     color: "#343a40"
+    width: 1600
+    height: 900
     anchors.fill: parent
 
     Rectangle {
@@ -90,7 +92,15 @@ Rectangle {
                 }
                 onReleased: {
                     parent.color = "#1488db"
-                    appLoader.source = "AppView.qml"
+//                  if (con.checkValidLogin(usernameInput.text, passwordInput.text)) {
+                    if (true) {
+                        appLoader.source = "AppView.qml"
+                        //TODO: Load user info
+                    } else {
+                        loginFailedLabel.text = "Login failed. Please try again!"
+                    }
+
+
                 }
             }
         }
@@ -118,6 +128,17 @@ Rectangle {
             anchors.leftMargin: 30
             source: "icons/password.png"
             fillMode: Image.PreserveAspectFit
+        }
+
+        Label {
+            id: loginFailedLabel
+            x: 145
+            y: 211
+            color: "#f61515"
+            text: ""
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.pointSize: 11
+            font.family: "Verdana"
         }
 
     }
@@ -156,8 +177,8 @@ Rectangle {
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.6600000262260437}D{i:2;anchors_width:408;anchors_x:102;anchors_y:52}
-D{i:4;anchors_width:408;anchors_x:102}D{i:6;anchors_height:90;anchors_width:200;anchors_x:63;anchors_y:250}
-D{i:8;anchors_x:22}D{i:9;anchors_x:29}D{i:1;anchors_height:340;anchors_width:564;anchors_x:684;anchors_y:427}
+    D{i:2;anchors_width:408;anchors_x:102;anchors_y:52}D{i:4;anchors_width:408;anchors_x:102}
+D{i:8;anchors_x:22}D{i:6;anchors_height:90;anchors_width:200;anchors_x:63;anchors_y:250}
+D{i:9;anchors_x:29}D{i:1;anchors_height:340;anchors_width:564;anchors_x:684;anchors_y:427}
 }
 ##^##*/

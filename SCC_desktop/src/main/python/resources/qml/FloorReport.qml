@@ -53,8 +53,8 @@ Rectangle{
             width: 151
             color: "#dc3545"
             radius: 10
-            anchors.right: generateReportButton.left
-            anchors.rightMargin: 5
+            anchors.right: parent.right
+            anchors.rightMargin: 10
             anchors.topMargin: 8
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 8
@@ -83,45 +83,7 @@ Rectangle{
                 }
                 onReleased: {
                     parent.color = "#dc3545"
-                }
-            }
-        }
-
-        Rectangle {
-            id: generateReportButton
-            width: 182
-            color: "#28a745"
-            radius: 10
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            anchors.topMargin: 8
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 8
-            anchors.top: parent.top
-            Label {
-                id: generateReportLabel
-                x: 47
-                y: 13
-                width: 169
-                height: 16
-                color: "#ffffff"
-                text: qsTr("Generate excel report")
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                font.bold: true
-                font.pointSize: 8
-                font.family: "Verdana"
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onPressed: {
-                    parent.color = "#288545"
-                }
-                onReleased: {
-                    parent.color = "#28a745"
+                    confirmDeleteAllFloorRecord.visible = true
                 }
             }
         }
@@ -138,12 +100,11 @@ Rectangle{
         anchors.left: parent.left
         anchors.leftMargin: 10
 
-        property var columnWidths: [50, 100, 100, 150, 100, 150, 170, 250, 100, 100]
+        property var columnWidths: [100, 130, 150, 100, 150, 170, 270, 100, 100]
         height: 65
         columnWidthProvider: function (column) { return columnWidths[column] }
 
         model: TableModel {
-            TableModelColumn { display: "checked" }
             TableModelColumn { display: "roomID" }
             TableModelColumn { display: "roomName" }
             TableModelColumn { display: "currentTemp" }
@@ -157,29 +118,20 @@ Rectangle{
             rows: [
                 {
                     // Each property is one cell/column.
-                    checked: false,
-                    roomID: "Room's ID",
-                    roomName: "Room's Name",
-                    currentTemp: "Current Temperature",
-                    currentHumid: "Current Humidity",
-                    eHoursUsage: "Total Hours Usage",
-                    electricalUsage: "Total Electrical Usage",
-                    updateDatetime: "Update Time",
-                    viewButton: "",
-                    deleteButton: ""
+                    "roomID": "Room's ID",
+                    "roomName": "Room's Name",
+                    "currentTemp": "Current Temperature",
+                    "currentHumid": "Current Humidity",
+                    "eHoursUsage": "Total Hours Usage",
+                    "electricalUsage": "Total Electrical Usage",
+                    "updateDatetime": "Update Time",
+                    "viewButton": "",
+                    "deleteButton": ""
                 }
             ]
         }
 
         delegate: DelegateChooser {
-            DelegateChoice {
-                column: 0
-                delegate: CheckBox {
-                    checked: model.display
-                    onToggled: model.display = checked
-                }
-            }
-
             DelegateChoice {
                 delegate: Text {
                     text: model.display
@@ -198,11 +150,49 @@ Rectangle{
 
     }
 
-    TableView {
-        id: floorView
-        columnSpacing: 1
-        rowSpacing: 5
-        boundsBehavior: Flickable.StopAtBounds
+    TableModel {
+        id: floorTableModel
+        TableModelColumn { display: "roomID" }
+        TableModelColumn { display: "roomName" }
+        TableModelColumn { display: "currentTemp" }
+        TableModelColumn { display: "currentHumid" }
+        TableModelColumn { display: "eHoursUsage" }
+        TableModelColumn { display: "electricalUsage" }
+        TableModelColumn { display: "updateDatetime" }
+        TableModelColumn { display: "viewButton" }
+        TableModelColumn { display: "deleteButton" }
+
+        // Each row is one type of fruit that can be ordered
+        rows: [
+            {
+                // Each property is one cell/column.
+                "roomID": "R500",
+                "roomName": "Room 505",
+                "currentTemp": "30 °C",
+                "currentHumid": "50 %",
+                "eHoursUsage": "200",
+                "electricalUsage": "400 kW",
+                "updateDatetime": "29/05/2020 12:00:00 AM",
+                "viewButton": "",
+                "deleteButton": ""
+            },
+            {
+                "roomID": "R504",
+                "roomName": "Room 504",
+                "currentTemp": "32 °C",
+                "currentHumid": "50 %",
+                "eHoursUsage": "150",
+                "electricalUsage": "350 kW",
+                "updateDatetime": "29/05/2020 11:00:00 PM",
+                "viewButton": "",
+                "deleteButton": ""
+            }
+        ]
+
+    }
+
+    Loader{
+        id: floorTableLoader
         anchors.top: tableHeader.bottom
         anchors.topMargin: 5
         anchors.right: parent.right
@@ -211,162 +201,35 @@ Rectangle{
         anchors.bottomMargin: 0
         anchors.left: parent.left
         anchors.leftMargin: 10
+        source: "FloorTable.qml"
+    }
 
-        property var columnWidths: [50, 100, 100, 150, 100, 150, 170, 250, 100, 100]
-        columnWidthProvider: function (column) { return columnWidths[column] }
+    Component.onCompleted: {
+        /*
+        reportFloorLabel.text = con.getFloorReportLabel()
+        floorNameLabel.text = con.getFloorNameLabel()
+        floorTableModel.rows = con.getFloorTable()
+        */
+    }
 
-        model: TableModel {
-            TableModelColumn { display: "checked" }
-            TableModelColumn { display: "roomID" }
-            TableModelColumn { display: "roomName" }
-            TableModelColumn { display: "currentTemp" }
-            TableModelColumn { display: "currentHumid" }
-            TableModelColumn { display: "eHoursUsage" }
-            TableModelColumn { display: "electricalUsage" }
-            TableModelColumn { display: "updateDatetime" }
-            TableModelColumn { display: "viewButton" }
-            TableModelColumn { display: "deleteButton" }
+    MessageBox {
+        id: confirmDeleteAllFloorRecord
+        text: "Are you sure want to delete all records?"
+        // onAccepted: con.deleteAllFloorgRecord()
+    }
 
-            // Each row is one type of fruit that can be ordered
-            rows: [
-                {
-                    // Each property is one cell/column.
-                    checked: false,
-                    roomID: "R500",
-                    roomName: "Room 505",
-                    currentTemp: "30 °C",
-                    currentHumid: "50 %",
-                    eHoursUsage: "200",
-                    electricalUsage: "400 kW",
-                    updateDatetime: "29/05/2020 12:00:00 AM",
-                    viewButton: "",
-                    deleteButton: ""
-                },
-                {
-                    checked: false,
-                    roomID: "R504",
-                    roomName: "Room 504",
-                    currentTemp: "32 °C",
-                    currentHumid: "50 %",
-                    eHoursUsage: "150",
-                    electricalUsage: "350 kW",
-                    updateDatetime: "29/05/2020 11:00:00 PM",
-                    viewButton: "",
-                    deleteButton: ""
-                }
-            ]
+    MessageBox {
+        id: confirmDeleteSingleFloorRecord
+        property var item: ""
 
-        }
-
-
-        delegate: DelegateChooser {
-            DelegateChoice {
-                column: 0
-                delegate: CheckBox {
-                    checked: model.display
-                    onToggled: model.display = checked
-                }
-            }
-            DelegateChoice {
-                column: 8
-
-                delegate: Rectangle {
-                    color: "#007bff"
-                    radius: 10
-
-                    Label {
-                        width: 48
-                        height: 20
-                        color: "#ffffff"
-                        text: "View"
-                        horizontalAlignment: Text.AlignHCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        font.bold: true
-                        font.pointSize: 9
-                        font.family: "Verdana"
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onPressed: {
-                            parent.color = "#005bbd"
-                        }
-                        onReleased: {
-                            parent.color = "#007bff"
-                        }
-                    }
-                }
-            }
-            DelegateChoice {
-                column: 9
-
-                delegate: Rectangle {
-                    color: "#dc3545"
-                    radius: 10
-
-                    Label {
-                        width: 48
-                        height: 20
-                        color: "#ffffff"
-                        text: "Delete"
-                        horizontalAlignment: Text.AlignHCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        font.bold: true
-                        font.pointSize: 9
-                        font.family: "Verdana"
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onPressed: {
-                            parent.color = "#ad3545"
-                        }
-                        onReleased: {
-                            parent.color = "#dc3545"
-                        }
-                    }
-                }
-            }
-            //            DelegateChoice {
-            //                column: 4
-            //                delegate: ItemDelegate {
-            //                    text: "Delete"
-            //                    onClicked: console.log("clicked:", modelData)
-
-            //                    Rectangle {
-            //                        anchors.fill: parent
-            //                        color: "red"
-            //                        z: -1
-            //                    }
-            //                }
-            //            }
-            DelegateChoice {
-                delegate: Text {
-                    text: model.display
-                    font.family: "Verdana"
-                    font.pointSize: 9
-                    padding: 15
-                    Rectangle {
-                        anchors.fill: parent
-                        color: "#efefef"
-                        z: -1
-                    }
-                }
-            }
-        }
-
-
-        ScrollBar.vertical: ScrollBar {
-            active: true
-        }
+        // onAccepted: con.deleteSingleFloorRecord(item)
     }
 }
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.75}D{i:4;anchors_x:8}D{i:5;anchors_height:38;anchors_width:214;anchors_x:384;anchors_y:11}
-D{i:8;anchors_width:214;anchors_x:484}D{i:14;anchors_width:182}D{i:3;anchors_height:47;anchors_width:437;anchors_y:58}
+    D{i:0;formeditorZoom:0.75}D{i:3;anchors_height:47;anchors_width:437;anchors_y:58}
+D{i:5;anchors_height:38;anchors_width:214;anchors_x:384;anchors_y:11}D{i:4;anchors_x:8}
+D{i:11;anchors_width:182}
 }
 ##^##*/
