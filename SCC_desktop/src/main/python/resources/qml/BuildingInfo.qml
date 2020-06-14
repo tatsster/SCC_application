@@ -105,7 +105,7 @@ Rectangle{
                 spacing: 30
                 ScrollBar.vertical: ScrollBar {}
 
-                model: [{"name": "Floor 5"}, {"name": "Floor 4"}, {"name": "Floor 3"}, {"name": "Floor 2"}, {"name": "Floor 1"},]
+                model: [{"id": "F005", "name": "Floor 5"}, {"id": "F004", "name": "Floor 4"}, {"id": "F003", "name": "Floor 3"}, {"id": "F002", "name": "Floor 2"}, {"id": "F001", "name": "Floor 1"},]
 //              model: con.getFloorList()
 
                 delegate: Rectangle {
@@ -121,6 +121,7 @@ Rectangle{
                         id: floorsLabel
                         width: 89
                         height: 31
+                        property var floor_id: modelData.id
                         text: modelData.name
                         font.pointSize: 12
                         font.family: "Verdana"
@@ -163,8 +164,8 @@ Rectangle{
                         displayMarginEnd: -20
                         ScrollBar.vertical: ScrollBar {}
 
-                        model: 6
-//                      model: con.getRoomList(floorsLabel.text)
+                        model: [{"id": "R505", "name": "Room 505"}, {"id": "R504", "name": "Room 504"}, {"id": "R503", "name": "Room 503"},]
+//                      model: con.getRoomList(floorsLabel.floor_id)
                         delegate: Rectangle {
                             width: 140
                             height: 50
@@ -175,7 +176,7 @@ Rectangle{
                                 width: 127
                                 height: 42
                                 color: "#ffffff"
-                                text: "Room 505"
+                                text: modelData.name
                                 horizontalAlignment: Text.AlignHCenter
                                 font.bold: true
                                 anchors.verticalCenter: parent.verticalCenter

@@ -204,14 +204,27 @@ Rectangle{
     MessageBox {
         id: confirmDeleteAllBuildingRecord
         text: "Are you sure want to delete all records?"
-        // onAccepted: con.deleteAllBuildingRecord()
+        onAccepted: {
+            // con.deleteAllBuildingRecord()
+            buildingTableModel.clear()
+        }
     }
 
     MessageBox {
         id: confirmDeleteSingleBuildingRecord
         property var item: ""
+        onAccepted: {
+            // con.deleteSingleBuildingRecord(item)
+            buildingTableModel.removeRow(getFloorIndex(item))
+        }
+    }
 
-        // onAccepted: con.deleteSingleBuildingRecord(item)
+    function getFloorIndex(floor_id) {
+        for (var r = 0; r < buildingTableModel.rowCount; ++r) {
+            if (buildingTableModel.rows[r].floorID === floor_id) {
+                return r;
+            }
+        }
     }
 }
 

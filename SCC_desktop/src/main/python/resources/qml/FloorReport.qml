@@ -166,15 +166,15 @@ Rectangle{
         rows: [
             {
                 // Each property is one cell/column.
-                "roomID": "R500",
+                "roomID": "R505",
                 "roomName": "Room 505",
                 "currentTemp": "30 °C",
                 "currentHumid": "50 %",
                 "eHoursUsage": "200",
                 "electricalUsage": "400 kW",
                 "updateDatetime": "29/05/2020 12:00:00 AM",
-                "viewButton": "",
-                "deleteButton": ""
+                "viewButton": "R505",
+                "deleteButton": "R505"
             },
             {
                 "roomID": "R504",
@@ -184,8 +184,8 @@ Rectangle{
                 "eHoursUsage": "150",
                 "electricalUsage": "350 kW",
                 "updateDatetime": "29/05/2020 11:00:00 PM",
-                "viewButton": "",
-                "deleteButton": ""
+                "viewButton": "R504",
+                "deleteButton": "R504"
             }
         ]
 
@@ -215,14 +215,27 @@ Rectangle{
     MessageBox {
         id: confirmDeleteAllFloorRecord
         text: "Are you sure want to delete all records?"
-        // onAccepted: con.deleteAllFloorgRecord()
+        onAccepted: {
+            // con.deleteAllFloorRecord()
+            floorTableModel.clear()
+        }
     }
 
     MessageBox {
         id: confirmDeleteSingleFloorRecord
         property var item: ""
+        onAccepted: {
+            // con.deleteSingleFloorRecord(item)
+            floorTableModel.removeRow(getRoomIndex(item))
+        }
+    }
 
-        // onAccepted: con.deleteSingleFloorRecord(item)
+    function getRoomIndex(room_id) {
+        for (var r = 0; r < floorTableModel.rowCount; ++r) {
+            if (floorTableModel.rows[r].roomID === room_id) {
+                return r;
+            }
+        }
     }
 }
 

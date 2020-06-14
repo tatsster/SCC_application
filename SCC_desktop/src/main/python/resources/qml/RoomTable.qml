@@ -54,14 +54,15 @@ TableView {
                         }
                     }
                     onReleased: {
-                        if (parent.color == "#288545") {
-                            parent.color = "#dc3545"
-                            statusLabel.text = "OFF"
+                        if (statusLabel.text == "ON") {
+                            model.display = "OFF"
                         }
                         else {
-                            parent.color = "#28a745"
-                            statusLabel.text = "ON"
+                            model.display = "ON"
                         }
+                        // con.toggleDivices(roomTableModel.rows[index - 6].deviceID)
+                        roomTableLoader.source = ""
+                        roomTableLoader.source = "RoomTable.qml"
                     }
                 }
             }
@@ -93,6 +94,8 @@ TableView {
                     }
                     onReleased: {
                         parent.color = "#007bff"
+                        // con.setCurrentDevice(model.display)
+                        mainViewLoader.source = "DeviceReport.qml"
                     }
                 }
             }
@@ -124,6 +127,8 @@ TableView {
                     }
                     onReleased: {
                         parent.color = "#dc3545"
+                        confirmDeleteSingleRoomRecord.visible = true
+                        confirmDeleteSingleRoomRecord.item = model.display
                     }
                 }
             }

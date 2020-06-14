@@ -4,53 +4,41 @@ import QtQuick.Layouts 1.3
 import Qt.labs.qmlmodels 1.0
 
 TableView {
-    id: floorView
+    id: deviceView
     columnSpacing: 1
     rowSpacing: 5
     boundsBehavior: Flickable.StopAtBounds
 
-    property var columnWidths: [100, 130, 150, 100, 150, 170, 270, 100, 100]
+    property var columnWidths: [170, 200, 100, 170, 180, 300, 150]
     columnWidthProvider: function (column) { return columnWidths[column] }
 
-    model: floorTableModel
-
+    model: deviceTableModel
 
     delegate: DelegateChooser {
         DelegateChoice {
-            column: 7
+            column: 2
 
             delegate: Rectangle {
-                color: "#007bff"
+                color: (model.display === "ON") ? "#28a745" : "#dc3545"
                 radius: 10
 
                 Label {
+                    id: statusLabel
                     width: 48
                     height: 20
                     color: "#ffffff"
-                    text: "View"
+                    text: model.display
                     horizontalAlignment: Text.AlignHCenter
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     font.bold: true
-                    font.pointSize: 9
+                    font.pointSize: 10
                     font.family: "Verdana"
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onPressed: {
-                        parent.color = "#005bbd"
-                    }
-                    onReleased: {
-                        parent.color = "#007bff"
-                        // con.setCurrentRoom(model.display)
-                        mainViewLoader.source = "RoomReport.qml"
-                    }
                 }
             }
         }
         DelegateChoice {
-            column: 8
+            column: 6
 
             delegate: Rectangle {
                 color: "#dc3545"
@@ -76,8 +64,8 @@ TableView {
                     }
                     onReleased: {
                         parent.color = "#dc3545"
-                        confirmDeleteSingleFloorRecord.visible = true
-                        confirmDeleteSingleFloorRecord.item = model.display
+                        confirmDeleteSingleDeviceRecord.visible = true
+                        confirmDeleteSingleDeviceRecord.item_timestamp = model.display
                     }
                 }
             }
@@ -96,6 +84,7 @@ TableView {
             }
         }
     }
+
 
     ScrollBar.vertical: ScrollBar {
         active: true

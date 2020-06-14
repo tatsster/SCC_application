@@ -10,6 +10,7 @@ Rectangle{
     color: "#f4f6f9"
     border.width: 0
     border.color: "#007bff"
+    property var selected_devices: []
 
     Label {
         id: reportRoomLabel
@@ -84,6 +85,11 @@ Rectangle{
                 }
                 onReleased: {
                     parent.color = "#ffc107"
+                    getSelectedDevices()
+                    // con.turnOffSelectedDevices(selected_devices)
+                    // roomTableModel.rows = con.getRoomTable()
+                    roomTableLoader.source = ""
+                    roomTableLoader.source = "RoomTable.qml"
                 }
             }
         }
@@ -124,6 +130,11 @@ Rectangle{
                 }
                 onReleased: {
                     parent.color = "#007bff"
+                    getSelectedDevices()
+                    // con.turnOnSelectedDevices(selected_devices)
+                    // roomTableModel.rows = con.getRoomTable()
+                    roomTableLoader.source = ""
+                    roomTableLoader.source = "RoomTable.qml"
                 }
             }
         }
@@ -163,6 +174,7 @@ Rectangle{
                 }
                 onReleased: {
                     parent.color = "#dc3545"
+                    confirmDeleteAllRoomRecord.visible = true
                 }
             }
         }
@@ -312,6 +324,40 @@ Rectangle{
         */
     }
 
+    MessageBox {
+        id: confirmDeleteAllRoomRecord
+        text: "Are you sure want to delete all records?"
+        onAccepted: {
+            // con.deleteAllRoomRecord()
+            roomTableModel.clear()
+        }
+    }
+
+    MessageBox {
+        id: confirmDeleteSingleRoomRecord
+        property var item: ""
+        onAccepted: {
+            // con.deleteSingleRoomRecord(item)
+            roomTableModel.removeRow(getDeviceIndex(item))
+        }
+    }
+
+    function getSelectedDevices() {
+        selected_devices = []
+        for (var r = 0; r < roomTableModel.rowCount; ++r) {
+            if (roomTableModel.rows[r].checked === true) {
+                selected_devices.push(roomTableModel.rows[r].deviceID)
+            }
+        }
+    }
+
+    function getDeviceIndex(device_id) {
+        for (var r = 0; r < roomTableModel.rowCount; ++r) {
+            if (roomTableModel.rows[r].deviceID === device_id) {
+                return r;
+            }
+        }
+    }
 }
 
 /*##^##

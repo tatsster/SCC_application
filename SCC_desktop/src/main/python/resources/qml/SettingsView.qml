@@ -196,7 +196,7 @@ Rectangle{
         textFieldTemp.placeholderText = con.getTempThreshold()
         textFieldHumid.placeholderText = con.getHumidThreshold()
 
-        if (statusLabel === "ON"){
+        if (statusLabel.text === "ON"){
             statusButton.color = "#28a745"
         } else {
             statusButton.color = "#dc3545"
