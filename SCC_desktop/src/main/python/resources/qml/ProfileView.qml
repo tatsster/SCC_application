@@ -119,7 +119,7 @@ Rectangle{
         x: 21
         y: 471
         width: 431
-        height: 262
+        height: 282
         color: "#ffffff"
         radius: 10
 
@@ -232,8 +232,9 @@ Rectangle{
             id: userAddressLabel
             x: 54
             width: 362
-            height: 36
-            text: "497 Hoa Hao St., 7 Ward, District 10"
+            height: 56
+            text: "497 Hoa Hao St., 7 Ward, District 10, HCMC"
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             anchors.top: addressLabel.bottom
             anchors.topMargin: 5
             anchors.right: parent.right

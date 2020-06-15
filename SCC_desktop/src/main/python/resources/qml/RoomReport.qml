@@ -319,7 +319,6 @@ Rectangle{
     Component.onCompleted: {
         /*
         reportRoomgLabel.text = con.getRoomReportLabel()
-        controlDeviceLabel.text = con.getControlDeviceLabel()
         roomTableModel.rows = con.getRoomTable()
         */
     }

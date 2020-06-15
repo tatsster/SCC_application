@@ -92,8 +92,7 @@ Rectangle {
                 }
                 onReleased: {
                     parent.color = "#1488db"
-//                  if (con.checkValidLogin(usernameInput.text, passwordInput.text)) {
-                    if (true) {
+                    if (con.checkValidLogin(usernameInput.text, passwordInput.text)) {
                         appLoader.source = "AppView.qml"
                         //TODO: Load user info
                     } else {

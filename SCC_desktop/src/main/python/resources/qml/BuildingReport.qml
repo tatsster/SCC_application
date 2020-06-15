@@ -195,8 +195,6 @@ Rectangle{
 
     Component.onCompleted: {
         /*
-        reportBuildingLabel.text = con.getBuildingReportLabel()
-        buildingNameLabel.text = con.getBuildingNameLabel()
         buildingTableModel.rows = con.getBuildingTable()
         */
     }

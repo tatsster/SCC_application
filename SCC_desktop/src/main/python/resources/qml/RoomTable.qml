@@ -8,12 +8,12 @@ TableView {
     columnSpacing: 1
     rowSpacing: 5
     boundsBehavior: Flickable.StopAtBounds
-
+    
     property var columnWidths: [50, 170, 200, 100, 150, 150, 250, 100, 100]
     columnWidthProvider: function (column) { return columnWidths[column] }
-
+    
     model: roomTableModel
-
+    
     delegate: DelegateChooser {
         DelegateChoice {
             column: 0
@@ -24,11 +24,11 @@ TableView {
         }
         DelegateChoice {
             column: 3
-
+            
             delegate: Rectangle {
                 color: (model.display === "ON") ? "#28a745" : "#dc3545"
                 radius: 10
-
+                
                 Label {
                     id: statusLabel
                     width: 48
@@ -42,7 +42,7 @@ TableView {
                     font.pointSize: 10
                     font.family: "Verdana"
                 }
-
+                
                 MouseArea {
                     anchors.fill: parent
                     onPressed: {
@@ -69,11 +69,11 @@ TableView {
         }
         DelegateChoice {
             column: 7
-
+            
             delegate: Rectangle {
                 color: "#007bff"
                 radius: 10
-
+                
                 Label {
                     width: 48
                     height: 20
@@ -86,7 +86,7 @@ TableView {
                     font.pointSize: 9
                     font.family: "Verdana"
                 }
-
+                
                 MouseArea {
                     anchors.fill: parent
                     onPressed: {
@@ -102,11 +102,11 @@ TableView {
         }
         DelegateChoice {
             column: 8
-
+            
             delegate: Rectangle {
                 color: "#dc3545"
                 radius: 10
-
+                
                 Label {
                     width: 48
                     height: 20
@@ -119,7 +119,7 @@ TableView {
                     font.pointSize: 9
                     font.family: "Verdana"
                 }
-
+                
                 MouseArea {
                     anchors.fill: parent
                     onPressed: {
@@ -147,8 +147,8 @@ TableView {
             }
         }
     }
-
-
+    
+    
     ScrollBar.vertical: ScrollBar {
         active: true
     }
