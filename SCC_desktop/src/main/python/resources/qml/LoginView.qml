@@ -37,6 +37,8 @@ Rectangle {
                 implicitHeight: 40
                 border.color: usernameInput.enabled ? "#1488db" : "transparent"
             }
+
+//            onPressed: con.toggleKeyboard()
         }
 
         TextField {
@@ -51,6 +53,7 @@ Rectangle {
             font.pointSize: 9
             placeholderText: qsTr("Password")
             selectByMouse: true
+            echoMode: TextInput.Password
 
             background: Rectangle {
                 color: "#d8d8da"

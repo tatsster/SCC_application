@@ -589,8 +589,9 @@ Rectangle{
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.75}D{i:5;anchors_x:21}D{i:6;anchors_x:21;anchors_y:15}D{i:9;anchors_x:21}
+    D{i:0;formeditorZoom:0.5}D{i:5;anchors_x:21}D{i:6;anchors_x:21;anchors_y:15}D{i:9;anchors_x:21}
 D{i:10;anchors_x:21;anchors_y:15}D{i:2;anchors_width:1160;anchors_x:21;anchors_y:58}
-D{i:24;anchors_height:150}D{i:33;anchors_height:150}D{i:42;anchors_height:150;anchors_y:476}
+D{i:24;anchors_height:150}D{i:33;anchors_height:150}D{i:25;anchors_height:150}D{i:42;anchors_height:150;anchors_y:476}
+D{i:34;anchors_height:150}
 }
 ##^##*/

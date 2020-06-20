@@ -23,6 +23,43 @@ Rectangle{
     }
 
     Rectangle {
+        width: 151
+        height: 45
+        color: "#007bff"
+        radius: 10
+        anchors.left: reportBuildingLabel.right
+        anchors.leftMargin: 0
+        anchors.top: parent.top
+        anchors.topMargin: 15
+        Text {
+            x: 136
+            y: 10
+            width: 127
+            height: 42
+            color: "#ffffff"
+            text: "Back"
+            horizontalAlignment: Text.AlignHCenter
+            font.bold: true
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            verticalAlignment: Text.AlignVCenter
+            font.family: "Verdana"
+            font.pixelSize: 20
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onPressed: {
+                parent.color = "#0262c9"
+            }
+            onReleased: {
+                parent.color = "#007bff"
+                mainViewLoader.source = "BuildingInfo.qml"
+            }
+        }
+    }
+
+    Rectangle {
         id: controlBox
         height: 60
         color: "#ffffff"
@@ -228,6 +265,6 @@ Rectangle{
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.75}
+    D{i:0;formeditorZoom:1.25}D{i:2;anchors_x:1029;anchors_y:13}
 }
 ##^##*/

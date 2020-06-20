@@ -15,11 +15,49 @@ Rectangle{
         id: reportFloorLabel
         x: 21
         y: 20
-        width: 260
+        width: 270
         height: 32
         text: "Report Floor F0005"
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         font.family: "Verdana"
         font.pointSize: 14
+    }
+
+    Rectangle {
+        width: 151
+        height: 45
+        color: "#007bff"
+        radius: 10
+        anchors.left: reportFloorLabel.right
+        anchors.leftMargin: 0
+        anchors.top: parent.top
+        anchors.topMargin: 15
+        Text {
+            x: 136
+            y: 10
+            width: 127
+            height: 42
+            color: "#ffffff"
+            text: "Back"
+            horizontalAlignment: Text.AlignHCenter
+            font.bold: true
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            verticalAlignment: Text.AlignVCenter
+            font.family: "Verdana"
+            font.pixelSize: 20
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onPressed: {
+                parent.color = "#0262c9"
+            }
+            onReleased: {
+                parent.color = "#007bff"
+                mainViewLoader.source = "BuildingReport.qml"
+            }
+        }
     }
 
     Rectangle {
@@ -242,7 +280,7 @@ Rectangle{
 /*##^##
 Designer {
     D{i:0;formeditorZoom:0.75}D{i:3;anchors_height:47;anchors_width:437;anchors_y:58}
-D{i:5;anchors_height:38;anchors_width:214;anchors_x:384;anchors_y:11}D{i:4;anchors_x:8}
+D{i:4;anchors_x:8}D{i:5;anchors_height:38;anchors_width:214;anchors_x:384;anchors_y:11}
 D{i:11;anchors_width:182}
 }
 ##^##*/

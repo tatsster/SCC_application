@@ -146,8 +146,7 @@ Rectangle{
                         parent.color = "#28a745"
                         statusLabel.text = "ON"
                     }
-//                  con.updateBLS()
-                    message.visible = true
+                    //                  con.updateBLS()
                 }
             }
         }
@@ -185,8 +184,48 @@ Rectangle{
                 }
                 onReleased: {
                     parent.color = "#dc3545"
-//                  con.updateThreshold(textFieldTemp.text, textFieldHumid.text)
+                    //                  con.updateThreshold(textFieldTemp.text, textFieldHumid.text)
                 }
+            }
+        }
+    }
+
+    Rectangle {
+        id: logoutButton
+        x: 1021
+        y: 798
+        width: 135
+        height: 51
+        color: "#dc3545"
+        radius: 10
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 40
+        anchors.right: parent.right
+        anchors.rightMargin: 40
+        Label {
+            id: logoutLabel
+            x: 47
+            y: 8
+            width: 85
+            height: 29
+            color: "#ffffff"
+            text: qsTr("Logout")
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.bold: true
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 12
+            font.family: "Verdana"
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onPressed: {
+                parent.color = "#ad3545"
+            }
+            onReleased: {
+                parent.color = "#dc3545"
+                appLoader.source = "LoginView.qml"
             }
         }
     }

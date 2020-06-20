@@ -193,6 +193,7 @@ Rectangle{
                                 }
                                 onReleased: {
                                     parent.color = "#28a745"
+                                    // con.setCurrentFloor(floor_id)
                                     // con.setCurrentRoom(modelData.id)
                                     mainViewLoader.source = "RoomReport.qml"
                                 }
