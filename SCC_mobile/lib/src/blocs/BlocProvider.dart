@@ -15,4 +15,8 @@ class BlocProvider extends InheritedWidget {
   static AppBloc of(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<BlocProvider>()).bloc;
   }
+
+  static void updateUserId(BuildContext context) {
+    (context.dependOnInheritedWidgetOfExactType<BlocProvider>()).bloc.updateUserId();
+  }
 }

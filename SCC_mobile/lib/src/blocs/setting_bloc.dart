@@ -6,8 +6,13 @@ import '../resources/device_db_provider.dart';
 
 class SettingBloc with Validator {
   final isAdmin = true;
+  String userId;
 
   final _deviceDb = DeviceProvider();
+
+  void updateUserId(String userId) {
+    this.userId = userId;
+  }
 
   final List<BehaviorSubject<int>> _thresholdFetcher = [];
   final List<BehaviorSubject<int>> _threshold = [];
@@ -38,7 +43,7 @@ class SettingBloc with Validator {
   }
 
   fetchThreshold() async {
-    final item = await _deviceDb.fetchItem();
+    final item = await _deviceDb.fetchItem(this.userId);
     _threshold[0].sink.add(item.data[0].tempThreshold.toInt());
     _threshold[1].sink.add(item.data[0].humidThreshold.toInt());
   }

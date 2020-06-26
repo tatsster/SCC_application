@@ -11,10 +11,16 @@ import '../resources/sensor_db_provider.dart';
 class DbBloc {
   // isAdmin then render Maintain mode - List User
   final isAdmin = true;
+  String userId;
+  int limit = 20;
 
   // DB fetching
   final _ssdb = SSDbProvider();
   final _logDB = LogProvider();
+
+  void updateUserId(String userId) {
+    this.userId = userId;
+  }
 
   // final _dbFetcher = PublishSubject<int>();
   final _sensorInfo = BehaviorSubject<SensorInfo>();
@@ -43,12 +49,13 @@ class DbBloc {
   }
 
   fetchItem() async {
-    final item = await _ssdb.fetchItem();
+    final item = await _ssdb.fetchItem(this.userId);
     _sensorInfo.sink.add(item);
   }
 
-  fetchLog() async {
-    final item = await _logDB.fetchItem();
+  void fetchLog(int limit) async {
+    this.limit = limit;
+    final item = await _logDB.fetchItem(this.userId, limit);
     _log.sink.add(item);
   }
 

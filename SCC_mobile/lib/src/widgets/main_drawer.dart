@@ -21,17 +21,17 @@ class MainDrawer extends StatelessWidget {
             // ),
             UserAccountsDrawerHeader(
               accountName: Text(
-                'my_email@email.com',
+                'nhan.pham.r6@email.com',
                 style: TextStyle(fontSize: 20.0),
               ),
               accountEmail: Text(
-                'My Name',
+                'Pham T. Nhan',
                 style: TextStyle(fontSize: 18.0),
               ),
               currentAccountPicture: CircleAvatar(
-                child: Text(
-                  'M',
-                  style: TextStyle(fontSize: 35.0),
+                child: CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/me.jpg'),
+                  radius: 33.0,
                 ),
               ),
             ),
@@ -50,7 +50,7 @@ class MainDrawer extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/dashboard');
               },
             ),
             ListTile(
@@ -100,6 +100,23 @@ class MainDrawer extends StatelessWidget {
                     ),
                     ListTile(
                       leading: FaIcon(
+                        FontAwesomeIcons.userCircle,
+                        size: 26.0,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Profile',
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/profile');
+                      },
+                    ),
+                    ListTile(
+                      leading: FaIcon(
                         FontAwesomeIcons.signOutAlt,
                         size: 26.0,
                         color: Colors.white,
@@ -111,6 +128,9 @@ class MainDrawer extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/');
+                      },
                     ),
                   ],
                 ),

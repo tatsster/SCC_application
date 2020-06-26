@@ -28,7 +28,7 @@ class TempHumidLog {
 }
 
 class Data {
-  int id;
+  int sensorOrder;
   String sensorId;
   String sensorTemp;
   String sensorHumid;
@@ -36,7 +36,7 @@ class Data {
   DateTime sensorTimestamp;
 
   Data(
-      {this.id,
+      {this.sensorOrder,
       this.sensorId,
       this.sensorTemp,
       this.sensorHumid,
@@ -44,7 +44,7 @@ class Data {
       this.sensorTimestamp});
 
   Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    sensorOrder = json['sensorOrder'];
     sensorId = json['sensor_id'];
     sensorTemp = json['sensor_temp'];
     sensorHumid = json['sensor_humid'];
@@ -55,7 +55,7 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
+    data['sensorOrder'] = this.sensorOrder;
     data['sensor_id'] = this.sensorId;
     data['sensor_temp'] = this.sensorTemp;
     data['sensor_humid'] = this.sensorHumid;

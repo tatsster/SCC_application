@@ -19,7 +19,7 @@ class Report extends StatelessWidget {
         title: Text(
           'Report',
           style: TextStyle(
-            fontSize: 30.0,
+            fontSize: 26.0,
             color: Colors.black,
           ),
         ),
@@ -42,40 +42,59 @@ class Report extends StatelessWidget {
   Widget buildBody(BuildContext context) {
     final SSDbBloc = BlocProvider.of(context).ssDbBloc;
 
+    return NotificationListener(
+      child: buildDataLog(context),
+      onNotification: (Notification notify) {
+        if (notify is ScrollEndNotification) {
+          SSDbBloc.fetchLog(SSDbBloc.limit + 20);
+          return true;
+        } else
+          return false;
+      },
+    );
+  }
+
+  Widget buildDataLog(BuildContext context) {
+    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
+
     return StreamBuilder(
-        stream: SSDbBloc.temphumidLog,
-        builder: (context, AsyncSnapshot<TempHumidLog> snapshot) {
-          if (snapshot.hasData)
-            return Container(
-              child: HorizontalDataTable(
-                leftHandSideColumnWidth: 100,
-                rightHandSideColumnWidth: 550,
-                isFixedHeader: true,
-                headerWidgets: _headersWidget(),
-                leftSideItemBuilder: _generateFirstCol,
-                rightSideItemBuilder: _generateRightCols,
-                itemCount: snapshot.data.data.length,
-                rowSeparatorWidget: Divider(
-                  color: Colors.black54,
-                  height: 1.0,
-                  thickness: 2.0,
-                ),
-                elevation: 10.0,
+      stream: SSDbBloc.temphumidLog,
+      builder: (context, AsyncSnapshot<TempHumidLog> snapshot) {
+        if (snapshot.hasData)
+          return Container(
+            child: HorizontalDataTable(
+              leftHandSideColumnWidth: 100,
+              rightHandSideColumnWidth: 550,
+              isFixedHeader: true,
+              headerWidgets: _headersWidget(),
+              leftSideItemBuilder: _generateFirstCol,
+              rightSideItemBuilder: _generateRightCols,
+              itemCount: snapshot.data.data.length,
+              rowSeparatorWidget: Divider(
+                color: Colors.black54,
+                height: 1.0,
+                thickness: 2.0,
               ),
-              height: MediaQuery.of(context).size.height,
-            );
-          else
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-        });
+              elevation: 10.0,
+            ),
+            height: MediaQuery.of(context).size.height,
+          );
+        else
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+      },
+    );
   }
 
   List<Widget> _headersWidget() {
     return [
       Container(
-        child: Text("Sensor ID",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23.0)),
+        child: Text(
+          "Sensor ID",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23.0),
+          textAlign: TextAlign.center,
+        ),
         width: 100,
         height: 56,
         alignment: Alignment.center,
@@ -97,22 +116,6 @@ class Report extends StatelessWidget {
         alignment: Alignment.center,
         color: Colors.blueAccent[100],
       ),
-      // Container(
-      //   child: RichText(
-      //     text: TextSpan(
-      //       style: TextStyle(
-      //           fontSize: 20.0,
-      //           color: Colors.black,
-      //           fontWeight: FontWeight.bold),
-      //       children: [TextSpan(text: 'Exceed '), TextSpan(text: 'Threshold')],
-      //     ),
-      //     textAlign: TextAlign.center,
-      //   ),
-      //   width: 150,
-      //   height: 56,
-      //   alignment: Alignment.center,
-      //   color: Colors.blueAccent[100],
-      // ),
       Container(
         child: Text("Heat Index",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23.0)),
@@ -142,7 +145,11 @@ class Report extends StatelessWidget {
           return Container(
             child: Text(
               '${snapshot.data.data[index].sensorId}',
-              style: TextStyle(fontSize: 23.0, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
             width: 100,
             height: 52,
@@ -189,7 +196,7 @@ class Report extends StatelessWidget {
                   '${snapshot.data.data[index].sensorHeatIndex}',
                   style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
                 ),
-                width: 100,
+                width: 150,
                 height: 52,
                 alignment: Alignment.center,
                 color: index % 2 == 0 ? Colors.grey : Colors.white,

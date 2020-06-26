@@ -6,13 +6,20 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/main_drawer.dart';
 import '../widgets/tile_info.dart';
 import '../widgets/updateThreshold.dart';
+import '../widgets/refresh.dart';
 import '../blocs/BlocProvider.dart';
 
 class Setting extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  @override
   Widget build(BuildContext context) {
+    return Refresh(
+      context: context,
+      child: buildSettingPage(context),
+    );
+  }
+
+  Widget buildSettingPage(BuildContext context) {
     final settingBloc = BlocProvider.of(context).settingBloc;
 
     return Scaffold(
@@ -21,7 +28,7 @@ class Setting extends StatelessWidget {
         title: Text(
           'Setting',
           style: TextStyle(
-            fontSize: 30.0,
+            fontSize: 26.0,
             color: Colors.black,
           ),
         ),

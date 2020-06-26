@@ -28,38 +28,78 @@ class SensorInfo {
 }
 
 class Data {
-  String floorId;
-  String roomId;
+  String sensorFloorName;
+  String sensorRoomName;
   String sensorId;
   String sensorName;
-  String sensorTemp;
-  String sensorHumid;
+  String sensorBuildingName;
+  String sensorValue;
+  String sensorIp;
+  String sensorPort;
+  String sensorTopic;
+  String sensorUsername;
+  String sensorPassword;
+  String sensorPid;
+  // Important
+  int sensorTemp;
+  int sensorHumid;
 
   Data(
-      {this.floorId,
-      this.roomId,
+      {this.sensorFloorName,
+      this.sensorRoomName,
       this.sensorId,
       this.sensorName,
-      this.sensorTemp,
-      this.sensorHumid});
+      this.sensorBuildingName,
+      this.sensorValue,
+      this.sensorIp,
+      this.sensorPort,
+      this.sensorTopic,
+      this.sensorUsername,
+      this.sensorPassword,
+      this.sensorPid});
 
   Data.fromJson(Map<String, dynamic> json) {
-    floorId = json['floor_id'];
-    roomId = json['room_id'];
+    sensorFloorName = json['sensor_floor_name'];
+    sensorRoomName = json['sensor_room_name'];
     sensorId = json['sensor_id'];
     sensorName = json['sensor_name'];
-    sensorTemp = json['sensor_temp'];
-    sensorHumid = json['sensor_humid'];
+    sensorBuildingName = json['sensor_building_name'];
+    sensorValue = json['sensor_value'];
+    sensorIp = json['sensor_ip'];
+    sensorPort = json['sensor_port'];
+    sensorTopic = json['sensor_topic'];
+    sensorUsername = json['sensor_username'];
+    sensorPassword = json['sensor_password'];
+    sensorPid = json['sensor_pid'];
+    getCurrentValue();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['floor_id'] = this.floorId;
-    data['room_id'] = this.roomId;
+    data['sensor_floor_name'] = this.sensorFloorName;
+    data['sensor_room_name'] = this.sensorRoomName;
     data['sensor_id'] = this.sensorId;
     data['sensor_name'] = this.sensorName;
+    data['sensor_building_name'] = this.sensorBuildingName;
+    data['sensor_value'] = this.sensorValue;
+    data['sensor_ip'] = this.sensorIp;
+    data['sensor_port'] = this.sensorPort;
+    data['sensor_topic'] = this.sensorTopic;
+    data['sensor_username'] = this.sensorUsername;
+    data['sensor_password'] = this.sensorPassword;
+    data['sensor_pid'] = this.sensorPid;
+    // Current sensor value
     data['sensor_temp'] = this.sensorTemp;
     data['sensor_humid'] = this.sensorHumid;
     return data;
+  }
+
+  getCurrentValue() {
+    if (this.sensorValue != null) {
+      var value = this.sensorValue.substring(1, this.sensorValue.length - 1);
+      var values = value.split(',');
+      this.sensorTemp = int.parse(values[0]);
+      this.sensorHumid = int.parse(values[1]);
+    }
   }
 }

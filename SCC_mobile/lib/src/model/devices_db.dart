@@ -28,11 +28,12 @@ class DeviceDB {
 }
 
 class Data {
-  String floorId;
-  String roomId;
+  String deviceFloorName;
+  String deviceRoomName;
+  String deviceBuildingName;
   String deviceId;
   String deviceName;
-  bool deviceStatus;
+  String deviceStatus;
   bool deviceAutomation;
   String deviceAdditional;
   String deviceUpdatedBy;
@@ -41,31 +42,33 @@ class Data {
   double humidThreshold;
 
   Data(
-      {this.floorId,
-      this.roomId,
+      {this.deviceFloorName,
+      this.deviceRoomName,
       this.deviceId,
       this.deviceName,
       this.deviceStatus,
       this.deviceAutomation,
       this.deviceAdditional,
-      this.deviceUpdatedBy});
+      this.deviceUpdatedBy,
+      this.deviceBuildingName});
 
   Data.fromJson(Map<String, dynamic> json) {
-    floorId = json['floor_id'];
-    roomId = json['room_id'];
+    deviceFloorName = json['device_floor_name'];
+    deviceRoomName = json['device_room_name'];
     deviceId = json['device_id'];
     deviceName = json['device_name'];
     deviceStatus = json['device_status'];
     deviceAutomation = json['device_automation'];
     deviceAdditional = json['device_additional'];
     deviceUpdatedBy = json['device_updated_by'];
+    deviceBuildingName = json['device_building_name'];
     fetchThreshold();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['floor_id'] = this.floorId;
-    data['room_id'] = this.roomId;
+    data['device_floor_name'] = this.deviceFloorName;
+    data['device_room_name'] = this.deviceRoomName;
     data['device_id'] = this.deviceId;
     data['device_name'] = this.deviceName;
     data['device_status'] = this.deviceStatus;
@@ -74,14 +77,20 @@ class Data {
     data['device_updated_by'] = this.deviceUpdatedBy;
     data['temp_threshold'] = this.tempThreshold;
     data['humid_threshold'] = this.humidThreshold;
+    data['device_building_name'] = this.deviceBuildingName;
     return data;
   }
 
   fetchThreshold() {
-    var value =
-        this.deviceAdditional.substring(1, this.deviceAdditional.length - 1);
-    var thresholds = value.split(',');
-    this.tempThreshold = double.parse(thresholds[0]);
-    this.humidThreshold = double.parse(thresholds[2]);
+    if (this.deviceAdditional == '') {
+      var value =
+          this.deviceAdditional.substring(1, this.deviceAdditional.length - 1);
+      var thresholds = value.split(',');
+      this.tempThreshold = double.parse(thresholds[0]);
+      this.humidThreshold = double.parse(thresholds[2]);
+    } else {
+      this.tempThreshold = 0.0;
+      this.humidThreshold = 0.0;
+    }
   }
 }

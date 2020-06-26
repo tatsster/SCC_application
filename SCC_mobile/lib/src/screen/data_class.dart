@@ -1,3 +1,4 @@
+import 'package:SCC_mobile/src/widgets/refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -16,6 +17,13 @@ class DataClass extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Refresh(
+      context: context,
+      child: buildDataClassPage(context),
+    );
+  }
+
+  Widget buildDataClassPage(BuildContext context) {
     final SSDbBloc = BlocProvider.of(context).ssDbBloc;
 
     return Scaffold(
@@ -24,10 +32,10 @@ class DataClass extends StatelessWidget {
         elevation: 2.0,
         backgroundColor: Colors.white,
         title: Text(
-          'Classroom ${this.classId}',
+          'Room ${this.classId}',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 28.0,
+            fontSize: 22.0,
           ),
         ),
         leading: IconButton(
@@ -49,7 +57,7 @@ class DataClass extends StatelessWidget {
         children: <Widget>[
           TileInfo(
             child: Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(15.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,16 +77,28 @@ class DataClass extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Padding(padding: EdgeInsets.only(left: 50.0)),
 
                       // ! Get temperature from sensor BLOC to here
-                      temperatureValue(context),
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          child: temperatureValue(context),
+                        ),
+                      ),
                     ],
                   ),
-                  Padding(padding: EdgeInsets.only(top: 5.0)),
-                  Text(
-                    'Temperature',
-                    style: TextStyle(fontSize: 24.0),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.bottomLeft,
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        'Temperature',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -88,7 +108,7 @@ class DataClass extends StatelessWidget {
           // ! Humidity
           TileInfo(
             child: Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(15.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,16 +128,28 @@ class DataClass extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Padding(padding: EdgeInsets.only(left: 50.0)),
 
                       // ! Get humidity from sensor BLOC to here
-                      humidityValue(context),
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          child: humidityValue(context),
+                        ),
+                      ),
                     ],
                   ),
-                  Padding(padding: EdgeInsets.only(top: 5.0)),
-                  Text(
-                    'Humidity',
-                    style: TextStyle(fontSize: 24.0),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.bottomLeft,
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        'Humidity',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -177,7 +209,7 @@ class DataClass extends StatelessWidget {
         staggeredTiles: [
           StaggeredTile.extent(1, 150.0),
           StaggeredTile.extent(1, 150.0),
-          StaggeredTile.extent(2, 250.0),
+          // StaggeredTile.extent(2, 250.0),
           StaggeredTile.extent(2, 70.0),
           StaggeredTile.extent(2, 70.0),
         ],
@@ -190,7 +222,7 @@ class DataClass extends StatelessWidget {
     return StreamBuilder(
       stream: SSDbBloc.sensorInfo,
       builder: (BuildContext context, AsyncSnapshot<SensorInfo> snapshot) {
-        if (snapshot.hasData)
+        if (snapshot.hasData && snapshot.data.data[0].sensorTemp != null)
           return Text(
             '${snapshot.data.data[0].sensorTemp}\n\u00B0C',
             style: TextStyle(
@@ -210,7 +242,7 @@ class DataClass extends StatelessWidget {
     return StreamBuilder(
       stream: SSDbBloc.sensorInfo,
       builder: (context, AsyncSnapshot<SensorInfo> snapshot) {
-        if (snapshot.hasData)
+        if (snapshot.hasData && snapshot.data.data[0].sensorHumid != null)
           return Text(
             '${snapshot.data.data[0].sensorHumid}\n%',
             style: TextStyle(
