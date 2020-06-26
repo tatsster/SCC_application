@@ -23,6 +23,43 @@ Rectangle{
     }
 
     Rectangle {
+        width: 151
+        height: 45
+        color: "#007bff"
+        radius: 10
+        anchors.left: reportBuildingLabel.right
+        anchors.leftMargin: 0
+        anchors.top: parent.top
+        anchors.topMargin: 15
+        Text {
+            x: 136
+            y: 10
+            width: 127
+            height: 42
+            color: "#ffffff"
+            text: "Back"
+            horizontalAlignment: Text.AlignHCenter
+            font.bold: true
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            verticalAlignment: Text.AlignVCenter
+            font.family: "Verdana"
+            font.pixelSize: 20
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onPressed: {
+                parent.color = "#0262c9"
+            }
+            onReleased: {
+                parent.color = "#007bff"
+                mainViewLoader.source = "BuildingInfo.qml"
+            }
+        }
+    }
+
+    Rectangle {
         id: controlBox
         height: 60
         color: "#ffffff"
@@ -39,7 +76,7 @@ Rectangle{
         Label {
             id: buildingNameLabel
             y: 22
-            text: qsTr("A4 Building Info")
+            text: "A4 Building Info"
             anchors.left: parent.left
             anchors.leftMargin: 10
             anchors.verticalCenterOffset: 0
@@ -53,8 +90,8 @@ Rectangle{
             width: 151
             color: "#dc3545"
             radius: 10
-            anchors.right: generateReportButton.left
-            anchors.rightMargin: 5
+            anchors.right: parent.right
+            anchors.rightMargin: 10
             anchors.topMargin: 8
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 8
@@ -83,45 +120,7 @@ Rectangle{
                 }
                 onReleased: {
                     parent.color = "#dc3545"
-                }
-            }
-        }
-
-        Rectangle {
-            id: generateReportButton
-            width: 182
-            color: "#28a745"
-            radius: 10
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            anchors.topMargin: 8
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 8
-            anchors.top: parent.top
-            Label {
-                id: generateReportLabel
-                x: 47
-                y: 13
-                width: 169
-                height: 16
-                color: "#ffffff"
-                text: qsTr("Generate excel report")
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                font.bold: true
-                font.pointSize: 8
-                font.family: "Verdana"
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onPressed: {
-                    parent.color = "#288545"
-                }
-                onReleased: {
-                    parent.color = "#28a745"
+                    confirmDeleteAllBuildingRecord.visible = true
                 }
             }
         }
@@ -138,12 +137,11 @@ Rectangle{
         anchors.left: parent.left
         anchors.leftMargin: 10
 
-        property var columnWidths: [50, 170, 200, 200, 200, 250, 100, 100]
+        property var columnWidths: [170, 200, 200, 230, 270, 100, 100]
         height: 50
         columnWidthProvider: function (column) { return columnWidths[column] }
 
         model: TableModel {
-            TableModelColumn { display: "checked" }
             TableModelColumn { display: "floorID" }
             TableModelColumn { display: "floorName" }
             TableModelColumn { display: "eHoursUsage" }
@@ -155,26 +153,18 @@ Rectangle{
             rows: [
                 {
                     // Each property is one cell/column.
-                    checked: false,
-                    floorID: "Floor's ID",
-                    floorName: "Floor's Name",
-                    eHoursUsage: "Total Hours Usage",
-                    electricalUsage: "Total Electrical Usage",
-                    updateDatetime: "Update Time",
-                    viewButton: "",
-                    deleteButton: ""
+                    "floorID": "Floor's ID",
+                    "floorName": "Floor's Name",
+                    "eHoursUsage": "Total Hours Usage",
+                    "electricalUsage": "Total Electrical Usage",
+                    "updateDatetime": "Update Time",
+                    "viewButton": "",
+                    "deleteButton": ""
                 }
             ]
         }
 
         delegate: DelegateChooser {
-            DelegateChoice {
-                column: 0
-                delegate: CheckBox {
-                    checked: model.display
-                    onToggled: model.display = checked
-                }
-            }
 
             DelegateChoice {
                 delegate: Text {
@@ -193,11 +183,42 @@ Rectangle{
 
     }
 
-    TableView {
-        id: buildingView
-        columnSpacing: 1
-        rowSpacing: 5
-        boundsBehavior: Flickable.StopAtBounds
+    TableModel {
+        id: buildingTableModel
+        TableModelColumn { display: "floorID" }
+        TableModelColumn { display: "floorName" }
+        TableModelColumn { display: "eHoursUsage" }
+        TableModelColumn { display: "electricalUsage" }
+        TableModelColumn { display: "updateDatetime" }
+        TableModelColumn { display: "viewButton" }
+        TableModelColumn { display: "deleteButton" }
+
+        // Each row is one type of fruit that can be ordered
+        rows: [
+            {
+                // Each property is one cell/column.
+                "floorID": "F0005",
+                "floorName": "Floor 5",
+                "eHoursUsage": "200",
+                "electricalUsage": "400 kW",
+                "updateDatetime": "29/05/2020 12:00:00 AM",
+                "viewButton": "F0005",
+                "deleteButton": "F0005"
+            },
+            {
+                "floorID": "F0004",
+                "floorName": "Floor 4",
+                "eHoursUsage": "50",
+                "electricalUsage": "250 kW",
+                "updateDatetime": "29/05/2020 12:00:00 AM",
+                "viewButton": "F0004",
+                "deleteButton": "F0004"
+            }
+        ]
+    }
+
+    Loader{
+        id: buildingTableLoader
         anchors.top: tableHeader.bottom
         anchors.topMargin: 5
         anchors.right: parent.right
@@ -206,156 +227,44 @@ Rectangle{
         anchors.bottomMargin: 0
         anchors.left: parent.left
         anchors.leftMargin: 10
+        source: "BuildingTable.qml"
+    }
 
-        property var columnWidths: [50, 170, 200, 200, 200, 250, 100, 100]
-        columnWidthProvider: function (column) { return columnWidths[column] }
+    Component.onCompleted: {
+        /*
+        buildingTableModel.rows = con.getBuildingTable()
+        */
+    }
 
-        model: TableModel {
-            TableModelColumn { display: "checked" }
-            TableModelColumn { display: "floorID" }
-            TableModelColumn { display: "floorName" }
-            TableModelColumn { display: "eHoursUsage" }
-            TableModelColumn { display: "electricalUsage" }
-            TableModelColumn { display: "updateDatetime" }
-            TableModelColumn { display: "viewButton" }
-            TableModelColumn { display: "deleteButton" }
-
-            // Each row is one type of fruit that can be ordered
-            rows: [
-                {
-                    // Each property is one cell/column.
-                    checked: false,
-                    floorID: "F0005",
-                    floorName: "Floor 5",
-                    eHoursUsage: "200",
-                    electricalUsage: "400 kW",
-                    updateDatetime: "29/05/2020 12:00:00 AM",
-                    viewButton: "F0005",
-                    deleteButton: "F0005"
-                },
-                {
-                    checked: false,
-                    floorID: "F0004",
-                    floorName: "Floor 4",
-                    eHoursUsage: "50",
-                    electricalUsage: "250 kW",
-                    updateDatetime: "29/05/2020 12:00:00 AM",
-                    viewButton: "F0004",
-                    deleteButton: "F0004"
-                }
-            ]
-
+    MessageBox {
+        id: confirmDeleteAllBuildingRecord
+        text: "Are you sure want to delete all records?"
+        onAccepted: {
+            // con.deleteAllBuildingRecord()
+            buildingTableModel.clear()
         }
+    }
 
-
-        delegate: DelegateChooser {
-            DelegateChoice {
-                column: 0
-                delegate: CheckBox {
-                    checked: model.display
-                    onToggled: model.display = checked
-                }
-            }
-            DelegateChoice {
-                column: 6
-
-                delegate: Rectangle {
-                    color: "#007bff"
-                    radius: 10
-
-                    Label {
-                        width: 48
-                        height: 20
-                        color: "#ffffff"
-                        text: "View"
-                        horizontalAlignment: Text.AlignHCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        font.bold: true
-                        font.pointSize: 9
-                        font.family: "Verdana"
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onPressed: {
-                            parent.color = "#005bbd"
-                        }
-                        onReleased: {
-                            parent.color = "#007bff"
-                        }
-                    }
-                }
-            }
-            DelegateChoice {
-                column: 7
-
-                delegate: Rectangle {
-                    color: "#dc3545"
-                    radius: 10
-
-                    Label {
-                        width: 48
-                        height: 20
-                        color: "#ffffff"
-                        text: "Delete"
-                        horizontalAlignment: Text.AlignHCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        font.bold: true
-                        font.pointSize: 9
-                        font.family: "Verdana"
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onPressed: {
-                            parent.color = "#ad3545"
-                        }
-                        onReleased: {
-                            parent.color = "#dc3545"
-                        }
-                    }
-                }
-            }
-            //            DelegateChoice {
-            //                column: 4
-            //                delegate: ItemDelegate {
-            //                    text: "Delete"
-            //                    onClicked: console.log("clicked:", modelData)
-
-            //                    Rectangle {
-            //                        anchors.fill: parent
-            //                        color: "red"
-            //                        z: -1
-            //                    }
-            //                }
-            //            }
-            DelegateChoice {
-                delegate: Text {
-                    text: model.display
-                    font.family: "Verdana"
-                    font.pointSize: 9
-                    padding: 15
-                    Rectangle {
-                        anchors.fill: parent
-                        color: "#efefef"
-                        z: -1
-                    }
-                }
-            }
+    MessageBox {
+        id: confirmDeleteSingleBuildingRecord
+        property var item: ""
+        onAccepted: {
+            // con.deleteSingleBuildingRecord(item)
+            buildingTableModel.removeRow(getFloorIndex(item))
         }
+    }
 
-
-        ScrollBar.vertical: ScrollBar {
-            active: true
+    function getFloorIndex(floor_id) {
+        for (var r = 0; r < buildingTableModel.rowCount; ++r) {
+            if (buildingTableModel.rows[r].floorID === floor_id) {
+                return r;
+            }
         }
     }
 }
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.75}D{i:4;anchors_x:8}D{i:5;anchors_height:38;anchors_width:214;anchors_x:384;anchors_y:11}
-D{i:8;anchors_width:214;anchors_x:484}D{i:14;anchors_width:182}D{i:3;anchors_height:47;anchors_width:437;anchors_y:58}
+    D{i:0;formeditorZoom:1.25}D{i:2;anchors_x:1029;anchors_y:13}
 }
 ##^##*/

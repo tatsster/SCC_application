@@ -102,7 +102,7 @@ Rectangle {
         y: 86
         height: 40
         color: "#d0d4db"
-        text: qsTr("Tran Trung Quan")
+        text: "Tran Trung Quan"
         anchors.left: userAvatar.right
         anchors.leftMargin: 25
         anchors.right: parent.right
@@ -227,6 +227,13 @@ Rectangle {
                 mainViewLoader.source = "SettingsView.qml"
             }
         }
+    }
+
+    Component.onCompleted: {
+        /*
+        userAvatar.source = con.getUserAva()
+        userName.text = con.getUserName()
+        */
     }
 
 }

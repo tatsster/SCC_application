@@ -1,13 +1,15 @@
 import QtQuick 2.0
 
 Rectangle {
+    id: rectangle
     width: 1600
     height: 900
     anchors.fill: parent
 
     Sidebar {
         id: sidebar
-        width: 300
+        anchors.right: parent.right
+        anchors.rightMargin: 1300
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 0
         anchors.top: parent.top
@@ -36,6 +38,6 @@ Rectangle {
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.5}
+    D{i:0;formeditorZoom:0.5}D{i:1;anchors_width:300}
 }
 ##^##*/

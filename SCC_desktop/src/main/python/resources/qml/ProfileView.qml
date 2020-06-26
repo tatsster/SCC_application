@@ -68,7 +68,7 @@ Rectangle{
             x: 91
             width: 290
             height: 42
-            text: qsTr("TRAN TRUNG QUAN")
+            text: "TRAN TRUNG QUAN"
             anchors.top: userAvatar.bottom
             anchors.topMargin: 20
             anchors.horizontalCenterOffset: 0
@@ -85,7 +85,7 @@ Rectangle{
             x: 93
             width: 247
             height: 36
-            text: qsTr("quan.tran.itbk@hcmut.edu.vn")
+            text: "quan.tran.itbk@hcmut.edu.vn"
             anchors.top: userNameLabel.bottom
             anchors.topMargin: 5
             anchors.horizontalCenterOffset: 1
@@ -101,7 +101,7 @@ Rectangle{
             x: 93
             width: 247
             height: 36
-            text: qsTr("0855791231")
+            text: "0855791231"
             anchors.top: userEmailLabel.bottom
             anchors.topMargin: 5
             horizontalAlignment: Text.AlignHCenter
@@ -119,7 +119,7 @@ Rectangle{
         x: 21
         y: 471
         width: 431
-        height: 262
+        height: 282
         color: "#ffffff"
         radius: 10
 
@@ -229,11 +229,12 @@ Rectangle{
         }
 
         Text {
-            id: userPositionLabel1
+            id: userAddressLabel
             x: 54
             width: 362
-            height: 36
-            text: "497 Hoa Hao St., 7 Ward, District 10"
+            height: 56
+            text: "497 Hoa Hao St., 7 Ward, District 10, HCMC"
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             anchors.top: addressLabel.bottom
             anchors.topMargin: 5
             anchors.right: parent.right
@@ -375,9 +376,10 @@ Rectangle{
             anchors.right: parent.right
             anchors.rightMargin: 20
 
+            text: ""
             font.pointSize: 10
             font.family: "Verdana"
-            placeholderText: qsTr("TRAN TRUNG QUAN")
+            placeholderText: "TRAN TRUNG QUAN"
             selectByMouse: true
         }
 
@@ -387,9 +389,10 @@ Rectangle{
             y: 172
             width: 498
             height: 40
+
             text: ""
             anchors.verticalCenter: emailLabel.verticalCenter
-            placeholderText: qsTr("quan.tran.itbk@hcmut.edu.vn")
+            placeholderText: "quan.tran.itbk@hcmut.edu.vn"
             font.pointSize: 10
             anchors.left: editProfileTag.right
             anchors.right: parent.right
@@ -404,8 +407,10 @@ Rectangle{
             x: 190
             y: 305
             height: 40
+
+            text: ""
             anchors.verticalCenter: addressEditLabel.verticalCenter
-            placeholderText: qsTr("497 Hoa Hao St., 7 Ward, District 10")
+            placeholderText: "497 Hoa Hao St., 7 Ward, District 10"
             font.pointSize: 10
             anchors.left: editProfileTag.right
             anchors.right: parent.right
@@ -419,8 +424,10 @@ Rectangle{
             id: textFieldPosition
             y: 314
             height: 40
+
+            text: ""
             anchors.verticalCenter: positionEditLabel.verticalCenter
-            placeholderText: qsTr("School Manager")
+            placeholderText: "School Manager"
             font.pointSize: 10
             anchors.left: editProfileTag.right
             anchors.right: parent.right
@@ -436,8 +443,10 @@ Rectangle{
             y: 240
             width: 498
             height: 40
+
+            text: ""
             anchors.verticalCenter: phoneLabel.verticalCenter
-            placeholderText: qsTr("0855791231")
+            placeholderText: "0855791231"
             font.pointSize: 10
             anchors.left: editProfileTag.right
             anchors.right: parent.right
@@ -482,11 +491,26 @@ Rectangle{
                 }
                 onReleased: {
                     parent.color = "#dc3545"
+//                  con.updateProfile(textFieldName.text, textFieldEmail.text, textFieldPhone.text, textFieldPosition.text, textFieldAddress.text)
                 }
             }
         }
+    }
 
-
+    Component.onCompleted: {
+        /*
+        userAvatar.source = con.getUserAva()
+        userNameLabel.text = con.getUserName()
+        userEmailLabel.text = con.getUserEmail()
+        userPhoneLabel.text = con.getUserPhone()
+        userPositionLabel.text = con.getUserPosition()
+        userAddressLabel.text = con.getUserAddress()
+        textFieldName.placeholderText = userNameLabel.text
+        textFieldEmail.placeholderText = userEmailLabel.text
+        textFieldPhone.placeholderText = userPhoneLabel.text
+        textFieldPosition.placeholderText = userPositionLabel.text
+        textFieldAddress.placeholderText = userAddressLabel.text
+        */
     }
 
 }

@@ -1,6 +1,6 @@
 {
     "app_name": "SCC",
     "author": "quantrancse",
-    "main_module": "src/main/python/main.py",
+    "main_module": "src/main/python/scc.py",
     "version": "0.0.0"
 }

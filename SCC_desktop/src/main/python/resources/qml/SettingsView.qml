@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.1
 
 Rectangle{
     id: testView
@@ -60,6 +61,8 @@ Rectangle{
             id: textFieldTemp
             y: 33
             height: 40
+
+            text: ""
             anchors.left: tempLabel.right
             anchors.leftMargin: 22
             anchors.right: parent.right
@@ -74,6 +77,8 @@ Rectangle{
             id: textFieldHumid
             y: 127
             height: 40
+
+            text: ""
             anchors.left: humidLabel.right
             anchors.leftMargin: 22
             anchors.right: parent.right
@@ -141,6 +146,7 @@ Rectangle{
                         parent.color = "#28a745"
                         statusLabel.text = "ON"
                     }
+                    //                  con.updateBLS()
                 }
             }
         }
@@ -178,10 +184,64 @@ Rectangle{
                 }
                 onReleased: {
                     parent.color = "#dc3545"
+                    //                  con.updateThreshold(textFieldTemp.text, textFieldHumid.text)
                 }
             }
         }
     }
+
+    Rectangle {
+        id: logoutButton
+        x: 1021
+        y: 798
+        width: 135
+        height: 51
+        color: "#dc3545"
+        radius: 10
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 40
+        anchors.right: parent.right
+        anchors.rightMargin: 40
+        Label {
+            id: logoutLabel
+            x: 47
+            y: 8
+            width: 85
+            height: 29
+            color: "#ffffff"
+            text: qsTr("Logout")
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.bold: true
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 12
+            font.family: "Verdana"
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onPressed: {
+                parent.color = "#ad3545"
+            }
+            onReleased: {
+                parent.color = "#dc3545"
+                appLoader.source = "LoginView.qml"
+            }
+        }
+    }
+    /*
+    Component.onCompleted: {
+        statusLabel.text = con.getStatusBLS()
+        textFieldTemp.placeholderText = con.getTempThreshold()
+        textFieldHumid.placeholderText = con.getHumidThreshold()
+
+        if (statusLabel.text === "ON"){
+            statusButton.color = "#28a745"
+        } else {
+            statusButton.color = "#dc3545"
+        }
+    }
+    */
 
 }
 

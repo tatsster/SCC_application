@@ -1,0 +1,139 @@
+/*//////////////////////////////////////////////////////////////////
+[ FONT ]*/
+
+@font-face {
+    font-family: Poppins-Regular;
+    src: url('../fonts/poppins/Poppins-Regular.ttf');
+}
+
+@font-face {
+    font-family: Poppins-Medium;
+    src: url('../fonts/poppins/Poppins-Medium.ttf');
+}
+
+@font-face {
+    font-family: Poppins-Bold;
+    src: url('../fonts/poppins/Poppins-Bold.ttf');
+}
+
+@font-face {
+    font-family: Poppins-SemiBold;
+    src: url('../fonts/poppins/Poppins-SemiBold.ttf');
+}
+
+.setting-update-button-form-group{
+    text-align: right;
+}
+
+.maintenance{
+    cursor: not-allowed;
+}
+
+.custom-custom-file-label::after{
+    background-color: #00A80E !important;
+    Content: "" !important;
+    color: white !important;
+    cursor: pointer;
+}
+
+.custom-upload-btn{
+    background: #e71511!important;
+    color: white !important;
+    cursor: pointer;
+}
+
+.custom-upload-btn:hover{
+    background: #d31511 !important;
+    border-color: #d31511 !important;
+}
+
+
+.login-page-custom{
+    background-image: url('../../assets/background/background.jpg') !important;
+    background-repeat: no-repeat;
+    background-color: rgba(255,255,255,0.1); !important;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.login-box-msg-custom{
+    display: block;
+    font-family: Poppins-Medium;
+    font-size: 30px;
+    color: #333333;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.parallax-container{
+    width: 100%;
+    height: 10vh;
+    /*overflow: hidden;*/
+    /*background: url(background.jpg);*/
+    background-attachment: fixed;
+}
+
+.parallax-container ul {
+    margin-left: -38vw;
+    height: 10vw;
+}
+
+.parallax-container li, .parallax-container img {
+    height: 50vw;
+}
+
+.mixBlnd
+{
+    background-blend-mode: screen;
+}
+
+.logo-custom{
+    width: 50%;
+}
+
+.outside-body{
+    overflow: hidden;
+}
+
+/*------------------------------------------------------------------
+[  ]*/
+.login100-pic {
+    /*width: 316px;*/
+    text-align: center;
+}
+
+.login100-pic img {
+    max-width: 50%;
+    padding-bottom: 2em;
+}
+
+.sign-out-button{
+    border-radius: 2em;
+}
+
+.brand-link-custom:hover{
+    color: rgba(255,255,255,.8);
+}
+
+.brand-link-custom:focus{
+    color: rgba(255,255,255,.8);
+}
+
+/*------------------------------------------------------------------
+[ Responsive ]*/
+
+@media (max-width: 992px) {
+    /*.login100-pic {*/
+    /*    width: 50%;*/
+    /*}*/
+}
+
+@media (max-width: 768px) {
+    /*.login100-pic {*/
+    /*    display: none;*/
+    /*}*/
+}
+
+
