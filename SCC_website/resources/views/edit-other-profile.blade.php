@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>SCC | @lang("Profile")</title>
+  <title>SCC | @lang("Edit Profile")</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -43,12 +43,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>@lang("Profile")</h1>
+            <h1>@lang("Edit Profile")</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="dashboard">@lang("Dashboard")</a></li>
-              <li class="breadcrumb-item active">@lang("Profile")</li>
+              <li class="breadcrumb-item"><a href="user-list">@lang("User List")</a></li>
+              <li class="breadcrumb-item active">@lang("Edit Profile")</li>
             </ol>
           </div>
         </div>
@@ -65,23 +65,23 @@
             <div class="card card-primary card-outline">
               <div class="card-body box-profile">
                 <div class="text-center">
-                    @if (session("1752051_user")["user_avatar"] == "")
+                    @if (session("current_user")["user_avatar"] == "")
                         <img id="avatar" class="profile-user-img img-fluid img-circle" src="../assets/img/avatar04.png">
                     @else
-                        <img id="avatar" class="profile-user-img img-fluid img-circle" src="{{{session("1752051_user")["user_avatar"]}}}">
+                        <img id="avatar" class="profile-user-img img-fluid img-circle" src="{{{session("current_user")["user_avatar"]}}}">
                     @endif
                 </div>
 
 {{--                <h3 class="profile-username text-center">Huỳnh Ngọc Thiện</h3>--}}
-                  <h3 class="profile-username text-center">{{session("1752051_user")["user_fullname"]}}</h3>
+                  <h3 class="profile-username text-center">{{session("current_user")["user_fullname"]}}</h3>
 
 {{--                <p class="text-muted text-center">Admin</p>--}}
 
 {{--                  <p class="text-muted text-center"><a style="text-decoration: none; color: #6c757d" >thien.huynh21@hcmut.edu.vn</a></p>--}}
-                  <p class="text-muted text-center"><a href="mailto:{{{session("1752051_user")["user_email"]}}}" style="text-decoration: none; color: #6c757d" >{{session("1752051_user")["user_email"]}}</a></p>
+                  <p class="text-muted text-center"><a href="mailto:{{{session("current_user")["user_email"]}}}" style="text-decoration: none; color: #6c757d" >{{session("current_user")["user_email"]}}</a></p>
 
 {{--                  <p class="text-muted text-center"><a style="text-decoration: none; color: #6c757d" >0888315899</a></p>--}}
-                  <p class="text-muted text-center"><a href="tel:{{{session("1752051_user")["user_mobile"]}}}" style="text-decoration: none; color: #6c757d" >{{session("1752051_user")["user_mobile"]}}</a></p>
+                  <p class="text-muted text-center"><a href="tel:{{{session("current_user")["user_mobile"]}}}" style="text-decoration: none; color: #6c757d" >{{session("current_user")["user_mobile"]}}</a></p>
 
 {{--                  <div class="input-group">--}}
 {{--                      <div class="custom-file">--}}
@@ -98,7 +98,7 @@
 
                   <div class="input-group">
                       <div class="custom-file">
-                          <form id="upload-avatar" method="post" action="update-profile-avatar" enctype="multipart/form-data">
+                          <form id="upload-avatar" method="post" action="update-other-profile-avatar" enctype="multipart/form-data">
                               {{csrf_field()}}
                               <input name="user_avatar" type="file" class="custom-file-inputs" id="avatar-upload" hidden required>
                           </form>
@@ -140,39 +140,20 @@
 {{--                  Admin--}}
 {{--                </p>--}}
                   <p class="text-muted">
-                      {{session("1752051_user")["user_role"]}}
+                      {{session("current_user")["user_role"]}}
                   </p>
 
                 <hr>
 
                 <strong><i class="fas fa-map-marker-alt mr-1"></i> @lang("Address")</strong>
 
-                <p class="text-muted">{{session("1752051_user")["user_address"]}}</p>
+                <p class="text-muted">{{session("current_user")["user_address"]}}</p>
 
                   <hr>
 
               <strong><i class="far fa-file-alt mr-1"></i> @lang("About")</strong>
 
-              <p class="text-muted">{{session("1752051_user")["user_about"]}}</p>
-{{--                  <p class="text-muted">292 Ha Vy Phuong 12, Quan 10</p>--}}
-
-{{--                <hr>--}}
-
-{{--                <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>--}}
-
-{{--                <p class="text-muted">--}}
-{{--                  <span class="tag tag-danger">UI Design</span>--}}
-{{--                  <span class="tag tag-success">Coding</span>--}}
-{{--                  <span class="tag tag-info">Javascript</span>--}}
-{{--                  <span class="tag tag-warning">PHP</span>--}}
-{{--                  <span class="tag tag-primary">Node.js</span>--}}
-{{--                </p>--}}
-
-{{--                <hr>--}}
-
-{{--                <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>--}}
-
-{{--                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>--}}
+              <p class="text-muted">{{session("current_user")["user_about"]}}</p>
               </div>
               <!-- /.card-body -->
             </div>
@@ -190,8 +171,9 @@
               </div><!-- /.card-header -->
               <div class="card-body">
                 <div class="tab-content">
+
                   <div class="tab-pane active" id="settings">
-                    <form action="update-profile" method="post" class="form-horizontal">
+                    <form action="update-other-profile" method="post" class="form-horizontal">
                         {{csrf_field()}}
                       <div class="form-group row">
                         <label for="inputName" class="col-sm-2 col-form-label">@lang("Full Name")</label>
@@ -212,9 +194,24 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="inputNames" class="col-sm-2 col-form-label">@lang("Address")</label>
+                            <label for="inputName2" class="col-sm-2 col-form-label">@lang("Role")</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="inputNames" name="user_address" placeholder="@lang("Fill in new address")">
+                                <select name="user_role" id="select2bs4-role" style="" class="form-control select2bs4" style="width: 100%;">
+{{--                                    <option></option>--}}
+                                    @foreach( $permission_db as $permission_each)
+                                        @if (session("current_user")["user_role"] == $permission_each->permission_role)
+                                            <option selected value="{{{$permission_each->permission_role}}}">{{$permission_each->permission_role}}</option>
+                                        @else
+                                            <option value="{{{$permission_each->permission_role}}}">{{$permission_each->permission_role}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputName" class="col-sm-2 col-form-label">@lang("Address")</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputName" name="user_address" placeholder="@lang("Fill in new address")">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -238,7 +235,7 @@
                         <div class="form-group row">
                             <label for="inputName8" class="col-sm-2 col-form-label">@lang("Session Timeout (Minutes)")</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="inputName8" name="user_session_timeout" value="{{{ session('1752051_user')['user_session_timeout'] }}}">
+                                <input type="text" class="form-control" id="inputName8" name="user_session_timeout" value="{{{ session("current_user")['user_session_timeout'] }}}">
                             </div>
                         </div>
                       <div class="form-group row">
@@ -276,6 +273,9 @@
 <div id="success-update" class="toastrDefaultSuccess" ></div>
 <div id="danger-update" class="toastrDefaultError" hidden></div>
 
+<input id="select2-placeholder" type="hidden" value='@lang("Choose a role to modify")'>
+<input id="select2-noResults" type="hidden" value='@lang("No Results Found")'>
+
 @if(session('msg_profile'))
     <input id="msg-profile" type="hidden" value="{{{ session('msg_profile') }}}">
 @endif
@@ -302,6 +302,8 @@
 <script src="../assets/plugins/sweetalert2/sweetalert2.min.js"></script>
 <!-- overlayScrollbars -->
 <script src="../assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- Select2 -->
+<script src="../assets/plugins/select2/js/select2.full.min.js"></script>
 <script type="text/javascript">
     $(function() {
         const Toast = Swal.mixin({
@@ -474,6 +476,36 @@
         });
     </script>
 @endif
+<script>
+    $(function () {
+
+        //Initialize Select2 Elements
+        $('#select2bs4-role').select2({
+            theme: 'bootstrap4',
+            placeholder: $('#select2-placeholder').val(),
+            language: {
+                "noResults": function(){
+                    return $('#select2-noResults').val();
+                }
+            }
+        })
+
+        {{--$('#select2bs4-role').on('select2:select', function (e) {--}}
+        {{--    var data = e.params.data;--}}
+        {{--    $.ajax({--}}
+        {{--        url: "choose-role",--}}
+        {{--        type: "POST",--}}
+        {{--        data: {_token: "{{csrf_token()}}", permission_role: data.id },--}}
+        {{--        async: false,--}}
+        {{--        success: function (data) {--}}
+        {{--            // alert(data);--}}
+        {{--            window.location.reload();--}}
+        {{--        }--}}
+        {{--    })--}}
+        {{--});--}}
+
+    });
+</script>
 <!-- Preview Avatar -->
 <script src="../assets/js/preview-avatar.js"></script>
 @include("include/session-timeout")

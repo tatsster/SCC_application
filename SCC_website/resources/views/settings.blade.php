@@ -713,6 +713,7 @@
     $(".bootstrap-switch-danger").text('@lang("OFF")');
 
 </script>
-</body>
+@include("include/session-timeout")
+@include("include/chatbot")
 </body>
 </html>

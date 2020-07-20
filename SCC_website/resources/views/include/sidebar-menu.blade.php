@@ -13,13 +13,13 @@
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
                 @if (session("1752051_user")["user_avatar"] == "")
-                    <img id="avata" class="img-circle elevation-2" src="../assets/admin/img/avatar04.png">
+                    <img id="avata" class="img-circle elevation-2" src="../assets/img/avatar04.png">
                 @else
                     <img id="avata" class="img-circle elevation-2" src="{{{session("1752051_user")["user_avatar"]}}}">
                 @endif
             </div>
             <div class="info">
-                <a href="profile" class="d-block">Huỳnh Ngọc Thiện</a>
+                <a href="profile" class="d-block">{{{session("1752051_user")["user_fullname"]}}}</a>
 {{--                <a href="profile" class="d-block">Dương Anh Vũ</a>--}}
             </div>
         </div>
@@ -114,7 +114,7 @@
                         @else
                             <a href="settings" class="nav-link">
                         @endif
-                            <i class="nav-icon fas fa-cog"></i>
+                            <i class="nav-icon fas fa-cogs"></i>
                             <p>
                                 @lang("System Settings")
                             </p>

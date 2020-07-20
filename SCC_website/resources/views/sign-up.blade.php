@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>SCC | @lang("Profile")</title>
+  <title>SCC | @lang("Add Profile")</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -30,25 +30,36 @@
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     <!-- Navbar -->
-@include("include/nav")
-<!-- /.navbar -->
+    <!-- Select2 -->
+    <link rel="stylesheet" href="../assets/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="../assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+                @include("include/change-language-outside")
+            </li>
+        </ul>
+    </nav>
 
-    <!-- Main Sidebar Container -->
-@include("include/sidebar-menu")
+    <!-- /.navbar -->
+
+{{--    <!-- Main Sidebar Container -->--}}
+{{--@include("include/sidebar-menu")--}}
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper custom-content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>@lang("Profile")</h1>
+            <h1>@lang("Register Profile")</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="dashboard">@lang("Dashboard")</a></li>
-              <li class="breadcrumb-item active">@lang("Profile")</li>
+              <li class="breadcrumb-item"><a href="sign-in">@lang("Sign In")</a></li>
+              <li class="breadcrumb-item active">@lang("Register Profile")</li>
             </ol>
           </div>
         </div>
@@ -58,124 +69,37 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <div class="row">
+          <form id="upload-avatar" method="post" action="register" enctype="multipart/form-data">
+            <div class="row">
           <div class="col-md-3">
 
             <!-- Profile Image -->
             <div class="card card-primary card-outline">
               <div class="card-body box-profile">
                 <div class="text-center">
-                    @if (session("1752051_user")["user_avatar"] == "")
-                        <img id="avatar" class="profile-user-img img-fluid img-circle" src="../assets/img/avatar04.png">
-                    @else
-                        <img id="avatar" class="profile-user-img img-fluid img-circle" src="{{{session("1752051_user")["user_avatar"]}}}">
-                    @endif
+                    <img id="avatar" class="profile-user-img img-fluid img-circle" src="../assets/img/avatar04.png">
                 </div>
 
-{{--                <h3 class="profile-username text-center">Huỳnh Ngọc Thiện</h3>--}}
-                  <h3 class="profile-username text-center">{{session("1752051_user")["user_fullname"]}}</h3>
-
-{{--                <p class="text-muted text-center">Admin</p>--}}
-
-{{--                  <p class="text-muted text-center"><a style="text-decoration: none; color: #6c757d" >thien.huynh21@hcmut.edu.vn</a></p>--}}
-                  <p class="text-muted text-center"><a href="mailto:{{{session("1752051_user")["user_email"]}}}" style="text-decoration: none; color: #6c757d" >{{session("1752051_user")["user_email"]}}</a></p>
-
-{{--                  <p class="text-muted text-center"><a style="text-decoration: none; color: #6c757d" >0888315899</a></p>--}}
-                  <p class="text-muted text-center"><a href="tel:{{{session("1752051_user")["user_mobile"]}}}" style="text-decoration: none; color: #6c757d" >{{session("1752051_user")["user_mobile"]}}</a></p>
-
-{{--                  <div class="input-group">--}}
-{{--                      <div class="custom-file">--}}
-{{--                          <form id="upload-avatar" method="post" action="update-profile-avatar" enctype="multipart/form-data">--}}
-{{--                              {{csrf_field()}}--}}
-{{--                              <input name="admin_avatar" type="file" class="custom-file-inputs" id="avatar-upload" hidden required>--}}
-{{--                          </form>--}}
-{{--                          <label class="custom-file-label custom-custom-file-label" for="avatar-upload">Choose avatar</label>--}}
-{{--                      </div>--}}
-{{--                      <div class="input-group-append">--}}
-{{--                          <span class="input-group-text custom-upload-btn" onclick='$("#upload-avatar").submit();' id="">Upload</span>--}}
-{{--                      </div>--}}
-{{--                  </div>--}}
+                  <br>
 
                   <div class="input-group">
                       <div class="custom-file">
-                          <form id="upload-avatar" method="post" action="update-profile-avatar" enctype="multipart/form-data">
                               {{csrf_field()}}
                               <input name="user_avatar" type="file" class="custom-file-inputs" id="avatar-upload" hidden required>
-                          </form>
+{{--                          </form>--}}
                           <label class="custom-file-label custom-custom-file-label" for="avatar-upload">@lang("Avatar")</label>
                       </div>
-                      <div class="input-group-append">
-                          <span class="input-group-text custom-upload-btn" onclick='$("#upload-avatar").submit();' id="">@lang("Upload")</span>
-                      </div>
                   </div>
-
-{{--                <ul class="list-group list-group-unbordered mb-3">--}}
-{{--                  <li class="list-group-item">--}}
-{{--                    <b>Followers</b> <a class="float-right">1,322</a>--}}
-{{--                  </li>--}}
-{{--                  <li class="list-group-item">--}}
-{{--                    <b>Following</b> <a class="float-right">543</a>--}}
-{{--                  </li>--}}
-{{--                  <li class="list-group-item">--}}
-{{--                    <b>Friends</b> <a class="float-right">13,287</a>--}}
-{{--                  </li>--}}
-{{--                </ul>--}}
-
-{{--                <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>--}}
+                  <br>
+                  <label for="captcha">@lang('Captcha')</label>
+                  {!! NoCaptcha::renderJs() !!}
+                  {!! NoCaptcha::display() !!}
+                  <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
               </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
 
-            <!-- About Me Box -->
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title">@lang("About Me")</h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <strong><i class="fas fa-pencil-alt mr-1"></i> @lang("Role")</strong>
-
-{{--                <p class="text-muted">--}}
-{{--                  Admin--}}
-{{--                </p>--}}
-                  <p class="text-muted">
-                      {{session("1752051_user")["user_role"]}}
-                  </p>
-
-                <hr>
-
-                <strong><i class="fas fa-map-marker-alt mr-1"></i> @lang("Address")</strong>
-
-                <p class="text-muted">{{session("1752051_user")["user_address"]}}</p>
-
-                  <hr>
-
-              <strong><i class="far fa-file-alt mr-1"></i> @lang("About")</strong>
-
-              <p class="text-muted">{{session("1752051_user")["user_about"]}}</p>
-{{--                  <p class="text-muted">292 Ha Vy Phuong 12, Quan 10</p>--}}
-
-{{--                <hr>--}}
-
-{{--                <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>--}}
-
-{{--                <p class="text-muted">--}}
-{{--                  <span class="tag tag-danger">UI Design</span>--}}
-{{--                  <span class="tag tag-success">Coding</span>--}}
-{{--                  <span class="tag tag-info">Javascript</span>--}}
-{{--                  <span class="tag tag-warning">PHP</span>--}}
-{{--                  <span class="tag tag-primary">Node.js</span>--}}
-{{--                </p>--}}
-
-{{--                <hr>--}}
-
-{{--                <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>--}}
-
-{{--                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>--}}
-              </div>
-              <!-- /.card-body -->
-            </div>
             <!-- /.card -->
           </div>
           <!-- /.col -->
@@ -183,15 +107,13 @@
             <div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
-{{--                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>--}}
-{{--                  <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>--}}
                   <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">@lang("Settings")</a></li>
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">
                 <div class="tab-content">
                   <div class="tab-pane active" id="settings">
-                    <form action="update-profile" method="post" class="form-horizontal">
+{{--                    <form action="update-other-profile" method="post" class="form-horizontal">--}}
                         {{csrf_field()}}
                       <div class="form-group row">
                         <label for="inputName" class="col-sm-2 col-form-label">@lang("Full Name")</label>
@@ -212,9 +134,9 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="inputNames" class="col-sm-2 col-form-label">@lang("Address")</label>
+                            <label for="inputName" class="col-sm-2 col-form-label">@lang("Address")</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="inputNames" name="user_address" placeholder="@lang("Fill in new address")">
+                                <input type="text" class="form-control" id="inputName" name="user_address" placeholder="@lang("Fill in new address")">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -235,18 +157,11 @@
                                 <input type="password" class="form-control" id="inputName1" name="user_password_confirmation" placeholder="@lang("Please confirm password")">
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="inputName8" class="col-sm-2 col-form-label">@lang("Session Timeout (Minutes)")</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="inputName8" name="user_session_timeout" value="{{{ session('1752051_user')['user_session_timeout'] }}}">
-                            </div>
-                        </div>
                       <div class="form-group row">
                         <div class="offset-sm-2 col-sm-10 text-right">
-                          <button type="submit" class="btn btn-danger">@lang("Update")</button>
+                          <button type="submit" class="btn btn-danger">@lang("Register")</button>
                         </div>
                       </div>
-                    </form>
                   </div>
                   <!-- /.tab-pane -->
                 </div>
@@ -257,13 +172,13 @@
           </div>
           <!-- /.col -->
         </div>
+          </form>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  @include("include/footer")
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
@@ -275,6 +190,9 @@
 
 <div id="success-update" class="toastrDefaultSuccess" ></div>
 <div id="danger-update" class="toastrDefaultError" hidden></div>
+
+<input id="select2-placeholder" type="hidden" value='@lang("Choose a role")'>
+<input id="select2-noResults" type="hidden" value='@lang("No Results Found")'>
 
 @if(session('msg_profile'))
     <input id="msg-profile" type="hidden" value="{{{ session('msg_profile') }}}">
@@ -302,6 +220,8 @@
 <script src="../assets/plugins/sweetalert2/sweetalert2.min.js"></script>
 <!-- overlayScrollbars -->
 <script src="../assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- Select2 -->
+<script src="../assets/plugins/select2/js/select2.full.min.js"></script>
 <script type="text/javascript">
     $(function() {
         const Toast = Swal.mixin({
@@ -474,9 +394,49 @@
         });
     </script>
 @endif
+<script>
+
+    function formatState (state) {
+        if (!state.id) { return state; }
+        var $state = $(
+            '<span><span class="flag-icon flag-icon-' +  state.element.value.toLowerCase() + '"></span>&ensp;' +
+            state.text +     '</span>'
+        );
+        return $state;
+    };
+
+    $(function () {
+
+        //Initialize Select2 Elements
+        $('#select2bs4-language').select2({
+            templateResult: formatState,
+            templateSelection: formatState,
+            theme: 'bootstrap4',
+            language: {
+                "noResults": function(){
+                    return $('#select2-noResults').val();
+                }
+            }
+        })
+
+        $('#select2bs4-language').on('select2:select', function (e) {
+            var data = e.params.data;
+            // console.log(data);
+            $.ajax({
+                url: "change-language-cookie",
+                type: "POST",
+                data: {_token: "{{csrf_token()}}", user_lang: data.id },
+                async: false,
+                success: function (data) {
+                    // alert(data);
+                    window.location.reload();
+                }
+            })
+        });
+
+    });
+</script>
 <!-- Preview Avatar -->
 <script src="../assets/js/preview-avatar.js"></script>
-@include("include/session-timeout")
-@include("include/chatbot")
 </body>
 </html>

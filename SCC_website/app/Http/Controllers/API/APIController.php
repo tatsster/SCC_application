@@ -59,7 +59,7 @@ class APIController extends Controller{
         return $min + $rnd;
     }
 
-    private function getToken($length)
+    private function get_token($length)
     {
         $token = "";
         $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -85,15 +85,15 @@ class APIController extends Controller{
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError("Đã có lỗi xảy ra !!!", $validator->errors());
+            return $this->send_error("Đã có lỗi xảy ra !!!", $validator->errors());
         }
 
         try {
             $query = DB::select($request["query"]);
 
-            return $this->sendResponse($query, 'Gửi Yêu Cầu Thành Công !!!');
+            return $this->send_response($query, 'Gửi Yêu Cầu Thành Công !!!');
         } catch ( \Exception $e ) {
-            return $this->sendError("Đã có lỗi xảy ra !!!", $e);
+            return $this->send_error("Đã có lỗi xảy ra !!!", [$e]);
         }
     }
 
@@ -118,15 +118,15 @@ class APIController extends Controller{
         if ($validator->fails()) {
             $error = json_decode($validator->errors())->user_email;
             if ($error != "") {
-                return $this->sendError("Đã có lỗi xảy ra !!!", $error);
+                return $this->send_error("Đã có lỗi xảy ra !!!", [$error]);
             }
-            return $this->sendError("Đã có lỗi xảy ra !!!", $validator->errors());
+            return $this->send_error("Đã có lỗi xảy ra !!!", $validator->errors());
         }
 
         $user_db = UserInfo::where("user_password", md5($request["user_password"]))->where("user_email", $request["user_email"])->first();
 
         if ($request["user_remember"] == 1){
-            $remember_token = $this->getToken(21);
+            $remember_token = parent::get_token(21);
             $user_db["user_remember_token"] = $remember_token;
             $user_db->save();
 
@@ -137,7 +137,7 @@ class APIController extends Controller{
         unset($user_db['user_login_attempt']);
         unset($user_db['user_remember_token']);
 
-        return $this->sendResponse($user_db, 'Đăng nhập thành công !!!');
+        return $this->sendResponse([$user_db], 'Đăng nhập thành công !!!');
     }
 
 //    public function sign_up(Request $request){
@@ -179,10 +179,10 @@ class APIController extends Controller{
 //        ]);
 //
 //        if ($validator->fails()) {
-//            return $this->sendError("Đã có lỗi xảy ra !!!", $validator->errors());
+//            return $this->send_error("Đã có lỗi xảy ra !!!", $validator->errors());
 //        }
 //
-//        $token = $this->getToken(17);
+//        $token = parent::get_token(17);
 //
 //        $user = new UserInfo();
 //        $user["user_id"] = $token;
@@ -218,7 +218,7 @@ class APIController extends Controller{
 //        try {
 //            return $this->sendResponse($res["results"], 'Lấy thông tin Tỉnh/Thành Phố thành công !!!');
 //        } catch ( \Exception $e ) {
-//            return $this->sendError("", '');
+//            return $this->send_error("", '');
 //        }
 //    }
 //
@@ -231,7 +231,7 @@ class APIController extends Controller{
 //        try {
 //            return $this->sendResponse($res["results"], 'Lấy thông tin Huyện/Quận thành công !!!');
 //        } catch ( \Exception $e ) {
-//            return $this->sendError("", '');
+//            return $this->send_error("", '');
 //        }
 //    }
 //
@@ -244,7 +244,7 @@ class APIController extends Controller{
 //        try {
 //            return $this->sendResponse($res["results"], 'Lấy thông tin Xã/Phường thành công !!!');
 //        } catch ( \Exception $e ) {
-//            return $this->sendError("", '');
+//            return $this->send_error("", '');
 //        }
 //    }
 //
@@ -258,7 +258,7 @@ class APIController extends Controller{
 //        try {
 //            return $this->sendResponse($data["results"][0]["fee"], 'Tính cước phí thành công !!!');
 //        } catch ( \Exception $e ) {
-//            return $this->sendError("Địa chỉ sai / Khối lượng nhập sai / Khối lượng đã lớn hơn 20000", '');
+//            return $this->send_error("Địa chỉ sai / Khối lượng nhập sai / Khối lượng đã lớn hơn 20000", '');
 //        }
 //    }
 //
@@ -310,11 +310,11 @@ class APIController extends Controller{
 //            ]);
 //
 //        if ($validator->fails()) {
-//            return $this->sendError("Đã có lỗi xảy ra !!!", $validator->errors());
+//            return $this->send_error("Đã có lỗi xảy ra !!!", $validator->errors());
 //        }
 //
 //        $form = new FormInfo();
-//        $form_id = $this->getToken(19);
+//        $form_id = parent::get_token(19);
 //        $form["form_id"] = $form_id;
 //        $form["form_sender_mobile"] = $request["sender-mobile"];
 //        $form["form_sender_fullname"] = $request["sender-fullname"];
@@ -376,11 +376,11 @@ class APIController extends Controller{
 //            ]);
 //
 //        if ($validator->fails()) {
-//            return $this->sendError("Đã có lỗi xảy ra !!!", $validator->errors());
+//            return $this->send_error("Đã có lỗi xảy ra !!!", $validator->errors());
 //        }
 //
 //        $form = new FormFoodInfo();
-//        $form_food_id = $this->getToken(18);
+//        $form_food_id = parent::get_token(18);
 //        $form["form_food_id"] = $form_food_id;
 //        $form["form_food_mobile"] = $request["sender-mobile"];
 //        $form["form_food_fullname"] = $request["sender-fullname"];
@@ -423,7 +423,7 @@ class APIController extends Controller{
 //        ]);
 //
 //        if ($validator->fails()) {
-//            return $this->sendError("Đã có lỗi xảy ra !!!", $validator->errors());
+//            return $this->send_error("Đã có lỗi xảy ra !!!", $validator->errors());
 //        }
 //
 //        $contact = new ContactInfo();

@@ -178,7 +178,7 @@
         }
 
         .btn-primary table td {
-            background-color: #3498db;
+            /*background-color: #3498db;*/
         }
 
         .btn-primary a {
@@ -322,11 +322,14 @@
                 line-height: inherit;
             }
             .btn-primary table td:hover {
-                background-color: #34495e !important;
+                /*background-color: #34495e !important;*/
+                /*border-color: #34495e !important;*/
             }
             .btn-primary a:hover {
-                background-color: #F8990B !important;
-                border-color: #F8990B !important;
+                /*background-color: #F8990B !important;*/
+                /*border-color: #F8990B !important;*/
+                background-color: #dc3545 !important;
+                border-color: #dc3545 !important;
             }
         }
 
@@ -349,10 +352,27 @@
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td>
-                                        <img class="logo" src="{{{ $message->embed(public_path()."/assets/logo/hcmut-logo.jpg") }}}">
+                                        <img class="logo" src="{{{ $message->embed(public_path()."/assets/logo/hcmut-logo-email.jpg") }}}">
+                                        <br>
+                                        <br>
                                         <h3>@lang("Hi") {{ $fullname }},</h3>
                                         <h3>@lang("This email is only for checking if your personal information is valid or not.") </h3>
-                                        <h3>@lang("Therefore, because this email was sent successfully so that means your personal information is valid !!!") <b style="color: #007bff">0888 315 899</b></h3>
+                                        <h3>@lang("Therefore, please visit the link below to confirm your personal information. Thank you for your reading !!! And if you have any problems, feel free to call us through our hotline: ") <b style="color: #007bff">0888 315 899</b></h3>
+                                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                                            <tbody>
+                                            <tr>
+                                                <td align="left">
+                                                    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td> <a href="@php echo "http://$_SERVER[HTTP_HOST]/confirm-information?user_confirmation_code=$code&user_email=$email"; @endphp" style="font-size: 20px; pointer-events: none">@lang("Activate Your New Personal Information !!!")</a> </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
 {{--                                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">--}}
 {{--                                            <tbody>--}}
 {{--                                            <tr>--}}

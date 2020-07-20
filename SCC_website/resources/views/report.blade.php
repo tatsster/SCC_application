@@ -66,77 +66,6 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-3">
-
-            <!-- Profile Image -->
-{{--            <div class="card card-primary card-outline">--}}
-{{--              <div class="card-body box-profile">--}}
-{{--                <div class="text-center">--}}
-{{--                  <img class="profile-user-img img-fluid img-circle"--}}
-{{--                       src="../assets/img/user4-128x128.jpg"--}}
-{{--                       alt="User profile picture">--}}
-{{--                </div>--}}
-
-{{--                <h3 class="profile-username text-center">Nina Mcintire</h3>--}}
-
-{{--                <p class="text-muted text-center">Software Engineer</p>--}}
-
-{{--                <ul class="list-group list-group-unbordered mb-3">--}}
-{{--                  <li class="list-group-item">--}}
-{{--                    <b>Followers</b> <a class="float-right">1,322</a>--}}
-{{--                  </li>--}}
-{{--                  <li class="list-group-item">--}}
-{{--                    <b>Following</b> <a class="float-right">543</a>--}}
-{{--                  </li>--}}
-{{--                  <li class="list-group-item">--}}
-{{--                    <b>Friends</b> <a class="float-right">13,287</a>--}}
-{{--                  </li>--}}
-{{--                </ul>--}}
-
-{{--                <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>--}}
-{{--              </div>--}}
-{{--              <!-- /.card-body -->--}}
-{{--            </div>--}}
-            <!-- /.card -->
-
-            <!-- About Me Box -->
-{{--            <div class="card card-primary">--}}
-{{--              <div class="card-header">--}}
-{{--                <h3 class="card-title">About Me</h3>--}}
-{{--              </div>--}}
-{{--              <!-- /.card-header -->--}}
-{{--              <div class="card-body">--}}
-{{--                <strong><i class="fas fa-book mr-1"></i> Education</strong>--}}
-
-{{--                <p class="text-muted">--}}
-{{--                  B.S. in Computer Science from the University of Tennessee at Knoxville--}}
-{{--                </p>--}}
-
-{{--                <hr>--}}
-
-{{--                <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>--}}
-
-{{--                <p class="text-muted">Malibu, California</p>--}}
-
-{{--                <hr>--}}
-
-{{--                <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>--}}
-
-{{--                <p class="text-muted">--}}
-{{--                  <span class="tag tag-danger">UI Design</span>--}}
-{{--                  <span class="tag tag-success">Coding</span>--}}
-{{--                  <span class="tag tag-info">Javascript</span>--}}
-{{--                  <span class="tag tag-warning">PHP</span>--}}
-{{--                  <span class="tag tag-primary">Node.js</span>--}}
-{{--                </p>--}}
-
-{{--                <hr>--}}
-
-{{--                <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>--}}
-
-{{--                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>--}}
-{{--              </div>--}}
-{{--              <!-- /.card-body -->--}}
-{{--            </div>--}}
             <!-- /.card -->
           </div>
           <!-- /.col -->
@@ -151,11 +80,11 @@
 {{--                      <h5 class="mt-4 mb-2">@lang("Choose role and set permission")</h5>--}}
 
                       <select name="user_lang" id="select2bs4-building" style="" class="form-control select2bs4" style="width: 100%;">
-                          @if (session("1752051_current_building")["building"] == "")
+                          @if (session("1752051_current_building")["building"] == null)
                               <option></option>
                           @endif
                           @foreach( $building_db as $building_each)
-                              @if (session("1752051_current_building")["building"] == $building_each->building_name)
+                              @if (session("1752051_current_building")["building"]["building_name"] == $building_each->building_name)
                                   <option selected value="{{{$building_each->building_name}}}">{{$building_each->building_name}}</option>
                               @else
                                   <option value="{{{$building_each->building_name}}}">{{$building_each->building_name}}</option>
@@ -165,133 +94,127 @@
 
                         <br>
 
-                      @if (session("1752051_current_building")["building"] != "" )
-
+                      @if (session("1752051_current_building")["building"] != null )
+{{--                            @php--}}
+{{--                                dd(session("1752051_current_building")["building"]["building_active"])--}}
+{{--                            @endphp--}}
                             <div class="row">
                                 <div class="col-md-12">
                                     <!-- The time line -->
                                     <div class="timeline">
                                         <!-- timeline time label -->
                                         <div class="time-label">
-                                            <span class="bg-primary"><a href="report">@lang("Building: ") {{ session("1752051_current_building")["building"] }}</a></span>
+                                            <span class="bg-primary"><a href="#/" onclick="renameBuilding('@lang("Rename Building?")','@lang('Do you want to rename building '){{{ session("1752051_current_building")["building"]["building_name"] }}} ?','@lang("Yes")','@lang("No")','@lang("New Building Name")','@lang("Input the new name")','@lang("Input name cannot be empty !!!")','@lang("Error !!!")','@lang("This building name had already existed !!!")','@lang("OK")','@lang("Successfully renamed !!!")','@lang("The building is now editable !!!")','{{{ session("1752051_current_building")["building"]["building_name"] }}}')">@lang("Building: ") {{ session("1752051_current_building")["building"]["building_name"] }}</a></span>
+                                            <span class="bg-danger float-right"><i class="fa fa-trash"></i> <a href="#/" onclick="deleteBuilding('@lang("Are you sure?")','@lang("You might not want to delete "){{{ session("1752051_current_building")["building"]["building_name"] }}} !!!','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted ") {{{ session("1752051_current_building")["building"]["building_name"] }}} !!!','@lang("OK")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")','{{{ session("1752051_current_building")["building"]["building_name"] }}}')">@lang("Delete Building: ") {{ session("1752051_current_building")["building"]["building_name"] }}</a></span>
+                                            @if (session("1752051_current_building")["building"]["building_active"] == true)
+                                                <span class="bg-warning float-right custom-next-building-option"><i class="fa fa-lock"></i> <a href="#/" onclick="activateDeactivateBuilding('@lang("Are you sure?")','@lang("You are deactivating "){{{ session("1752051_current_building")["building"]["building_name"] }}}!!!','@lang("Yes, deactivate!")','@lang("Cancel")','@lang("Deactivate!")','@lang("You deactivated ") {{{ session("1752051_current_building")["building"]["building_name"] }}} !!!','@lang("OK")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")','{{{ session("1752051_current_building")["building"]["building_name"] }}}',1)">@lang("Deactivate Building: ") {{ session("1752051_current_building")["building"]["building_name"] }}</a></span>
+                                            @else
+                                                <span class="bg-warning float-right custom-next-building-option"><i class="fa fa-unlock"></i> <a href="#/" onclick="activateDeactivateBuilding('@lang("Are you sure?")','@lang("You are activating "){{{ session("1752051_current_building")["building"]["building_name"] }}}!!!','@lang("Yes, activate!")','@lang("Cancel")','@lang("Activate!")','@lang("You activated ") {{{ session("1752051_current_building")["building"]["building_name"] }}} !!!','@lang("OK")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")','{{{ session("1752051_current_building")["building"]["building_name"] }}}',0)">@lang("Activate Building: ") {{ session("1752051_current_building")["building"]["building_name"] }}</a></span>
+
+                                            @endif
                                         </div>
                                         <!-- /.timeline-label -->
                                         <!-- timeline item -->
-                                        <div>
                                             @php
 
                                                 $floor_array = session("1752051_current_building");
+
 
                                                 unset($floor_array["building"]);
 
                                                 $floor_keys = array_keys($floor_array);
 
+                                                // dd(session("1752051_current_building"));
+
                                             @endphp
                                             @for ($i = 0; $i < count($floor_array); $i++)
-                                                <i class="fas fa-building bg-success"></i>
-                                                <div class="timeline-item">
-    {{--                                                <span class="time"><i class="fas fa-clock"></i> Cập nhật cấu trúc tầng ngày 11/05/2020</span>--}}
-                                                    <h3 class="timeline-header text-danger text-bold"><a href="report-floor">@lang("Floor: ") {{  $floor_keys[$i] }}</a></h3>
+                                                <div>
+                                                    @php
+                                                        $random_number = rand(0,2);
+                                                    @endphp
+                                                    @if ($random_number == 0)
+                                                        <i class="fas fa-building bg-success"></i>
+                                                    @elseif ($random_number == 1)
+                                                        <i class="fas fa-building bg-info"></i>
+                                                    @else
+                                                        <i class="fas fa-building bg-danger"></i>
+                                                    @endif
+                                                    <div class="timeline-item">
+                                                        <a href="#/" onclick="deleteFloor('@lang("Are you sure?")','@lang("You might not want to delete "){{{ $floor_keys[$i] }}} !!!','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted ") {{{ $floor_keys[$i] }}} !!!','@lang("OK")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")','{{{ $floor_keys[$i] }}}','{{{ session("1752051_current_building")["building"]["building_name"] }}}')" class="time"><i class="custom-icon-delete-size fas fa-times"></i></a>
+                                                        <a href="#/" onclick="addNewRoom('@lang("Create Room")','@lang("Submit a new room name")','@lang("Input name cannot be empty !!!")','@lang("Error !!!")','@lang("This building / floor / room had already existed !!!")','@lang("OK")','@lang("Successfully created !!!")','@lang("The room is now editable !!!")','@lang("Next &rarr;")','{{{ $floor_keys[$i] }}}','{{{ session("1752051_current_building")["building"]["building_name"] }}}')" class="time"><i class="custom-icon-add-size fas fa-plus"></i></a>
+                                                        @if (session("1752051_current_building")["building"]["building_active"] == true)
+                                                            @if ($floor_array[$floor_keys[$i]][0]["floor_active"] == true)
+                                                                <a href="#/" onclick="activateDeactivateFloor('@lang("Are you sure?")','@lang("You are deactivating "){{{ $floor_keys[$i] }}}!!!','@lang("Yes, deactivate!")','@lang("Cancel")','@lang("Deactivate!")','@lang("You deactivated ") {{{ $floor_keys[$i] }}} !!!','@lang("OK")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")','{{{ $floor_keys[$i] }}}','{{{ session("1752051_current_building")["building"]["building_name"] }}}',1)" class="time"><i class="custom-icon-activate-deactivate-size fas fa-lock"></i></a>
+                                                            @else
+                                                                <a href="#/" onclick="activateDeactivateFloor('@lang("Are you sure?")','@lang("You are activating "){{{ $floor_keys[$i] }}}!!!','@lang("Yes, activate!")','@lang("Cancel")','@lang("Activate!")','@lang("You activated ") {{{ $floor_keys[$i] }}} !!!','@lang("OK")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")','{{{ $floor_keys[$i] }}}','{{{ session("1752051_current_building")["building"]["building_name"] }}}',0)" class="time"><i class="custom-icon-activate-deactivate-size fas fa-unlock"></i></a>
+                                                            @endif
+                                                        @endif
+                                                        <h3 class="timeline-header text-danger text-bold"><a href="#/" onclick="renameFloor('@lang("Rename Floor?")','@lang('Do you want to rename floor '){{{ $floor_keys[$i] }}} ?','@lang("Yes")','@lang("No")','@lang("New Floor Name")','@lang("Input the new name")','@lang("Input name cannot be empty !!!")','@lang("Error !!!")','@lang("This floor name had already existed !!!")','@lang("OK")','@lang("Successfully renamed !!!")','@lang("The floor is now editable !!!")','{{{ $floor_keys[$i] }}}','{{{ session("1752051_current_building")["building"]["building_name"] }}}')">@lang("Floor: ") {{  $floor_keys[$i] }}</a></h3>
+                                                        @if ( count($floor_array[$floor_keys[$i]][1]) != 0 )
+                                                            <div class="timeline-footer">
+                                                        @endif
+                                                        @for ($j = 0; $j < count($floor_array[$floor_keys[$i]][1]); $j++)
+                                                                <div class="btn-group">
+                                                                    @php
+                                                                        $random_number = rand(0,3);
 
-{{--                                                    <div class="timeline-body">--}}
-{{--                                                        @lang("Room(s): ")--}}
-{{--                                                    </div>--}}
-                                                    <div class="timeline-footer">
-                                                        @for ($j = 0; $j < count($floor_array[$floor_keys[$i]]); $j++)
-                                                            <div class="btn-group">
-                                                                <button type="button" onclick="chooseRoom('{{{ session("1752051_current_building")["building"] }}}','{{{  $floor_keys[$i] }}}','{{{ $floor_array[$floor_keys[$i]][$j] }}}')" class="btn btn-info">{{ $floor_array[$floor_keys[$i]][$j] }}</button>
-                                                                <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
-                                                                    <span class="sr-only">Toggle Dropdown</span>
-                                                                    <div class="dropdown-menu" role="menu" style="">
-        {{--                                                                <a class="dropdown-item" href="#">Action</a>--}}
-        {{--                                                                <a class="dropdown-item" href="#">Another action</a>--}}
-        {{--                                                                <a class="dropdown-item" href="#">Something else here</a>--}}
-        {{--                                                                <div class="dropdown-divider"></div>--}}
-        {{--                                                                <a class="dropdown-item" href="#">Separated link</a>--}}
-                                                                    </div>
-                                                                </button>
-                                                            </div>
-        {{--                                                    <a href="report-room" class="btn btn-primary btn-lg">Room 500</a>--}}
-        {{--                                                    <a href="report-room" class="btn btn-info btn-lg">Room 501</a>--}}
-        {{--                                                    <a href="report-room" class="btn btn-success btn-lg">Room 502</a>--}}
-        {{--                                                    <a href="report-room" class="btn btn-info btn-lg">Room 503</a>--}}
-        {{--                                                    <a href="report-room" class="btn btn-danger btn-lg">Room 504</a>--}}
-        {{--                                                    <a href="report-room" class="btn btn-warning btn-lg">Library 505</a>--}}
-                                                        </div>
-                                                    @endfor
+                                                                        if ($random_number == 0){
+                                                                            $class = "btn-success";
+                                                                        }
+                                                                        else if ($random_number == 1){
+                                                                            $class = "btn-info";
+                                                                        }
+                                                                        else if ($random_number == 2){
+                                                                            $class = "btn-danger";
+                                                                        }
+                                                                        else{
+                                                                            $class = "btn-warning";
+                                                                        }
+
+                                                                    @endphp
+                                                                    @if ($floor_array[$floor_keys[$i]][1][$j]["room_active"] == true)
+                                                                        <button type="button" onclick="chooseRoom('{{{ session("1752051_current_building")["building"]["building_name"] }}}','{{{  $floor_keys[$i] }}}','{{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}}')" class="btn {{{ $class }}}">{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}</button>
+                                                                        <button type="button" class="btn {{{ $class }}} dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
+                                                                            <span class="sr-only">Toggle Dropdown</span>
+                                                                            <div class="dropdown-menu" role="menu" style="">
+                                                                                <a class="dropdown-item" href="#/" onclick="renameRoom('@lang("Rename Room?")','@lang('Do you want to rename room '){{{ $floor_keys[$i] }}} ?','@lang("Yes")','@lang("No")','@lang("New Room Name")','@lang("Input the new name")','@lang("Input name cannot be empty !!!")','@lang("Error !!!")','@lang("This room name had already existed !!!")','@lang("OK")','@lang("Successfully renamed !!!")','@lang("The room is now editable !!!")', '{{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}}','{{{ $floor_keys[$i] }}}','{{{ session("1752051_current_building")["building"]["building_name"] }}}')">@lang("Rename")</a>
+                                                                                <a class="dropdown-item" href="#/" onclick="deleteRoom('@lang("Are you sure?")','@lang("You might not want to delete "){{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}}!!!','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted ") {{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}} !!!','@lang("OK")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")','{{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}}','{{{ $floor_keys[$i] }}}','{{{ session("1752051_current_building")["building"]["building_name"] }}}')">@lang("Delete")</a>
+                                                                                @if (session("1752051_current_building")["building"]["building_active"] == true && $floor_array[$floor_keys[$i]][0]["floor_active"] == true)
+                                                                                    @if ($floor_array[$floor_keys[$i]][1][$j]["room_active"] == true)
+                                                                                        <a class="dropdown-item" href="#/" onclick="activateDeactivateRoom('@lang("Are you sure?")','@lang("You are deactivating "){{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}}!!!','@lang("Yes, deactivate!")','@lang("Cancel")','@lang("Deactivate!")','@lang("You deactivated ") {{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}} !!!','@lang("OK")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")','{{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}}','{{{ $floor_keys[$i] }}}','{{{ session("1752051_current_building")["building"]["building_name"] }}}',1)">@lang("Deactivate")</a>
+                                                                                    @else
+                                                                                        <a class="dropdown-item" href="#/" onclick="activateDeactivateRoom('@lang("Are you sure?")','@lang("You are activating "){{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}}!!!','@lang("Yes, activate!")','@lang("Cancel")','@lang("Activate!")','@lang("You activated ") {{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}} !!!','@lang("OK")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")','{{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}}','{{{ $floor_keys[$i] }}}','{{{ session("1752051_current_building")["building"]["building_name"] }}}',0)">@lang("Activate")</a>
+                                                                                    @endif
+                                                                                @endif
+                                                                            </div>
+                                                                        </button>
+                                                                    @else
+                                                                        <button type="button" class="btn btn-secondary">{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}</button>
+                                                                        <button type="button" class="btn btn-secondary dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
+                                                                            <span class="sr-only">Toggle Dropdown</span>
+                                                                            <div class="dropdown-menu" role="menu" style="">
+                                                                                <a class="dropdown-item" href="#/" onclick="renameRoom('@lang("Rename Room?")','@lang('Do you want to rename room '){{{ $floor_keys[$i] }}} ?','@lang("Yes")','@lang("No")','@lang("New Room Name")','@lang("Input the new name")','@lang("Input name cannot be empty !!!")','@lang("Error !!!")','@lang("This room name had already existed !!!")','@lang("OK")','@lang("Successfully renamed !!!")','@lang("The room is now editable !!!")', '{{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}}','{{{ $floor_keys[$i] }}}','{{{ session("1752051_current_building")["building"]["building_name"] }}}')">@lang("Rename")</a>
+                                                                                <a class="dropdown-item" href="#/" onclick="deleteRoom('@lang("Are you sure?")','@lang("You might not want to delete "){{{ $floor_array[$floor_keys[$i]][$j]["room_name"] }}}!!!','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted ") {{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}} !!!','@lang("OK")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")','{{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}}','{{{ $floor_keys[$i] }}}','{{{ session("1752051_current_building")["building"]["building_name"] }}}')">@lang("Delete")</a>
+                                                                                @if (session("1752051_current_building")["building"]["building_active"] == true && $floor_array[$floor_keys[$i]][0]["floor_active"] == true)
+                                                                                    @if ($floor_array[$floor_keys[$i]][1][$j]["room_active"] == true)
+                                                                                        <a class="dropdown-item" href="#/" onclick="activateDeactivateRoom('@lang("Are you sure?")','@lang("You are deactivating "){{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}}!!!','@lang("Yes, deactivate!")','@lang("Cancel")','@lang("Deactivate!")','@lang("You deactivated ") {{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}} !!!','@lang("OK")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")','{{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}}','{{{ $floor_keys[$i] }}}','{{{ session("1752051_current_building")["building"]["building_name"] }}}',1)">@lang("Deactivate")</a>
+                                                                                    @else
+                                                                                        <a class="dropdown-item" href="#/" onclick="activateDeactivateRoom('@lang("Are you sure?")','@lang("You are activating "){{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}}!!!','@lang("Yes, activate!")','@lang("Cancel")','@lang("Activate!")','@lang("You activated ") {{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}} !!!','@lang("OK")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")','{{{ $floor_array[$floor_keys[$i]][1][$j]["room_name"] }}}','{{{ $floor_keys[$i] }}}','{{{ session("1752051_current_building")["building"]["building_name"] }}}',0)">@lang("Activate")</a>
+                                                                                    @endif
+                                                                                @endif
+                                                                            </div>
+                                                                        </button>
+                                                                    @endif
+                                                                </div>
+                                                        @endfor
+                                                            @if ( count($floor_array[$floor_keys[$i]][1]) != 0 )
+                                                                </div>
+                                                            @endif
+                                                    </div>
                                                 </div>
                                             @endfor
-                                        </div>
-                                        <!-- END timeline item -->
-                                        <!-- timeline item -->
-                                    {{--                                <div>--}}
-                                    {{--                                    <i class="fas fa-user bg-green"></i>--}}
-                                    {{--                                    <div class="timeline-item">--}}
-                                    {{--                                        <span class="time"><i class="fas fa-clock"></i> 5 mins ago</span>--}}
-                                    {{--                                        <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>--}}
-                                    {{--                                    </div>--}}
-                                    {{--                                </div>--}}
-                                    {{--                                <!-- END timeline item -->--}}
-                                    {{--                                <!-- timeline item -->--}}
-                                    {{--                                <div>--}}
-                                    {{--                                    <i class="fas fa-comments bg-yellow"></i>--}}
-                                    {{--                                    <div class="timeline-item">--}}
-                                    {{--                                        <span class="time"><i class="fas fa-clock"></i> 27 mins ago</span>--}}
-                                    {{--                                        <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>--}}
-                                    {{--                                        <div class="timeline-body">--}}
-                                    {{--                                            Take me to your leader!--}}
-                                    {{--                                            Switzerland is small and neutral!--}}
-                                    {{--                                            We are more like Germany, ambitious and misunderstood!--}}
-                                    {{--                                        </div>--}}
-                                    {{--                                        <div class="timeline-footer">--}}
-                                    {{--                                            <a class="btn btn-warning btn-sm">View comment</a>--}}
-                                    {{--                                        </div>--}}
-                                    {{--                                    </div>--}}
-                                    {{--                                </div>--}}
-                                    {{--                                <!-- END timeline item -->--}}
-                                    {{--                                <!-- timeline time label -->--}}
-                                    {{--                                <div class="time-label">--}}
-                                    {{--                                    <span class="bg-green">3 Jan. 2014</span>--}}
-                                    {{--                                </div>--}}
-                                    {{--                                <!-- /.timeline-label -->--}}
-                                    {{--                                <!-- timeline item -->--}}
-                                    {{--                                <div>--}}
-                                    {{--                                    <i class="fa fa-camera bg-purple"></i>--}}
-                                    {{--                                    <div class="timeline-item">--}}
-                                    {{--                                        <span class="time"><i class="fas fa-clock"></i> 2 days ago</span>--}}
-                                    {{--                                        <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>--}}
-                                    {{--                                        <div class="timeline-body">--}}
-                                    {{--                                            <img src="http://placehold.it/150x100" alt="...">--}}
-                                    {{--                                            <img src="http://placehold.it/150x100" alt="...">--}}
-                                    {{--                                            <img src="http://placehold.it/150x100" alt="...">--}}
-                                    {{--                                            <img src="http://placehold.it/150x100" alt="...">--}}
-                                    {{--                                            <img src="http://placehold.it/150x100" alt="...">--}}
-                                    {{--                                        </div>--}}
-                                    {{--                                    </div>--}}
-                                    {{--                                </div>--}}
-                                    {{--                                <!-- END timeline item -->--}}
-                                    {{--                                <!-- timeline item -->--}}
-                                    {{--                                <div>--}}
-                                    {{--                                    <i class="fas fa-video bg-maroon"></i>--}}
-
-                                    {{--                                    <div class="timeline-item">--}}
-                                    {{--                                        <span class="time"><i class="fas fa-clock"></i> 5 days ago</span>--}}
-
-                                    {{--                                        <h3 class="timeline-header"><a href="#">Mr. Doe</a> shared a video</h3>--}}
-
-                                    {{--                                        <div class="timeline-body">--}}
-                                    {{--                                            <div class="embed-responsive embed-responsive-16by9">--}}
-                                    {{--                                                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tMWkeBIohBs" frameborder="0" allowfullscreen=""></iframe>--}}
-                                    {{--                                            </div>--}}
-                                    {{--                                        </div>--}}
-                                    {{--                                        <div class="timeline-footer">--}}
-                                    {{--                                            <a href="#" class="btn btn-sm bg-maroon">See comments</a>--}}
-                                    {{--                                        </div>--}}
-                                    {{--                                    </div>--}}
-                                    {{--                                </div>--}}
-                                    <!-- END timeline item -->
-                                        <div>
-                                            <i class="fas fa-building bg-gray"></i>
+                                        <div style="cursor: pointer" onclick="addNewFloor('@lang("Create Floor")','@lang("Submit a new floor name")','@lang("Create Room")','@lang("Submit a new room name")','@lang("Input name cannot be empty !!!")','@lang("Error !!!")','@lang("This building / floor / room had already existed !!!")','@lang("OK")','@lang("Successfully created !!!")','@lang("The floor is now editable !!!")','@lang("Next &rarr;")','{{{ session("1752051_current_building")["building"]["building_name"] }}}')">
+                                            <i class="fas fa-plus bg-warning"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -699,6 +622,779 @@
         })
     }
 
+    function renameBuilding(title_ask,text_warning,confirm_button,cancel,building_title,building_text,required,error_title,error_text,reconfirm,success_title,success_text,current_building) {
+
+        Swal.fire({
+            title: title_ask,
+            text: text_warning,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirm_button,
+            cancelButtonText: cancel
+        }).then((result) => {
+            if (result.value) {
+
+                Swal.mixin({
+                    input: 'text',
+                    confirmButtonText: confirm_button,
+                    showCancelButton: true,
+                    progressSteps: ['1']
+                }).queue([
+                    {
+                        title: building_title,
+                        text: building_text,
+                        inputValidator: (value) => {
+                            if (!value) {
+                                return required
+                            }
+                        },
+                        inputAttributes: {
+                            autocapitalize: 'off',
+                        }
+                    }
+                ]).then((result) => {
+                    if (result.value) {
+                        // alert(1);
+                        // alert(result.value[0]);
+                        const answers = result.value
+                        $.ajax({
+                            url: "rename-building",
+                            type: "POST",
+                            data: {_token: "{{csrf_token()}}", building: answers[0], current_building: current_building  },
+                            async: false,
+                            success: function (data) {
+                                // alert(data);
+                                // window.location.reload();
+                                Swal.fire({
+                                    title: success_title,
+                                    text: success_text,
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    allowOutsideClick: false,
+                                    confirmButtonColor: '#28a745',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: reconfirm
+                                }).then((result) => {
+                                    if (result.value) {
+                                        window.location.reload();
+                                    }
+                                })
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                // alert(xhr.message);
+                                // alert(thrownError);
+                                Swal.fire({
+                                    title: error_title,
+                                    text: error_text,
+                                    icon: 'error',
+                                    showCancelButton: false,
+                                    allowOutsideClick: false,
+                                    confirmButtonColor: '#dc3545',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: reconfirm
+                                }).then((result) => {
+                                    if (result.value) {
+                                        window.location.reload();
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+
+            }
+        })
+
+    }
+
+    function deleteBuilding(title_ask,text_warning,confirm,cancel,title_inform,text_inform,reconfirm,error_title,error_text,current_building){
+        Swal.fire({
+            title: title_ask,
+            text: text_warning,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirm,
+            cancelButtonText: cancel
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "delete-building",
+                    type: "POST",
+                    data: {_token: "{{csrf_token()}}", building: current_building  },
+                    async: false,
+                    success: function (data) {
+                        // alert(data);
+                        // window.location.reload();
+                        Swal.fire({
+                            title: title_inform,
+                            text: text_inform,
+                            icon: 'success',
+                            showCancelButton: false,
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#28a745',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: reconfirm
+                        }).then((result) => {
+                            if (result.value) {
+                                window.location.reload();
+                            }
+                        })
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        // alert(xhr.message);
+                        // alert(thrownError);
+                        Swal.fire({
+                            title: error_title,
+                            text: error_text,
+                            icon: 'error',
+                            showCancelButton: false,
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#dc3545',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: reconfirm
+                        }).then((result) => {
+                            if (result.value) {
+                                window.location.reload();
+                            }
+                        })
+                    }
+                })
+            }
+        })
+
+    }
+
+    function activateDeactivateBuilding(title_ask,text_warning,confirm,cancel,title_inform,text_inform,reconfirm,error_title,error_text,current_building,button){
+        Swal.fire({
+            title: title_ask,
+            text: text_warning,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirm,
+            cancelButtonText: cancel
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "activate-deactivate-building",
+                    type: "POST",
+                    data: {_token: "{{csrf_token()}}", building: current_building, button: button  },
+                    async: true,
+                    success: function (data) {
+                        // alert(data);
+                        // window.location.reload();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        // alert(xhr.message);
+                        // alert(thrownError);
+                        // Swal.fire({
+                        //     title: error_title,
+                        //     text: error_text,
+                        //     icon: 'error',
+                        //     showCancelButton: false,
+                        //     allowOutsideClick: false,
+                        //     confirmButtonColor: '#dc3545',
+                        //     cancelButtonColor: '#d33',
+                        //     confirmButtonText: reconfirm
+                        // }).then((result) => {
+                        //     if (result.value) {
+                        //         window.location.reload();
+                        //     }
+                        // })
+                    }
+                })
+
+                Swal.fire({
+                    title: title_inform,
+                    text: text_inform,
+                    icon: 'success',
+                    showCancelButton: false,
+                    allowOutsideClick: false,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: reconfirm
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.reload();
+                    }
+                })
+
+            }
+        })
+
+    }
+
+    function addNewFloor(floor_title,floor_text,room_title,room_text,required,error_title,error_text,reconfirm,success_title,success_text,confirm_button,current_building) {
+        Swal.mixin({
+            input: 'text',
+            confirmButtonText: confirm_button,
+            showCancelButton: true,
+            progressSteps: ['1', '2']
+        }).queue([
+            {
+                title: floor_title,
+                text: floor_text,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return required
+                    }
+                },
+                inputAttributes: {
+                    autocapitalize: 'off',
+                }
+            },
+            {
+                title: room_title,
+                text: room_text,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return required
+                    }
+                },
+                inputAttributes: {
+                    autocapitalize: 'off',
+                }
+            }
+        ]).then((result) => {
+            if (result.value) {
+                // alert(1);
+                // alert(result.value[0]);
+                const answers = result.value
+                $.ajax({
+                    url: "create-floor",
+                    type: "POST",
+                    data: {_token: "{{csrf_token()}}", building: current_building, floor: answers[0], room: answers[1] },
+                    async: false,
+                    success: function (data) {
+                        // alert(data);
+                        // window.location.reload();
+                        Swal.fire({
+                            title: success_title,
+                            text: success_text,
+                            icon: 'success',
+                            showCancelButton: false,
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#28a745',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: reconfirm
+                        }).then((result) => {
+                            if (result.value) {
+                                window.location.reload();
+                            }
+                        })
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        // alert(xhr.message);
+                        // alert(thrownError);
+                        Swal.fire({
+                            title: error_title,
+                            text: error_text,
+                            icon: 'error',
+                            showCancelButton: false,
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#dc3545',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: reconfirm
+                        }).then((result) => {
+                            if (result.value) {
+                                window.location.reload();
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
+
+    function renameFloor(title_ask,text_warning,confirm_button,cancel,building_title,building_text,required,error_title,error_text,reconfirm,success_title,success_text,current_floor,current_building) {
+
+        Swal.fire({
+            title: title_ask,
+            text: text_warning,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirm_button,
+            cancelButtonText: cancel
+        }).then((result) => {
+            if (result.value) {
+
+                Swal.mixin({
+                    input: 'text',
+                    confirmButtonText: confirm_button,
+                    showCancelButton: true,
+                    progressSteps: ['1']
+                }).queue([
+                    {
+                        title: building_title,
+                        text: building_text,
+                        inputValidator: (value) => {
+                            if (!value) {
+                                return required
+                            }
+                        },
+                        inputAttributes: {
+                            autocapitalize: 'off',
+                        }
+                    }
+                ]).then((result) => {
+                    if (result.value) {
+                        // alert(1);
+                        // alert(result.value[0]);
+                        const answers = result.value
+                        $.ajax({
+                            url: "rename-floor",
+                            type: "POST",
+                            data: {_token: "{{csrf_token()}}", building: current_building, current_floor: current_floor, new_floor: answers[0]  },
+                            async: false,
+                            success: function (data) {
+                                // alert(data);
+                                // window.location.reload();
+                                Swal.fire({
+                                    title: success_title,
+                                    text: success_text,
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    allowOutsideClick: false,
+                                    confirmButtonColor: '#28a745',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: reconfirm
+                                }).then((result) => {
+                                    if (result.value) {
+                                        window.location.reload();
+                                    }
+                                })
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                // alert(xhr.message);
+                                // alert(thrownError);
+                                Swal.fire({
+                                    title: error_title,
+                                    text: error_text,
+                                    icon: 'error',
+                                    showCancelButton: false,
+                                    allowOutsideClick: false,
+                                    confirmButtonColor: '#dc3545',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: reconfirm
+                                }).then((result) => {
+                                    if (result.value) {
+                                        window.location.reload();
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+
+            }
+        })
+
+    }
+
+    function deleteFloor(title_ask,text_warning,confirm,cancel,title_inform,text_inform,reconfirm,error_title,error_text,current_floor,current_building){
+        Swal.fire({
+            title: title_ask,
+            text: text_warning,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirm,
+            cancelButtonText: cancel
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "delete-floor",
+                    type: "POST",
+                    data: {_token: "{{csrf_token()}}", building: current_building, current_floor: current_floor  },
+                    async: false,
+                    success: function (data) {
+                        // alert(data);
+                        // window.location.reload();
+                        Swal.fire({
+                            title: title_inform,
+                            text: text_inform,
+                            icon: 'success',
+                            showCancelButton: false,
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#28a745',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: reconfirm
+                        }).then((result) => {
+                            if (result.value) {
+                                window.location.reload();
+                            }
+                        })
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        // alert(xhr.message);
+                        // alert(thrownError);
+                        Swal.fire({
+                            title: error_title,
+                            text: error_text,
+                            icon: 'error',
+                            showCancelButton: false,
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#dc3545',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: reconfirm
+                        }).then((result) => {
+                            if (result.value) {
+                                window.location.reload();
+                            }
+                        })
+                    }
+                })
+            }
+        })
+
+    }
+
+    function activateDeactivateFloor(title_ask,text_warning,confirm,cancel,title_inform,text_inform,reconfirm,error_title,error_text,current_floor,current_building,button){
+        Swal.fire({
+            title: title_ask,
+            text: text_warning,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirm,
+            cancelButtonText: cancel
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "activate-deactivate-floor",
+                    type: "POST",
+                    data: {_token: "{{csrf_token()}}", building: current_building, current_floor: current_floor, button: button  },
+                    async: true,
+                    success: function (data) {
+                        // alert(data);
+                        // window.location.reload();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        // alert(xhr.message);
+                        // alert(thrownError);
+                        // Swal.fire({
+                        //     title: error_title,
+                        //     text: error_text,
+                        //     icon: 'error',
+                        //     showCancelButton: false,
+                        //     allowOutsideClick: false,
+                        //     confirmButtonColor: '#dc3545',
+                        //     cancelButtonColor: '#d33',
+                        //     confirmButtonText: reconfirm
+                        // }).then((result) => {
+                        //     if (result.value) {
+                        //         window.location.reload();
+                        //     }
+                        // })
+                    }
+                })
+
+                Swal.fire({
+                    title: title_inform,
+                    text: text_inform,
+                    icon: 'success',
+                    showCancelButton: false,
+                    allowOutsideClick: false,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: reconfirm
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.reload();
+                    }
+                })
+
+            }
+        })
+
+    }
+
+    function addNewRoom(room_title,room_text,required,error_title,error_text,reconfirm,success_title,success_text,confirm_button,current_floor,current_building) {
+        Swal.mixin({
+            input: 'text',
+            confirmButtonText: confirm_button,
+            showCancelButton: true,
+            progressSteps: ['1']
+        }).queue([
+            {
+                title: room_title,
+                text: room_text,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return required
+                    }
+                },
+                inputAttributes: {
+                    autocapitalize: 'off',
+                }
+            }
+        ]).then((result) => {
+            if (result.value) {
+                // alert(1);
+                // alert(result.value[0]);
+                const answers = result.value
+                $.ajax({
+                    url: "create-room",
+                    type: "POST",
+                    data: {_token: "{{csrf_token()}}", building: current_building, floor: current_floor, room: answers[0] },
+                    async: false,
+                    success: function (data) {
+                        // alert(data);
+                        // window.location.reload();
+                        Swal.fire({
+                            title: success_title,
+                            text: success_text,
+                            icon: 'success',
+                            showCancelButton: false,
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#28a745',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: reconfirm
+                        }).then((result) => {
+                            if (result.value) {
+                                window.location.reload();
+                            }
+                        })
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        // alert(xhr.message);
+                        // alert(thrownError);
+                        Swal.fire({
+                            title: error_title,
+                            text: error_text,
+                            icon: 'error',
+                            showCancelButton: false,
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#dc3545',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: reconfirm
+                        }).then((result) => {
+                            if (result.value) {
+                                window.location.reload();
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
+
+    function renameRoom(title_ask,text_warning,confirm_button,cancel,building_title,building_text,required,error_title,error_text,reconfirm,success_title,success_text,current_room,current_floor,current_building) {
+
+        Swal.fire({
+            title: title_ask,
+            text: text_warning,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirm_button,
+            cancelButtonText: cancel
+        }).then((result) => {
+            if (result.value) {
+
+                Swal.mixin({
+                    input: 'text',
+                    confirmButtonText: confirm_button,
+                    showCancelButton: true,
+                    progressSteps: ['1']
+                }).queue([
+                    {
+                        title: building_title,
+                        text: building_text,
+                        inputValidator: (value) => {
+                            if (!value) {
+                                return required
+                            }
+                        },
+                        inputAttributes: {
+                            autocapitalize: 'off',
+                        }
+                    }
+                ]).then((result) => {
+                    if (result.value) {
+                        // alert(1);
+                        // alert(result.value[0]);
+                        const answers = result.value
+                        $.ajax({
+                            url: "rename-room",
+                            type: "POST",
+                            data: {_token: "{{csrf_token()}}", building: current_building, current_floor: current_floor, current_room: current_room, new_room: answers[0]  },
+                            async: false,
+                            success: function (data) {
+                                // alert(data);
+                                // window.location.reload();
+                                Swal.fire({
+                                    title: success_title,
+                                    text: success_text,
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    allowOutsideClick: false,
+                                    confirmButtonColor: '#28a745',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: reconfirm
+                                }).then((result) => {
+                                    if (result.value) {
+                                        window.location.reload();
+                                    }
+                                })
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                // alert(xhr.message);
+                                // alert(thrownError);
+                                Swal.fire({
+                                    title: error_title,
+                                    text: error_text,
+                                    icon: 'error',
+                                    showCancelButton: false,
+                                    allowOutsideClick: false,
+                                    confirmButtonColor: '#dc3545',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: reconfirm
+                                }).then((result) => {
+                                    if (result.value) {
+                                        window.location.reload();
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+
+            }
+        })
+
+    }
+
+    function deleteRoom(title_ask,text_warning,confirm,cancel,title_inform,text_inform,reconfirm,error_title,error_text,current_room,current_floor,current_building){
+        Swal.fire({
+            title: title_ask,
+            text: text_warning,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirm,
+            cancelButtonText: cancel
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "delete-room",
+                    type: "POST",
+                    data: {_token: "{{csrf_token()}}", building: current_building, current_floor: current_floor, current_room: current_room  },
+                    async: false,
+                    success: function (data) {
+                        // alert(data);
+                        // window.location.reload();
+                        Swal.fire({
+                            title: title_inform,
+                            text: text_inform,
+                            icon: 'success',
+                            showCancelButton: false,
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#28a745',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: reconfirm
+                        }).then((result) => {
+                            if (result.value) {
+                                window.location.reload();
+                            }
+                        })
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        // alert(xhr.message);
+                        // alert(thrownError);
+                        Swal.fire({
+                            title: error_title,
+                            text: error_text,
+                            icon: 'error',
+                            showCancelButton: false,
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#dc3545',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: reconfirm
+                        }).then((result) => {
+                            if (result.value) {
+                                window.location.reload();
+                            }
+                        })
+                    }
+                })
+            }
+        })
+
+    }
+
+    function activateDeactivateRoom(title_ask,text_warning,confirm,cancel,title_inform,text_inform,reconfirm,error_title,error_text,current_room,current_floor,current_building,button){
+        Swal.fire({
+            title: title_ask,
+            text: text_warning,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirm,
+            cancelButtonText: cancel
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "activate-deactivate-room",
+                    type: "POST",
+                    data: {_token: "{{csrf_token()}}", building: current_building, current_floor: current_floor, current_room: current_room, button: button  },
+                    async: true,
+                    success: function (data) {
+                        // alert(data);
+                        // window.location.reload();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        // alert(xhr.message);
+                        // alert(thrownError);
+                        // Swal.fire({
+                        //     title: error_title,
+                        //     text: error_text,
+                        //     icon: 'error',
+                        //     showCancelButton: false,
+                        //     allowOutsideClick: false,
+                        //     confirmButtonColor: '#dc3545',
+                        //     cancelButtonColor: '#d33',
+                        //     confirmButtonText: reconfirm
+                        // }).then((result) => {
+                        //     if (result.value) {
+                        //         window.location.reload();
+                        //     }
+                        // })
+                    }
+                })
+
+                Swal.fire({
+                    title: title_inform,
+                    text: text_inform,
+                    icon: 'success',
+                    showCancelButton: false,
+                    allowOutsideClick: false,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: reconfirm
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.reload();
+                    }
+                })
+
+            }
+        })
+
+    }
+
     $(".bootstrap-switch-success").text('@lang("ON")');
 
     $(".bootstrap-switch-danger").text('@lang("OFF")');
@@ -719,6 +1415,7 @@
         });
     </script>
 @endif
-</body>
+@include("include/session-timeout")
+@include("include/chatbot")
 </body>
 </html>

@@ -31,6 +31,8 @@
     <link rel="stylesheet" href="../assets/plugins/toastr/toastr.min.css">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="../assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Extract -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.bootstrap4.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -52,6 +54,7 @@
               @if (session("1752051_user_role")["permission_create_building_floor_room"])
                   <br>
                   <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#addSensor" > <i class="fas fa-temperature-high"></i> @lang("Add Sensor")</button>
+                  <button type="button" class="btn btn-lg btn-info" data-toggle="modal" data-target="#addDevice" > <i class="fas fa-cog"></i> @lang("Add Device")</button>
                   <div class="modal fade" id="addSensor" tabindex="-1" role="dialog" aria-labelledby="addSensorLabel" aria-hidden="true">
                       <div class="modal-dialog" role="document">
                           <div class="modal-content">
@@ -65,33 +68,86 @@
                                   </div>
                                   <div class="modal-body">
                                           <div class="form-group">
-                                              <label for="sensor-id" class="col-form-label">@lang("Sensor ID:")</label>
-                                              <input type="text" name="sensor_id" class="form-control" id="sensor-id">
+                                              <label for="add-sensor-id" class="col-form-label">@lang("Sensor ID:")</label>
+                                              <input type="text" name="sensor_id" class="form-control" id="add-sensor-id">
                                           </div>
                                           <div class="form-group">
-                                              <label for="sensor-name" class="col-form-label">@lang("Sensor name:")</label>
-                                              <input type="text" name="sensor_name" class="form-control" id="sensor-name">
+                                              <label for="add-sensor-name" class="col-form-label">@lang("Sensor name:")</label>
+                                              <input type="text" name="sensor_name" class="form-control" id="add-sensor-name">
                                           </div>
                                           <div class="form-group">
-                                              <label for="sensor-ip" class="col-form-label">@lang("MQTT IP:")</label>
-                                              <input type="text" name="sensor_ip" class="form-control" id="sensor-ip">
+                                              <label for="add-sensor-ip" class="col-form-label">@lang("MQTT IP:")</label>
+                                              <input type="text" name="sensor_ip" class="form-control" id="add-sensor-ip">
                                           </div>
                                           <div class="form-group">
-                                              <label for="sensor-port" class="col-form-label">@lang("MQTT port:")</label>
-                                              <input type="text" name="sensor_port" class="form-control" id="sensor-port">
+                                              <label for="add-sensor-port" class="col-form-label">@lang("MQTT port:")</label>
+                                              <input type="number" name="sensor_port" class="form-control" id="add-sensor-port">
                                           </div>
                                           <div class="form-group">
-                                              <label for="sensor-topic" class="col-form-label">@lang("MQTT Topic:")</label>
-                                              <input type="text" name="sensor_topic" class="form-control" id="sensor-topic">
+                                              <label for="add-sensor-topic" class="col-form-label">@lang("MQTT Topic:")</label>
+                                              <input type="text" name="sensor_topic" class="form-control" id="add-sensor-topic">
                                           </div>
                                           <div class="form-group">
-                                              <label for="sensor-username" class="col-form-label">@lang("MQTT Username:")</label>
-                                              <input type="text" name="sensor_username" class="form-control" id="sensor-username">
+                                              <label for="add-sensor-username" class="col-form-label">@lang("MQTT Username:")</label>
+                                              <input type="text" name="sensor_username" class="form-control" id="add-sensor-username">
                                           </div>
                                           <div class="form-group">
-                                              <label for="sensor-password" class="col-form-label">@lang("MQTT Password:")</label>
-                                              <input type="text" name="sensor_password" class="form-control" id="sensor-password">
+                                              <label for="add-sensor-password" class="col-form-label">@lang("MQTT Password:")</label>
+                                              <input type="text" name="sensor_password" class="form-control" id="add-sensor-password">
                                           </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang("Close")</button>
+                                      <button type="submit" class="btn btn-primary">@lang("Create")</button>
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="modal fade" id="addDevice" tabindex="-1" role="dialog" aria-labelledby="addSensorLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                              <form action="create-device" method="post">
+                                  {{csrf_field()}}
+                                  <div class="modal-header">
+                                      <h5 class="modal-title text-danger" id="exampleModalLabel">@lang("Add Device")</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      <div class="form-group">
+                                          <label for="add-device-id" class="col-form-label">@lang("Device ID:")</label>
+                                          <input type="text" name="device_id" class="form-control" id="add-device-id">
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="add-device-name" class="col-form-label">@lang("Device name:")</label>
+                                          <input type="text" name="device_name" class="form-control" id="add-device-name">
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="add-device-additional" class="col-form-label">@lang("Device Additional Value:")</label>
+                                          <input type="text" name="device_additional" class="form-control" id="add-device-additional">
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="add-device-ip" class="col-form-label">@lang("MQTT IP:")</label>
+                                          <input type="text" name="device_ip" class="form-control" id="add-device-ip">
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="add-device-port" class="col-form-label">@lang("MQTT port:")</label>
+                                          <input type="number" name="device_port" class="form-control" id="add-device-port">
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="add-device-topic" class="col-form-label">@lang("MQTT Topic:")</label>
+                                          <input type="text" name="device_topic" class="form-control" id="add-device-topic">
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="add-device-username" class="col-form-label">@lang("MQTT Username:")</label>
+                                          <input type="text" name="device_username" class="form-control" id="add-device-username">
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="add-device-password" class="col-form-label">@lang("MQTT Password:")</label>
+                                          <input type="text" name="device_password" class="form-control" id="add-device-password">
+                                      </div>
                                   </div>
                                   <div class="modal-footer">
                                       <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang("Close")</button>
@@ -119,78 +175,6 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-3">
-
-            <!-- Profile Image -->
-{{--            <div class="card card-primary card-outline">--}}
-{{--              <div class="card-body box-profile">--}}
-{{--                <div class="text-center">--}}
-{{--                  <img class="profile-user-img img-fluid img-circle"--}}
-{{--                       src="../assets/img/user4-128x128.jpg"--}}
-{{--                       alt="User profile picture">--}}
-{{--                </div>--}}
-
-{{--                <h3 class="profile-username text-center">Nina Mcintire</h3>--}}
-
-{{--                <p class="text-muted text-center">Software Engineer</p>--}}
-
-{{--                <ul class="list-group list-group-unbordered mb-3">--}}
-{{--                  <li class="list-group-item">--}}
-{{--                    <b>Followers</b> <a class="float-right">1,322</a>--}}
-{{--                  </li>--}}
-{{--                  <li class="list-group-item">--}}
-{{--                    <b>Following</b> <a class="float-right">543</a>--}}
-{{--                  </li>--}}
-{{--                  <li class="list-group-item">--}}
-{{--                    <b>Friends</b> <a class="float-right">13,287</a>--}}
-{{--                  </li>--}}
-{{--                </ul>--}}
-
-{{--                <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>--}}
-{{--              </div>--}}
-{{--              <!-- /.card-body -->--}}
-{{--            </div>--}}
-            <!-- /.card -->
-
-            <!-- About Me Box -->
-{{--            <div class="card card-primary">--}}
-{{--              <div class="card-header">--}}
-{{--                <h3 class="card-title">About Me</h3>--}}
-{{--              </div>--}}
-{{--              <!-- /.card-header -->--}}
-{{--              <div class="card-body">--}}
-{{--                <strong><i class="fas fa-book mr-1"></i> Education</strong>--}}
-
-{{--                <p class="text-muted">--}}
-{{--                  B.S. in Computer Science from the University of Tennessee at Knoxville--}}
-{{--                </p>--}}
-
-{{--                <hr>--}}
-
-{{--                <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>--}}
-
-{{--                <p class="text-muted">Malibu, California</p>--}}
-
-{{--                <hr>--}}
-
-{{--                <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>--}}
-
-{{--                <p class="text-muted">--}}
-{{--                  <span class="tag tag-danger">UI Design</span>--}}
-{{--                  <span class="tag tag-success">Coding</span>--}}
-{{--                  <span class="tag tag-info">Javascript</span>--}}
-{{--                  <span class="tag tag-warning">PHP</span>--}}
-{{--                  <span class="tag tag-primary">Node.js</span>--}}
-{{--                </p>--}}
-
-{{--                <hr>--}}
-
-{{--                <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>--}}
-
-{{--                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>--}}
-{{--              </div>--}}
-{{--              <!-- /.card-body -->--}}
-{{--            </div>--}}
-            <!-- /.card -->
           </div>
           <!-- /.col -->
             <div class="col-md-12">
@@ -198,14 +182,26 @@
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
                             {{--                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>--}}
-                            <li class="nav-item"><a class="nav-link active" href="#sensors" data-toggle="tab">@lang("Sensors")</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#devices" data-toggle="tab">@lang("Devices")</a></li>
+                            @if( session("1752051_current_room_tab") == 0)
+                                <li class="nav-item"><a class="nav-link active" onclick="currentTab(0)" href="#sensors" data-toggle="tab">@lang("Sensors")</a></li>
+                            @else
+                                <li class="nav-item"><a class="nav-link" onclick="currentTab(0)" href="#sensors" data-toggle="tab">@lang("Sensors")</a></li>
+                            @endif
+                            @if( session("1752051_current_room_tab") == 1)
+                                <li class="nav-item"><a class="nav-link active" onclick="currentTab(1)" href="#devices" data-toggle="tab">@lang("Devices")</a></li>
+                            @else
+                                <li class="nav-item"><a class="nav-link" onclick="currentTab(1)" href="#devices" data-toggle="tab">@lang("Devices")</a></li>
+                            @endif
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <div class="tab-content">
-                            <div class="tab-pane active" id="sensors">
-                                <select name="user_lang" id="select2bs4-sensor" style="" class="form-control select2bs4" style="width: 100%;">
+                            @if( session("1752051_current_room_tab") == 0)
+                                <div class="tab-pane active" id="sensors">
+                            @else
+                                <div class="tab-pane" id="sensors">
+                            @endif
+                                <select id="select2bs4-sensor" style="" class="form-control select2bs4" style="width: 100%;">
                                     @if (session("1752051_current_sensor")["sensor_id"] == "")
                                         <option></option>
                                     @endif
@@ -220,6 +216,8 @@
 
                                 <br>
 
+{{--                                    <h1>{{session("1752051_current_sensor_log")}}</h1>--}}
+
                                 @if (session("1752051_current_sensor")["sensor_id"] != "")
 
                                     <div class="chart tab-pane" id="backup-log">
@@ -228,27 +226,117 @@
                                             <button type="button" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm float-right" style="margin-right: 5px;">
                                                 <i class="fas fa-tras"></i> @lang("Delete all records")
                                             </button>
-                                            <button type="button" data-toggle="modal" data-target="#modal-success" class="btn btn-success btn-sm float-right" style="margin-right: 5px;">
-                                                <i class="fas fa-download"></i> @lang("Generate all records to excel")
-                                            </button>
                                         </div>
                                         <div class="card-body">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                            <form action="sensor-search-time-range" method="post">
+                                                {{ csrf_field() }}
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                                    </div>
+                                                    <input type="hidden" name="sensor_id" value="{{{ session("1752051_current_sensor")["sensor_id"] }}}">
+                                                    <input type="text" name="sensor_time_range" class="form-control float-right" id="reservationtime-sensor">
                                                 </div>
-                                                <input type="text" class="form-control float-right" id="reservationtime">
-                                            </div>
-                                            <br>
-                                            <button type="button" class="btn btn-primary btn-sm float-right" style="margin-right: 5px;">
-                                                @lang("Apply time range")
-                                            </button>
+                                                <br>
+                                                <button type="submit" class="btn btn-primary btn-sm float-right" style="margin-right: 5px;">
+                                                    @lang("Apply time range")
+                                                </button>
+                                            </form>
                                             <button type="button" onclick="refreshSensor()" class="btn btn-info btn-sm float-right" style="margin-right: 5px;">
                                                 @lang("Refresh")
                                             </button>
                                         </div>
+
+                                        <section class="col-lg-12 connectedSortable">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <div class="card-tools">
+                                                        <ul class="nav nav-pills ml-auto">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active" href="#real-time-temperature" data-toggle="tab">@lang('Real-time Temperature')</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="#real-time-humidity" data-toggle="tab">@lang('Real-time Humidity')</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="#real-time-heat-index" data-toggle="tab">@lang('Real-time Heat Index')</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div><!-- /.card-header -->
+                                                <div class="card-body">
+                                                    <div class="tab-content p-0">
+                                                        <!-- Morris chart - Sales -->
+                                                        <div class="chart tab-pane active" id="real-time-temperature"
+                                                             style="position: relative; height: 300px;">
+                                                            <div class="card-header">
+                                                                <h3 class="card-title">
+                                                                    <i class="far fa-chart-bar"></i>
+                                                                    Celsius Degree
+                                                                </h3>
+
+                                                                <div class="card-tools">
+                                                                    Real time
+                                                                    <div class="btn-group" id="realtime" data-toggle="btn-toggle">
+                                                                        <button type="button" class="btn btn-default btn-sm active" data-toggle="on">On</button>
+                                                                        <button type="button" class="btn btn-default btn-sm" data-toggle="off">Off</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div id="interactive" style="height: 300px; padding: 0px; position: relative;"><canvas class="flot-base" width="1486" height="600" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 743px; height: 300px;"></canvas><canvas class="flot-overlay" width="1486" height="600" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 743px; height: 300px;"></canvas><div class="flot-svg" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;"><svg style="width: 100%; height: 100%;"><g class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;"><text x="28.0234375" y="293.96875" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: center;">0</text><text x="95.05697601010101" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">10</text><text x="166.06707702020202" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">20</text><text x="237.07717803030303" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">30</text><text x="308.08727904040404" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">40</text><text x="379.0973800505051" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">50</text><text x="450.10748106060606" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">60</text><text x="521.1175820707072" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">70</text><text x="592.1276830808081" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">80</text><text x="663.1377840909091" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">90</text></g><g class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;"><text x="8.953125" y="268.03125" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: right;">0</text><text x="1" y="217.63125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">20</text><text x="1" y="167.23125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">40</text><text x="1" y="116.83125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">60</text><text x="1" y="66.43125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">80</text><text x="-6.953125" y="16.03125" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: right;">100</text></g></svg></div></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="chart tab-pane" id="real-time-humidity"
+                                                             style="position: relative; height: 300px;">
+                                                            {{--                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
+                                                            {{--                        <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 344px;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
+                                                            <div class="card-header">
+                                                                <h3 class="card-title">
+                                                                    <i class="far fa-chart-bar"></i>
+                                                                    Percentage
+                                                                </h3>
+
+                                                                <div class="card-tools">
+                                                                    Real time
+                                                                    <div class="btn-group" id="realtime2" data-toggle="btn-toggle">
+                                                                        <button type="button" class="btn btn-default btn-sm active" data-toggle="on">On</button>
+                                                                        <button type="button" class="btn btn-default btn-sm" data-toggle="off">Off</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div id="interactive2" style="height: 300px; padding: 0px; position: relative;"><canvas class="flot-base" width="1486" height="600" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 743px; height: 300px;"></canvas><canvas class="flot-overlay" width="1486" height="600" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 743px; height: 300px;"></canvas><div class="flot-svg" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;"><svg style="width: 100%; height: 100%;"><g class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;"><text x="28.0234375" y="293.96875" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: center;">0</text><text x="95.05697601010101" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">10</text><text x="166.06707702020202" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">20</text><text x="237.07717803030303" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">30</text><text x="308.08727904040404" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">40</text><text x="379.0973800505051" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">50</text><text x="450.10748106060606" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">60</text><text x="521.1175820707072" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">70</text><text x="592.1276830808081" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">80</text><text x="663.1377840909091" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">90</text></g><g class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;"><text x="8.953125" y="268.03125" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: right;">0</text><text x="1" y="217.63125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">20</text><text x="1" y="167.23125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">40</text><text x="1" y="116.83125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">60</text><text x="1" y="66.43125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">80</text><text x="-6.953125" y="16.03125" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: right;">100</text></g></svg></div></div>
+                                                            </div>
+                                                        </div>
+                                                        {{--                    <div class="chart tab-pane" id="temperature"--}}
+                                                        {{--                         style="position: relative; height: 300px;">--}}
+                                                        {{--                        --}}{{--                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
+                                                        {{--                        <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 344px;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
+                                                        {{--                    </div>--}}
+                                                        {{--                  <div class="chart tab-pane" id="humidity"--}}
+                                                        {{--                       style="position: relative; height: 300px;">--}}
+                                                        {{--                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
+                                                        {{--                      <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 344px;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
+                                                        {{--                   </div>--}}
+                                                        {{--                    <div class="chart tab-pane" id="hours-usage" style="position: relative; height: 300px;">--}}
+                                                        {{--                        --}}{{--                    <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
+                                                        {{--                        <canvas id="stackedBarChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
+                                                        {{--                    </div>--}}
+                                                        {{--                  <div class="chart tab-pane" id="electrical-usage" style="position: relative; height: 300px;">--}}
+                                                        {{--                    <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
+                                                        {{--                      <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 344px;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
+                                                        {{--                  </div>--}}
+                                                    </div>
+                                                </div><!-- /.card-body -->
+                                            </div>
+                                            <!-- /.card -->
+
+                                        </section>
+
+
                                         <div class="card-body">
-                                            <table id="example1" class="table table-bordered table-striped">
+                                            <table id="sensor-table" class="table table-bordered table-striped">
                                                 <thead>
                                                 <tr>
                                                     <th class="text-center">
@@ -265,9 +353,6 @@
                                                     <th>@lang("Heat Index")</th>
                                                     <th>@lang("Date")</th>
                                                     <th>
-                                                        <button type="button" data-toggle="modal" data-target="#modal-success" class="btn btn-success btn-sm" style="margin-right: 5px;">
-                                                            <i class="fas fa-download"></i> @lang("Generate excel")
-                                                        </button>
                                                         <button data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
                                                             <i class="fas fa-trash">
                                                             </i>
@@ -277,6 +362,11 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
+{{--                                                @php--}}
+
+{{--                                                dd(session("1752051_current_sensor_log"))--}}
+
+{{--                                                    @endphp--}}
                                                 @foreach (session("1752051_current_sensor_log") as $each)
 
                                                     <tr>
@@ -314,9 +404,6 @@
                                                     <th>@lang("Heat Index")</th>
                                                     <th>@lang("Date")</th>
                                                     <th>
-                                                        <button type="button" data-toggle="modal" data-target="#modal-success" class="btn btn-success btn-sm" style="margin-right: 5px;">
-                                                            <i class="fas fa-download"></i> @lang("Generate excel")
-                                                        </button>
                                                         <button data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
                                                             <i class="fas fa-trash">
                                                             </i>
@@ -352,7 +439,7 @@
                                             </div>
                                             <div class="col-sm-6">
                                                 <label for="sensor-port" class="col-form-label">@lang("MQTT port:")</label>
-                                                <input value="{{{ session("1752051_current_sensor")["sensor_port"] }}}" type="text" name="sensor_port" class="form-control" id="sensor-port">
+                                                <input value="{{{ session("1752051_current_sensor")["sensor_port"] }}}" type="number" name="sensor_port" class="form-control" id="sensor-port">
                                             </div>
                                         </div>
 
@@ -376,13 +463,13 @@
 
                                         <div class="form-group row">
                                             <div class="offset-sm-2 col-sm-10 text-right">
-                                                <button type="button" name="btn-delete" value="1" class="btn btn-danger" data-dismiss="modal">@lang("Delete")</button>
-                                                <button type="submit" class="btn btn-success">@lang("Update")</button>
+                                                <button type="submit" name="btn-delete" value="1" class="btn btn-danger" data-dismiss="modal">@lang("Delete")</button>
                                                 @if (session("1752051_current_sensor")["sensor_pid"] != null)
                                                     <button type="button" onclick="runStopSensor(1,'@lang("Successfully stopped !!!")','@lang("You can turn on later !!!")','@lang("Are you sure you want to turn off sensor?")','@lang("You will stop sensor immediately !!!")','@lang("Yes, turn it off!")','@lang("OK")','@lang("Cancel")','@lang("Sensor is opening !!!")','@lang("Sensor will be on in !!!")','@lang("millisecond(s)")')" class="btn btn-info">@lang("Stop")</button>
                                                 @endif
                                                 @if (session("1752051_current_sensor")["sensor_pid"] == null)
-                                                    <button type="button" onclick="runStopSensor(2,'@lang("Successfully ran !!!")','@lang("You can turn off later !!!")','@lang("Are you sure you want to turn on sensor ?")','@lang("Turning on time will be about 1 minute !!!")','@lang("Yes, turn it on!")','@lang("OK")','@lang("Cancel")','@lang("Sensor is opening !!!")','@lang("Sensor will be on in !!!")','@lang("millisecond(s)")')" class="btn btn-primary">@lang("Run")</button>
+                                                    <button type="submit" class="btn btn-success">@lang("Update")</button>
+                                                    <button type="button" onclick="runStopSensor(2,'@lang("Successfully ran !!!")','@lang("You can turn off later !!!")','@lang("Are you sure you want to turn on sensor ?")','@lang("")','@lang("Yes, turn it on!")','@lang("OK")','@lang("Cancel")','@lang("Sensor is opening !!!")','@lang("Sensor will be on in !!!")','@lang("millisecond(s)")')" class="btn btn-primary">@lang("Run")</button>
                                                 @endif
                                             </div>
                                         </div>
@@ -392,10 +479,212 @@
                                 @endif
                             </div>
 
-                            <div class="tab-pane" id="devices">
-                                <form class="form-horizontal">
+                            @if( session("1752051_current_room_tab") == 1)
+                                <div class="tab-pane active" id="devices">
+                            @else
+                                <div class="tab-pane" id="devices">
+                            @endif
 
-                                </form>
+                                <select id="select2bs4-device" style="" class="form-control select2bs4" style="width: 100%;">
+                                    @if (session("1752051_current_device")["device_id"] == "")
+                                        <option></option>
+                                    @endif
+                                    @foreach( $device_db as $device_each)
+                                        @if (session("1752051_current_device")["device_id"] == $device_each->device_id)
+                                            <option selected value="{{{$device_each->device_id}}}">{{$device_each->device_name}} ({{$device_each->device_id}})</option>
+                                        @else
+                                            <option value="{{{$device_each->device_id}}}">{{$device_each->device_name}} ({{$device_each->device_id}})</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+
+                                <br>
+
+                                @if (session("1752051_current_device")["device_id"] != "")
+
+                                    <div class="chart tab-pane" id="backup-log">
+                                        <div class="card-header">
+                                            <h3 class="card-title">@lang("Device Log")</h3>
+                                            <button type="button" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm float-right" style="margin-right: 5px;">
+                                                <i class="fas fa-tras"></i> @lang("Delete all records")
+                                            </button>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="device-search-time-range" method="post">
+                                                {{ csrf_field() }}
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                                    </div>
+                                                    <input type="hidden" name="device_id" value="{{{ session("1752051_current_device")["device_id"] }}}">
+                                                    <input type="text" name="device_time_range" class="form-control float-right" id="reservationtime-device">
+                                                </div>
+                                                <br>
+                                                <button type="submit" class="btn btn-primary btn-sm float-right" style="margin-right: 5px;">
+                                                    @lang("Apply time range")
+                                                </button>
+                                            </form>
+                                            <button type="button" onclick="refreshDevice()" class="btn btn-info btn-sm float-right" style="margin-right: 5px;">
+                                                @lang("Refresh")
+                                            </button>
+                                        </div>
+                                        <div class="card-body">
+                                            <table id="device-table" class="table table-bordered table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th class="text-center">
+                                                        <div class="icheck-success d-inline">
+                                                            <input type="checkbox" id="checkboxSuccess1">
+                                                            <label for="checkboxSuccess1">
+                                                            </label>
+                                                        </div>
+                                                    </th>
+                                                    <th>@lang("Order")</th>
+                                                    <th>@lang("Device ID")</th>
+                                                    <th>@lang("Device Status")</th>
+                                                    <th>@lang("Device Status Value")</th>
+                                                    <th>@lang("Date")</th>
+                                                    <th>
+                                                        <button data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
+                                                            <i class="fas fa-trash">
+                                                            </i>
+                                                            @lang("Delete selected")
+                                                        </button>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach (session("1752051_current_device_log") as $each)
+
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <div class="icheck-success d-inline">
+                                                                <input type="checkbox" id="checkboxSuccess13">
+                                                                <label for="checkboxSuccess13">
+                                                                </label>
+                                                            </div>
+                                                        </td>
+                                                        <td>{{ $each["device_order"] }}</td>
+                                                        <td>{{ $each["device_id"] }}</td>
+                                                        <td>
+                                                            @php
+                                                                $status = explode(",",str_replace("[","",str_replace("]","",$each["device_status"])));
+                                                            @endphp
+                                                            @if($status[0] == '"1"')
+                                                                <input type="checkbox" checked data-bootstrap-switch-disabled data-off-color="danger" data-on-color="success">
+                                                            @else
+                                                                <input type="checkbox" data-bootstrap-switch-disabled data-off-color="danger" data-on-color="success">
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ str_replace('"','',$status[1]) }}</td>
+                                                        <td> @php echo date('m/d/Y h:i A', $each["device_timestamp"]); @endphp </td>
+                                                        <td class="project-actions text-left">
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                                <tfoot>
+                                                <tr>
+                                                    <th class="text-center">
+                                                        <div class="icheck-success d-inline">
+                                                            <input type="checkbox" id="checkboxSuccess999">
+                                                            <label for="checkboxSuccess999">
+                                                            </label>
+                                                        </div>
+                                                    </th>
+                                                    <th>@lang("Order")</th>
+                                                    <th>@lang("Device ID")</th>
+                                                    <th>@lang("Device Status")</th>
+                                                    <th>@lang("Device Status Value")</th>
+                                                    <th>@lang("Date")</th>
+                                                    <th>
+                                                        <button data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
+                                                            <i class="fas fa-trash">
+                                                            </i>
+                                                            @lang("Delete selected")
+                                                        </button>
+                                                    </th>
+                                                </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+                                    <br>
+
+                                    <form action="update-device" method="post" class="form-horizontal">
+                                        {{ csrf_field() }}
+                                        <div class="form-group row">
+                                            <div class="col-sm-6">
+                                                <label for="device-id" class="col-form-label">@lang("Device ID:")</label>
+                                                <input value="{{{ session("1752051_current_device")["device_id"] }}}" type="text" name="device_id" class="form-control" id="device-id">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label for="device-name" class="col-form-label">@lang("Device name:")</label>
+                                                <input value="{{{ session("1752051_current_device")["device_name"] }}}" type="text" name="device_name" class="form-control" id="device-name">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-6">
+                                                <label for="device-additional" class="col-form-label">@lang("Device Additional Value:")</label>
+                                                <input value="{{{ session("1752051_current_device")["device_additional"] }}}" type="text" name="device_additional" class="form-control" id="device-additional">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label for="device-status-value" class="col-form-label">@lang("Device Status Value:")</label>
+                                                @php
+                                                    $status = explode(",",str_replace("[","",str_replace("]","",session("1752051_current_device")["device_status"])));
+                                                @endphp
+                                                <input value="{{{ str_replace('"','',$status[1]) }}}" type="text" name="device_status_value" class="form-control" id="device-status-value">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-6">
+                                                <label for="device-ip" class="col-form-label">@lang("MQTT IP:")</label>
+                                                <input value="{{{ session("1752051_current_device")["device_ip"] }}}" type="text" name="device_ip" class="form-control" id="device-ip">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label for="device-port" class="col-form-label">@lang("MQTT port:")</label>
+                                                <input value="{{{ session("1752051_current_device")["device_port"] }}}" type="number" name="device_port" class="form-control" id="device-port">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-6">
+                                                <label for="sensor-topic" class="col-form-label">@lang("MQTT Topic:")</label>
+                                                <input value="{{{ session("1752051_current_device")["device_topic"] }}}" type="text" name="device_topic" class="form-control" id="device-topic">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label for="device-username" class="col-form-label">@lang("MQTT Username:")</label>
+                                                <input value="{{{ session("1752051_current_device")["device_username"] }}}" type="text" name="device_username" class="form-control" id="device-username">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-6">
+                                                <label for="device-password" class="col-form-label">@lang("MQTT Password:")</label>
+                                                <input value="{{{ session("1752051_current_device")["device_password"] }}}" type="text" name="device_password" class="form-control" id="device-password">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="offset-sm-2 col-sm-10 text-right">
+                                                <button type="submit" name="btn-delete" value="1" class="btn btn-danger" data-dismiss="modal">@lang("Delete")</button>
+                                                @if (session("1752051_current_device")["device_pid"] != null)
+                                                    <button type="button" onclick="runStopDevice(1,'@lang("Successfully stopped !!!")','@lang("You can turn on later !!!")','@lang("Are you sure you want to turn off device?")','@lang("You will stop device immediately !!!")','@lang("Yes, turn it off!")','@lang("OK")','@lang("Cancel")','@lang("Device is opening !!!")','@lang("Device will be on in !!!")','@lang("millisecond(s)")')" class="btn btn-info">@lang("Off")</button>
+                                                @endif
+                                                @if (session("1752051_current_device")["device_pid"] == null)
+                                                    <button type="submit" class="btn btn-success">@lang("Update")</button>
+                                                    <button type="button" onclick="runStopDevice(2,'@lang("Successfully ran !!!")','@lang("You can turn off later !!!")','@lang("Are you sure you want to turn on device ?")','','@lang("Yes, turn it on!")','@lang("OK")','@lang("Cancel")','@lang("Device is opening !!!")','@lang("Device will be on in !!!")','@lang("millisecond(s)")')" class="btn btn-primary">@lang("On")</button>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+                                @endif
                             </div>
                             <!-- /.tab-pane -->
                         </div>
@@ -431,14 +720,23 @@
 <div id="success-update" class="toastrDefaultSuccessMsg" ></div>
 <div id="danger-update" class="toastrDefaultErrorMsg" hidden></div>
 
-<input id="select2-placeholder" type="hidden" value='@lang("Choose a building to modify")'>
+<input id="select2-placeholder-device" type="hidden" value='@lang("Choose a device to modify")'>
+<input id="select2-placeholder-sensor" type="hidden" value='@lang("Choose a sensor to modify")'>
 <input id="select2-noResults" type="hidden" value='@lang("No Results Found")'>
+
+<div id="id-buttons-copy" onclick="changeButtonsCopy('@lang('Copy')')"></div>
+<div id="id-buttons-csv" onclick="changeButtonsCSV('@lang('CSV')')"></div>
+<div id="id-buttons-excel" onclick="changeButtonsExcel('@lang('Excel')')"></div>
+<div id="id-buttons-pdf" onclick="changeButtonsPDF('@lang('PDF')')"></div>
+<div id="id-buttons-print" onclick="changeButtonsPrint('@lang('Print')')"></div>
 
 @if(session('msg_room'))
     <input id="msg-permission" type="hidden" value="{{{ session('msg_room') }}}">
 @endif
 <!-- jQuery -->
 <script src="../assets/plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="../assets/plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
@@ -454,15 +752,38 @@
 <script src="../assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="../assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="../assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<!-- ChartJS -->
+<script src="../assets/plugins/chart.js/Chart.min.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="../assets/plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- FLOT CHARTS -->
+<script src="../assets/plugins/flot/jquery.flot.js"></script>
+<!-- FLOT RESIZE PLUGIN - allows the chart to redraw when the window is resized -->
+<script src="../assets/plugins/flot-old/jquery.flot.resize.min.js"></script>
+<!-- FLOT PIE PLUGIN - also used to draw donut charts -->
+<script src="../assets/plugins/flot-old/jquery.flot.pie.min.js"></script>
+<!-- DRAW -->
+<script src="../assets/js/pages/room.js"></script>
 <!-- date-range-picker -->
 <script src="../assets/plugins/moment/moment.min.js"></script>
 <script src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
 <!-- overlayScrollbars -->
 <script src="../assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 @include("include/nav-extension")
+<!-- Extract -->
+<script src="../assets/js/dataTables.buttons.min.js"></script>
+<script src="../assets/js/buttons.flash.min.js"></script>
+<script src="../assets/js/jszip.min.js"></script>
+<script src="../assets/js/pdfmake.min.js"></script>
+<script src="../assets/js/vfs_fonts.js"></script>
+<script src="../assets/js/buttons.html5.min.js"></script>
+<script src="../assets/js/buttons.print.min.js"></script>
 <script>
-    $("input[data-bootstrap-switch]").each(function(){
-        $(this).bootstrapSwitch('state', $(this).prop('checked'));
+    // $("input[data-bootstrap-switch]").each(function(){
+    //     $(this).bootstrapSwitch('state', $(this).prop('checked'));
+    // });
+    $("input[data-bootstrap-switch-disabled]").each(function(){
+        $(this).bootstrapSwitch('toggleDisabled',true,true);
     });
 </script>
 <!-- SweetAlert2 -->
@@ -675,7 +996,7 @@
         //Initialize Select2 Elements
         $('#select2bs4-sensor').select2({
             theme: 'bootstrap4',
-            placeholder: $('#select2-placeholder').val(),
+            placeholder: $('#select2-placeholder-sensor').val(),
             language: {
                 "noResults": function(){
                     return $('#select2-noResults').val();
@@ -697,6 +1018,30 @@
             })
         });
 
+        $('#select2bs4-device').select2({
+            theme: 'bootstrap4',
+            placeholder: $('#select2-placeholder-device').val(),
+            language: {
+                "noResults": function(){
+                    return $('#select2-noResults').val();
+                }
+            }
+        })
+
+        $('#select2bs4-device').on('select2:select', function (e) {
+            var data = e.params.data;
+            $.ajax({
+                url: "choose-device",
+                type: "POST",
+                data: {_token: "{{csrf_token()}}", device_id: data.id },
+                async: false,
+                success: function (data) {
+                    // alert(data);
+                    window.location.reload();
+                }
+            })
+        });
+
     });
 
     function chooseRoom(building,floor,room){
@@ -708,6 +1053,19 @@
             success: function (data) {
                 // alert(data);
                 window.location.href = "room";
+            }
+        })
+    }
+
+    function currentTab(tab_id){
+        $.ajax({
+            url: "set-current-room-tab",
+            type: "POST",
+            data: {_token: "{{csrf_token()}}", tab_id: tab_id },
+            async: false,
+            success: function (data) {
+                // alert(data);
+                // window.location.href = "room";
             }
         })
     }
@@ -753,7 +1111,7 @@
                             Swal.fire({
                                 title: sensor_title,
                                 html: '<b></b>',
-                                timer: 90000,
+                                timer: 1,
                                 timerProgressBar: true,
                                 allowOutsideClick: false,
                                 onBeforeOpen: () => {
@@ -829,9 +1187,139 @@
         }
     }
 
+    function runStopDevice(button,notice_title,notice_text,title_ask,text_warning,confirms,reconfirm,cancel,sensor_title,sensor_html_1,sensor_html_2){
+
+        if (button == 2){
+            Swal.fire({
+                title: title_ask,
+                text: text_warning,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: confirms,
+                cancelButtonText: cancel
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: "run-stop-device",
+                        type: "POST",
+                        data: {_token: "{{csrf_token()}}", button: button },
+                        async: true,
+                        success: function (data) {
+                            // alert(data);
+                            // window.location.href = "room";
+                        }
+                    })
+
+                    Swal.fire({
+                        title: notice_title,
+                        text:  notice_text,
+                        icon: 'success',
+                        showCancelButton: false,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#28a745',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: reconfirm
+                    }).then((result) => {
+                        if (result.value) {
+                            let timerInterval
+                            Swal.fire({
+                                title: sensor_title,
+                                html: '<b></b>',
+                                timer: 1,
+                                timerProgressBar: true,
+                                allowOutsideClick: false,
+                                onBeforeOpen: () => {
+                                    Swal.showLoading()
+                                    timerInterval = setInterval(() => {
+                                        const content = Swal.getContent()
+                                        if (content) {
+                                            const b = content.querySelector('b')
+                                            if (b) {
+                                                b.textContent = Swal.getTimerLeft()
+                                            }
+                                        }
+                                    }, 100)
+                                },
+                                onClose: () => {
+                                    clearInterval(timerInterval)
+                                }
+                            }).then((result) => {
+                                /* Read more about handling dismissals below */
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    console.log('I was closed by the timer')
+                                    refreshDevice();
+                                }
+                            })
+                        }
+                    })
+
+                }
+            })
+
+        }
+        else {
+
+            Swal.fire({
+                title: title_ask,
+                text: text_warning,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: confirms,
+                cancelButtonText: cancel
+            }).then((result) => {
+                if (result.value) {
+
+                    $.ajax({
+                        url: "run-stop-device",
+                        type: "POST",
+                        data: {_token: "{{csrf_token()}}", button: button },
+                        async: true,
+                        success: function (data) {
+                            // alert(data);
+                            // window.location.href = "room";
+                        }
+                    })
+
+                    Swal.fire({
+                        title: notice_title,
+                        text: notice_text,
+                        icon: 'error',
+                        showCancelButton: false,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#dc3545',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: reconfirm
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.reload();
+                        }
+                    })
+                }
+            })
+        }
+    }
+
     function refreshSensor(){
         $.ajax({
             url: "refresh-sensor",
+            type: "POST",
+            data: {_token: "{{csrf_token()}}"},
+            async: true,
+            success: function (data) {
+                // alert(data);
+                // window.location.href = "room";
+                window.location.reload();
+            }
+        })
+    }
+
+    function refreshDevice(){
+        $.ajax({
+            url: "refresh-device",
             type: "POST",
             data: {_token: "{{csrf_token()}}"},
             async: true,
@@ -965,6 +1453,25 @@
             "responsive": true,
             "autoWidth": false,
         });
+
+        $("#sensor-table").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+            "dom": 'Bfrtip',
+            "buttons": [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+
+        $("#device-table").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+            "dom": 'Bfrtip',
+            "buttons": [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+
         $('#example2').DataTable({
             "paging": true,
             "lengthChange": false,
@@ -974,17 +1481,86 @@
             "autoWidth": false,
             "responsive": true,
         });
+
     });
 
-    $('#reservation').daterangepicker()
+    $('#reservation-sensor').daterangepicker()
     //Date range picker with time picker
-    $('#reservationtime').daterangepicker({
+    $('#reservationtime-sensor').daterangepicker({
         timePicker: true,
         timePickerIncrement: 30,
         locale: {
             format: 'DD/MM/YYYY hh:mm A'
         }
     })
+
+    $('#reservation-device').daterangepicker()
+    //Date range picker with time picker
+    $('#reservationtime-device').daterangepicker({
+        timePicker: true,
+        timePickerIncrement: 30,
+        locale: {
+            format: 'DD/MM/YYYY hh:mm A'
+        }
+    })
+
+    function changeButtonsCopy(name){
+        $('.buttons-copy').text(name);
+        $('.buttons-copy').addClass("btn btn-primary");
+    }
+
+    function changeButtonsCSV(name){
+        $('.buttons-csv').text(name);
+        $('.buttons-csv').addClass("btn btn-info");
+    }
+
+    function changeButtonsExcel(name){
+        $('.buttons-excel').text(name);
+        $('.buttons-excel').addClass("btn btn-success");
+    }
+
+    function changeButtonsPDF(name){
+        $('.buttons-pdf').text(name);
+        $('.buttons-pdf').addClass("btn btn-danger");
+    }
+
+    function changeButtonsPrint(name){
+        $('.buttons-print').text(name);
+        $('.buttons-print').addClass("btn btn-warning");
+    }
+
+    $('.buttons-copy').ready( function() {
+
+        $('#id-buttons-copy').click();
+
+    });
+
+    $('.buttons-excel').ready( function() {
+
+        $('#id-buttons-excel').click();
+
+    });
+
+    $('.buttons-csv').ready( function() {
+
+        $('#id-buttons-csv').click();
+
+    });
+
+    $('.buttons-pdf').ready( function() {
+
+        $('#id-buttons-pdf').click();
+
+    });
+
+    $('.buttons-print').ready( function() {
+
+        $('#id-buttons-print').click();
+
+    });
+
 </script>
+@include("include/session-timeout")
+@include("include/chatbot")
 </body>
 </html>

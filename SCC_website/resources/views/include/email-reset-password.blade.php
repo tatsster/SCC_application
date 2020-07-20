@@ -349,10 +349,12 @@
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td>
-                                        <img class="logo" src="@php echo "https://$_SERVER[HTTP_HOST]"; @endphp/logo/hcmut-logo.jpg">
-                                        <h3>@lang("Hi") {{ $fullname }},</h3>
+                                        <img class="logo" src="{{{ $message->embed(public_path()."/assets/logo/hcmut-logo-email.jpg") }}}">
+                                        <br>
+                                        <br>
+                                        <h3>@lang("Hi"),</h3>
                                         <h3>@lang("This is your temporary password:") <b style="color: #dc3545">{{$new_password}}</b></h3>
-                                        <h3>@lang("After signing in, remember to change your password !!!") <b style="color: #007bff">0888 315 899</b></h3>
+                                        <h3>@lang("After signing in, remember to change your password !!! And if you have any problems, feel free to call us through our hotline: ") <b style="color: #007bff">0888 315 899</b></h3>
 {{--                                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">--}}
 {{--                                            <tbody>--}}
 {{--                                            <tr>--}}
