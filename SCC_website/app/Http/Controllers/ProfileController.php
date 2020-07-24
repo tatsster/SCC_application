@@ -665,7 +665,7 @@ class ProfileController extends MainController {
 
     public function register(Request $request){
 
-        Lang::setLocale($request->session()->get('1752051_user')["user_lang"]);
+        Lang::setLocale($request->cookie('1752051_user_lang'));
 
         $validator = Validator::make($request->all(), [
             'user_fullname' => 'min:5|max:255',

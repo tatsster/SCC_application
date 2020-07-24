@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Validator;
 
 class MainController extends Controller {
 
+    protected $search = '';
+
     /* Generate Features */
 
     private function crypto_rand_secure($min, $max)
@@ -144,31 +146,18 @@ class MainController extends Controller {
 
         /* Calculate hours usage and electrical usage */
 
-        $enum = array(
-            "device_kwh" => 4,
-        );
-
         $device_log_db = DB::table('device')
             ->join('device_log', 'device.device_id', '=', 'device_log.device_id')
+            ->where('device_log.device_status', '=', false)
             ->get();
 
         $hours_usage = 0;
         $electrical_consumption = 0;
-        $current_timestamp = 0;
 
         foreach($device_log_db as $device_log_each){
-            $status = explode(",",str_replace("[","",str_replace("]","",$device_log_each->device_status)));
-            if ($status[0] == '"1"'){
-                $current_timestamp = $device_log_each->device_timestamp;
-            }
-            else{
-                $past_hours = ($device_log_each->device_timestamp - $current_timestamp) / 3600;
-                $hours_usage += $past_hours;
-
-                $device_kwh = floatval(explode(",",str_replace("[","",str_replace("[","",$device_log_each->device_additional)))[$enum["device_kwh"]]);
-                $electrical_consumption +=  $past_hours * $device_kwh;
-                $current_timestamp = 0;
-            }
+            $device_log_each = (array) $device_log_each;
+            $hours_usage += $device_log_each["device_hours_usage"];
+            $electrical_consumption += $device_log_each["device_electrical_consumption"];
         }
 
         $hours_usage = round($hours_usage,2);
@@ -368,6 +357,8 @@ class MainController extends Controller {
 
         /* Get language options */
 
+        Lang::setLocale($request->session()->get('1752051_user')["user_lang"]);
+
         $lang_db = LanguageInfo::all();
 
         $permission_db = PermissionInfo::all();
@@ -434,40 +425,45 @@ class MainController extends Controller {
 
         $request->session()->put("search-button-type", $request["type"]);
 
-        $search = $request["search"];
+        $this->search = $request["search"];
 
         if ($request["type"] == 1) {
             $user_list = UserInfo::where("user_active", true)
-                                ->orWhere("user_role", 'like', '%'.$search.'%' )
-                                ->orWhere("user_fullname", 'like', '%'.$search.'%' )
-                                ->orWhere("user_address", 'like', '%'.$search.'%' )
-                                ->orWhere("user_email", 'like', '%'.$search.'%' )
-                                ->orWhere("user_mobile", 'like', '%'.$search.'%' )
-                                ->orWhere("user_about", 'like', '%'.$search.'%' )
+                                ->where(function($q) {
+                                    $q->where("user_role", 'like', '%'.$this->search.'%' )
+                                        ->orWhere("user_fullname", 'like', '%'.$this->search.'%' )
+                                        ->orWhere("user_address", 'like', '%'.$this->search.'%' )
+                                        ->orWhere("user_email", 'like', '%'.$this->search.'%' )
+                                        ->orWhere("user_mobile", 'like', '%'.$this->search.'%' )
+                                        ->orWhere("user_about", 'like', '%'.$this->search.'%' );
+                                })
                                 ->paginate(6);
         }
         else if ($request["type"] == 2) {
             $user_list = UserInfo::where("user_active", false)
-                                    ->orWhere("user_role", 'like', '%'.$search.'%' )
-                                    ->orWhere("user_fullname", 'like', '%'.$search.'%' )
-                                    ->orWhere("user_address", 'like', '%'.$search.'%' )
-                                    ->orWhere("user_email", 'like', '%'.$search.'%' )
-                                    ->orWhere("user_mobile", 'like', '%'.$search.'%' )
-                                    ->orWhere("user_about", 'like', '%'.$search.'%' )
+                                    ->where(function($q) {
+                                        $q->where("user_role", 'like', '%'.$this->search.'%' )
+                                            ->orWhere("user_fullname", 'like', '%'.$this->search.'%' )
+                                            ->orWhere("user_address", 'like', '%'.$this->search.'%' )
+                                            ->orWhere("user_email", 'like', '%'.$this->search.'%' )
+                                            ->orWhere("user_mobile", 'like', '%'.$this->search.'%' )
+                                            ->orWhere("user_about", 'like', '%'.$this->search.'%' );
+                                    })
                                     ->paginate(6);
         }
         else{
 
-            $user_list = UserInfo::orWhere("user_role", 'like', '%'.$search.'%' )
-                                ->orWhere("user_fullname", 'like', '%'.$search.'%' )
-                                ->orWhere("user_address", 'like', '%'.$search.'%' )
-                                ->orWhere("user_email", 'like', '%'.$search.'%' )
-                                ->orWhere("user_mobile", 'like', '%'.$search.'%' )
-                                ->orWhere("user_about", 'like', '%'.$search.'%' )
+            $user_list = UserInfo::orWhere("user_role", 'like', '%'.$this->search.'%' )
+                                ->orWhere("user_fullname", 'like', '%'.$this->search.'%' )
+                                ->orWhere("user_address", 'like', '%'.$this->search.'%' )
+                                ->orWhere("user_email", 'like', '%'.$this->search.'%' )
+                                ->orWhere("user_mobile", 'like', '%'.$this->search.'%' )
+                                ->orWhere("user_about", 'like', '%'.$this->search.'%' )
                                 ->paginate(6);
         }
 
         $current_page = "user-list";
+        $search = $this->search;
 
         return view('user-list', compact("current_page", "lang_db", "user_list", "search"));
     }

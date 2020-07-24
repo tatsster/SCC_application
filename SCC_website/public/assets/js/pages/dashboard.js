@@ -496,7 +496,7 @@ $(function () {
         var realtime       = 'on' //If == to on then fetch data every x seconds. else stop fetching
         var realtime2       = 'on'
         function update() {
-
+            // alert(getTemperaturData());
             interactive_plot.setData([getTemperaturData()])
 
             // Since the axes don't change, we don't need to call plot.setupGrid()

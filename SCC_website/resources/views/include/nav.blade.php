@@ -31,8 +31,8 @@
     <ul class="navbar-nav ml-auto">
         <!-- Messages Dropdown Menu -->
         <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="modal" data-target="#chatBot" href="#/">
-                <i class="far fa-comments"></i>
+            <a class="nav-link btn btn-sm bg-teal" data-toggle="modal" data-target="#chatBot" href="#/">
+                <i class="fas fa-comments"></i>
 {{--                <span class="badge badge-danger navbar-badge">3</span>--}}
             </a>
 

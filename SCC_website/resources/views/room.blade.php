@@ -125,8 +125,12 @@
                                           <input type="text" name="device_name" class="form-control" id="add-device-name">
                                       </div>
                                       <div class="form-group">
-                                          <label for="add-device-additional" class="col-form-label">@lang("Device Additional Value:")</label>
-                                          <input type="text" name="device_additional" class="form-control" id="add-device-additional">
+                                          <label for="add-device-kwh" class="col-form-label">@lang("Device Electrical Consumption (KWH):")</label>
+                                          <input type="text" name="device_kwh" class="form-control" id="add-device-kwh">
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="add-device-status-value" class="col-form-label">@lang("Device Status Value:")</label>
+                                          <input type="text" name="device_status_value" class="form-control" id="add-device-status-value">
                                       </div>
                                       <div class="form-group">
                                           <label for="add-device-ip" class="col-form-label">@lang("MQTT IP:")</label>
@@ -201,15 +205,15 @@
                             @else
                                 <div class="tab-pane" id="sensors">
                             @endif
-                                <select id="select2bs4-sensor" style="" class="form-control select2bs4" style="width: 100%;">
+                                <select id="select2bs4-sensor" class="form-control select2bs4" style="width: 100%;">
                                     @if (session("1752051_current_sensor")["sensor_id"] == "")
                                         <option></option>
                                     @endif
                                     @foreach( $sensor_db as $sensor_each)
-                                        @if (session("1752051_current_sensor")["sensor_id"] == $sensor_each->sensor_id)
-                                            <option selected value="{{{$sensor_each->sensor_id}}}">{{$sensor_each->sensor_name}} ({{$sensor_each->sensor_id}})</option>
+                                        @if (session("1752051_current_sensor")["sensor_id"] == $sensor_each["sensor_id"])
+                                            <option selected value="{{{$sensor_each["sensor_id"]}}}">{{$sensor_each["sensor_name"]}} ({{$sensor_each["sensor_id"]}})</option>
                                         @else
-                                            <option value="{{{$sensor_each->sensor_id}}}">{{$sensor_each->sensor_name}} ({{$sensor_each->sensor_id}})</option>
+                                            <option value="{{{$sensor_each["sensor_id"]}}}">{{$sensor_each["sensor_name"]}} ({{$sensor_each["sensor_id"]}})</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -223,28 +227,15 @@
                                     <div class="chart tab-pane" id="backup-log">
                                         <div class="card-header">
                                             <h3 class="card-title">@lang("Sensor Log")</h3>
-                                            <button type="button" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm float-right" style="margin-right: 5px;">
-                                                <i class="fas fa-tras"></i> @lang("Delete all records")
-                                            </button>
-                                        </div>
-                                        <div class="card-body">
-                                            <form action="sensor-search-time-range" method="post">
-                                                {{ csrf_field() }}
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="far fa-clock"></i></span>
-                                                    </div>
-                                                    <input type="hidden" name="sensor_id" value="{{{ session("1752051_current_sensor")["sensor_id"] }}}">
-                                                    <input type="text" name="sensor_time_range" class="form-control float-right" id="reservationtime-sensor">
-                                                </div>
-                                                <br>
-                                                <button type="submit" class="btn btn-primary btn-sm float-right" style="margin-right: 5px;">
-                                                    @lang("Apply time range")
+                                            @if (session("1752051_current_sensor")["sensor_pid"] == null)
+                                                <button type="button" onclick="deleteAllLog('@lang("Are you sure?")','@lang("You might not want to delete all log of "){{{ session("1752051_current_sensor")["sensor_id"] }}} !!!','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted all log of ") {{{ session("1752051_current_sensor")["sensor_id"] }}} !!!','@lang("OK")',0)" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm float-right" style="margin-right: 5px;">
+                                                    <i class="fas fa-trash"></i> @lang("Delete all records")
                                                 </button>
-                                            </form>
-                                            <button type="button" onclick="refreshSensor()" class="btn btn-info btn-sm float-right" style="margin-right: 5px;">
-                                                @lang("Refresh")
-                                            </button>
+                                            @else
+                                                <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
+                                                    <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
+                                                </button>
+                                            @endif
                                         </div>
 
                                         <section class="col-lg-12 connectedSortable">
@@ -267,66 +258,78 @@
                                                 <div class="card-body">
                                                     <div class="tab-content p-0">
                                                         <!-- Morris chart - Sales -->
-                                                        <div class="chart tab-pane active" id="real-time-temperature"
-                                                             style="position: relative; height: 300px;">
+                                                        <div class="chart tab-pane active" id="real-time-temperature">
                                                             <div class="card-header">
                                                                 <h3 class="card-title">
                                                                     <i class="far fa-chart-bar"></i>
-                                                                    Celsius Degree
+                                                                    @lang('Celsius Degree')
                                                                 </h3>
 
                                                                 <div class="card-tools">
-                                                                    Real time
-                                                                    <div class="btn-group" id="realtime" data-toggle="btn-toggle">
-                                                                        <button type="button" class="btn btn-default btn-sm active" data-toggle="on">On</button>
-                                                                        <button type="button" class="btn btn-default btn-sm" data-toggle="off">Off</button>
-                                                                    </div>
+                                                                    <div class="label">@lang("Zoom Options:")</div>
+                                                                    {{--                                                                        <span id="durationValue" class="value">20000</span>--}}
+                                                                    <span><input type="range" min="1000" max="60000" step="100" value="20000" id="duration-temperature" class="control"></span>
                                                                 </div>
                                                             </div>
                                                             <div class="card-body">
-                                                                <div id="interactive" style="height: 300px; padding: 0px; position: relative;"><canvas class="flot-base" width="1486" height="600" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 743px; height: 300px;"></canvas><canvas class="flot-overlay" width="1486" height="600" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 743px; height: 300px;"></canvas><div class="flot-svg" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;"><svg style="width: 100%; height: 100%;"><g class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;"><text x="28.0234375" y="293.96875" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: center;">0</text><text x="95.05697601010101" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">10</text><text x="166.06707702020202" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">20</text><text x="237.07717803030303" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">30</text><text x="308.08727904040404" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">40</text><text x="379.0973800505051" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">50</text><text x="450.10748106060606" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">60</text><text x="521.1175820707072" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">70</text><text x="592.1276830808081" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">80</text><text x="663.1377840909091" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">90</text></g><g class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;"><text x="8.953125" y="268.03125" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: right;">0</text><text x="1" y="217.63125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">20</text><text x="1" y="167.23125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">40</text><text x="1" y="116.83125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">60</text><text x="1" y="66.43125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">80</text><text x="-6.953125" y="16.03125" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: right;">100</text></g></svg></div></div>
+                                                                <div>
+                                                                    @lang('Pause:')&nbsp;
+                                                                    <div class="btn-group" id="temperature" data-toggle="btn-toggle">
+                                                                        <input type="checkbox" class="control" id="pause-temperature">
+                                                                    </div>
+                                                                </div>
+                                                                <br>
+                                                                <canvas id="chart-real-time-temperature"></canvas>
                                                             </div>
                                                         </div>
-                                                        <div class="chart tab-pane" id="real-time-humidity"
-                                                             style="position: relative; height: 300px;">
-                                                            {{--                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
-                                                            {{--                        <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 344px;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
+                                                        <div class="chart tab-pane" id="real-time-humidity">
                                                             <div class="card-header">
                                                                 <h3 class="card-title">
                                                                     <i class="far fa-chart-bar"></i>
-                                                                    Percentage
+                                                                    %
                                                                 </h3>
 
                                                                 <div class="card-tools">
-                                                                    Real time
-                                                                    <div class="btn-group" id="realtime2" data-toggle="btn-toggle">
-                                                                        <button type="button" class="btn btn-default btn-sm active" data-toggle="on">On</button>
-                                                                        <button type="button" class="btn btn-default btn-sm" data-toggle="off">Off</button>
-                                                                    </div>
+                                                                    <div class="label">@lang("Zoom Options:")</div>
+                                                                    {{--                                                                        <span id="durationValue" class="value">20000</span>--}}
+                                                                    <span><input type="range" min="1000" max="60000" step="100" value="20000" id="duration-humidity" class="control"></span>
                                                                 </div>
                                                             </div>
                                                             <div class="card-body">
-                                                                <div id="interactive2" style="height: 300px; padding: 0px; position: relative;"><canvas class="flot-base" width="1486" height="600" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 743px; height: 300px;"></canvas><canvas class="flot-overlay" width="1486" height="600" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 743px; height: 300px;"></canvas><div class="flot-svg" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;"><svg style="width: 100%; height: 100%;"><g class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;"><text x="28.0234375" y="293.96875" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: center;">0</text><text x="95.05697601010101" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">10</text><text x="166.06707702020202" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">20</text><text x="237.07717803030303" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">30</text><text x="308.08727904040404" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">40</text><text x="379.0973800505051" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">50</text><text x="450.10748106060606" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">60</text><text x="521.1175820707072" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">70</text><text x="592.1276830808081" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">80</text><text x="663.1377840909091" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">90</text></g><g class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;"><text x="8.953125" y="268.03125" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: right;">0</text><text x="1" y="217.63125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">20</text><text x="1" y="167.23125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">40</text><text x="1" y="116.83125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">60</text><text x="1" y="66.43125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">80</text><text x="-6.953125" y="16.03125" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: right;">100</text></g></svg></div></div>
+                                                                <div>
+                                                                    @lang('Pause:')&nbsp;
+                                                                    <div class="btn-group" id="humidity" data-toggle="btn-toggle">
+                                                                        <input type="checkbox" class="control" id="pause-humidity">
+                                                                    </div>
+                                                                </div>
+                                                                <br>
+                                                                <canvas id="chart-real-time-humidity"></canvas>
                                                             </div>
                                                         </div>
-                                                        {{--                    <div class="chart tab-pane" id="temperature"--}}
-                                                        {{--                         style="position: relative; height: 300px;">--}}
-                                                        {{--                        --}}{{--                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
-                                                        {{--                        <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 344px;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
-                                                        {{--                    </div>--}}
-                                                        {{--                  <div class="chart tab-pane" id="humidity"--}}
-                                                        {{--                       style="position: relative; height: 300px;">--}}
-                                                        {{--                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
-                                                        {{--                      <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 344px;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
-                                                        {{--                   </div>--}}
-                                                        {{--                    <div class="chart tab-pane" id="hours-usage" style="position: relative; height: 300px;">--}}
-                                                        {{--                        --}}{{--                    <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
-                                                        {{--                        <canvas id="stackedBarChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
-                                                        {{--                    </div>--}}
-                                                        {{--                  <div class="chart tab-pane" id="electrical-usage" style="position: relative; height: 300px;">--}}
-                                                        {{--                    <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
-                                                        {{--                      <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 344px;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
-                                                        {{--                  </div>--}}
+                                                        <div class="chart tab-pane" id="real-time-heat-index">
+                                                            <div class="card-header">
+                                                                <h3 class="card-title">
+                                                                    <i class="far fa-chart-bar"></i>
+                                                                    %
+                                                                </h3>
+
+                                                                <div class="card-tools">
+                                                                    <div class="label">@lang("Zoom Options:")</div>
+                                                                    {{--                                                                        <span id="durationValue" class="value">20000</span>--}}
+                                                                    <span><input type="range" min="1000" max="60000" step="100" value="20000" id="duration-heat-index" class="control"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div>
+                                                                    @lang('Pause:')&nbsp;
+                                                                    <div class="btn-group" id="heat-index" data-toggle="btn-toggle">
+                                                                        <input type="checkbox" class="control" id="pause-heat-index">
+                                                                    </div>
+                                                                </div>
+                                                                <br>
+                                                                <canvas id="chart-real-time-heat-index"></canvas>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div><!-- /.card-body -->
                                             </div>
@@ -334,17 +337,39 @@
 
                                         </section>
 
+                                        <div class="card-body">
+                                            <form action="sensor-search-time-range" method="post">
+                                                {{ csrf_field() }}
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                                    </div>
+                                                    <input type="hidden" name="sensor_id" value="{{{ session("1752051_current_sensor")["sensor_id"] }}}">
+                                                    <input type="text" name="sensor_time_range" class="form-control float-right" id="reservationtime-sensor">
+                                                </div>
+                                                <br>
+                                                <button type="submit" class="btn btn-primary btn-sm float-right" style="margin-right: 5px;">
+                                                    @lang("Apply time range")
+                                                </button>
+                                            </form>
+                                            <button type="button" onclick="refreshSensor()" class="btn btn-info btn-sm float-right" style="margin-right: 5px;">
+                                                @lang("Refresh")
+                                            </button>
+                                        </div>
+
 
                                         <div class="card-body">
                                             <table id="sensor-table" class="table table-bordered table-striped">
                                                 <thead>
                                                 <tr>
                                                     <th class="text-center">
-                                                        <div class="icheck-success d-inline">
-                                                            <input type="checkbox" id="checkboxSuccess1">
-                                                            <label for="checkboxSuccess1">
-                                                            </label>
-                                                        </div>
+                                                        @if (session("1752051_current_sensor")["sensor_pid"] == null)
+                                                            <div class="icheck-success d-inline">
+                                                                <input type="checkbox" onclick="checkAllCheckBox(0,0)" id="check-mark-sensor-upper">
+                                                                <label for="check-mark-sensor-upper">
+                                                                </label>
+                                                            </div>
+                                                        @endif
                                                     </th>
                                                     <th>@lang("Order")</th>
                                                     <th>@lang("Sensor ID")</th>
@@ -353,11 +378,17 @@
                                                     <th>@lang("Heat Index")</th>
                                                     <th>@lang("Date")</th>
                                                     <th>
-                                                        <button data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
-                                                            <i class="fas fa-trash">
-                                                            </i>
-                                                            @lang("Delete selected")
-                                                        </button>
+                                                        @if (session("1752051_current_sensor")["sensor_pid"] == null)
+                                                            <button onclick="deleteLog('@lang("Are you sure?")','@lang("You might not want to delete these sensor logs !!!")','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted these sensor logs !!!")','@lang("OK")',0,'check-mark-sensor')" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
+                                                                <i class="fas fa-trash">
+                                                                </i>
+                                                                @lang("Delete selected")
+                                                            </button>
+                                                        @else
+                                                            <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
+                                                                <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
+                                                            </button>
+                                                        @endif
                                                     </th>
                                                 </tr>
                                                 </thead>
@@ -371,18 +402,18 @@
 
                                                     <tr>
                                                         <td class="text-center">
-                                                            <div class="icheck-success d-inline">
-                                                                <input type="checkbox" id="checkboxSuccess13">
-                                                                <label for="checkboxSuccess13">
-                                                                </label>
-                                                            </div>
+                                                            @if (session("1752051_current_sensor")["sensor_pid"] == null)
+                                                                <div class="icheck-success d-inline">
+                                                                    <input value="{{{ $each["sensor_order"] }}}" type="checkbox" class="check-mark-sensor">
+                                                                </div>
+                                                            @endif
                                                         </td>
                                                         <td>{{ $each["sensor_order"] }}</td>
                                                         <td>{{ $each["sensor_id"] }}</td>
                                                         <td>{{ $each["sensor_temp"] }}</td>
                                                         <td>{{ $each["sensor_humid"] }}</td>
                                                         <td>{{ $each["sensor_heat_index"] }}</td>
-                                                        <td> @php echo date('m/d/Y h:i A', $each["sensor_timestamp"]); @endphp </td>
+                                                        <td> @php echo date('m/d/Y H:i:s', $each["sensor_timestamp"]); @endphp </td>
                                                         <td class="project-actions text-left">
                                                         </td>
                                                     </tr>
@@ -391,11 +422,13 @@
                                                 <tfoot>
                                                 <tr>
                                                     <th class="text-center">
-                                                        <div class="icheck-success d-inline">
-                                                            <input type="checkbox" id="checkboxSuccess999">
-                                                            <label for="checkboxSuccess999">
-                                                            </label>
-                                                        </div>
+                                                        @if (session("1752051_current_sensor")["sensor_pid"] == null)
+                                                            <div class="icheck-success d-inline">
+                                                                <input type="checkbox" onclick="checkAllCheckBox(0,1)" id="check-mark-sensor-lower">
+                                                                <label for="check-mark-sensor-lower">
+                                                                </label>
+                                                            </div>
+                                                        @endif
                                                     </th>
                                                     <th>@lang("Order")</th>
                                                     <th>@lang("Sensor ID")</th>
@@ -404,11 +437,17 @@
                                                     <th>@lang("Heat Index")</th>
                                                     <th>@lang("Date")</th>
                                                     <th>
-                                                        <button data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
-                                                            <i class="fas fa-trash">
-                                                            </i>
-                                                            @lang("Delete selected")
-                                                        </button>
+                                                        @if (session("1752051_current_sensor")["sensor_pid"] == null)
+                                                            <button onclick="deleteLog('@lang("Are you sure?")','@lang("You might not want to delete these sensor logs !!!")','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted these sensor logs !!!")','@lang("OK")',0,'check-mark-sensor')" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
+                                                                <i class="fas fa-trash">
+                                                                </i>
+                                                                @lang("Delete selected")
+                                                            </button>
+                                                        @else
+                                                            <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
+                                                                <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
+                                                            </button>
+                                                        @endif
                                                     </th>
                                                 </tr>
                                                 </tfoot>
@@ -463,13 +502,16 @@
 
                                         <div class="form-group row">
                                             <div class="offset-sm-2 col-sm-10 text-right">
-                                                <button type="submit" name="btn-delete" value="1" class="btn btn-danger" data-dismiss="modal">@lang("Delete")</button>
+                                                @if (session("1752051_current_sensor")["sensor_pid"] == null)
+                                                    <button type="submit" id="current-{{{ session("1752051_current_sensor")["sensor_id"] }}}" name="btn-delete" value="1" hidden></button>
+                                                    <button type="button" class="btn btn-danger" onclick="deleteSensorDevice('@lang("Are you sure?")','@lang("You might not want to delete "){{{ session("1752051_current_sensor")["sensor_id"] }}} !!!','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted ") {{{ session("1752051_current_sensor")["sensor_id"] }}} !!!','@lang("OK")','current-{{{ session("1752051_current_sensor")["sensor_id"] }}}')" data-dismiss="modal">@lang("Delete")</button>
+                                                @endif
                                                 @if (session("1752051_current_sensor")["sensor_pid"] != null)
-                                                    <button type="button" onclick="runStopSensor(1,'@lang("Successfully stopped !!!")','@lang("You can turn on later !!!")','@lang("Are you sure you want to turn off sensor?")','@lang("You will stop sensor immediately !!!")','@lang("Yes, turn it off!")','@lang("OK")','@lang("Cancel")','@lang("Sensor is opening !!!")','@lang("Sensor will be on in !!!")','@lang("millisecond(s)")')" class="btn btn-info">@lang("Stop")</button>
+                                                    <button type="button" onclick="runStopSensor(1,'@lang("Successfully stopped !!!")','@lang("You can turn on later !!!")','@lang("Are you sure you want to turn off sensor?")','@lang("You will stop sensor immediately !!!")','@lang("Yes, turn it off!")','@lang("OK")','@lang("Cancel")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")')" class="btn btn-info">@lang("Stop")</button>
                                                 @endif
                                                 @if (session("1752051_current_sensor")["sensor_pid"] == null)
                                                     <button type="submit" class="btn btn-success">@lang("Update")</button>
-                                                    <button type="button" onclick="runStopSensor(2,'@lang("Successfully ran !!!")','@lang("You can turn off later !!!")','@lang("Are you sure you want to turn on sensor ?")','@lang("")','@lang("Yes, turn it on!")','@lang("OK")','@lang("Cancel")','@lang("Sensor is opening !!!")','@lang("Sensor will be on in !!!")','@lang("millisecond(s)")')" class="btn btn-primary">@lang("Run")</button>
+                                                    <button type="button" onclick="runStopSensor(2,'@lang("Successfully ran !!!")','@lang("You can turn off later !!!")','@lang("Are you sure you want to turn on sensor ?")','@lang("")','@lang("Yes, turn it on!")','@lang("OK")','@lang("Cancel")','@lang("Sensor is opening !!!")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")')" class="btn btn-primary">@lang("Run")</button>
                                                 @endif
                                             </div>
                                         </div>
@@ -485,15 +527,15 @@
                                 <div class="tab-pane" id="devices">
                             @endif
 
-                                <select id="select2bs4-device" style="" class="form-control select2bs4" style="width: 100%;">
+                                <select id="select2bs4-device" class="form-control select2bs4" style="width: 100%;">
                                     @if (session("1752051_current_device")["device_id"] == "")
                                         <option></option>
                                     @endif
                                     @foreach( $device_db as $device_each)
-                                        @if (session("1752051_current_device")["device_id"] == $device_each->device_id)
-                                            <option selected value="{{{$device_each->device_id}}}">{{$device_each->device_name}} ({{$device_each->device_id}})</option>
+                                        @if (session("1752051_current_device")["device_id"] == $device_each["device_id"])
+                                            <option selected value="{{{$device_each["device_id"]}}}">{{$device_each["device_name"]}} ({{$device_each["device_id"]}})</option>
                                         @else
-                                            <option value="{{{$device_each->device_id}}}">{{$device_each->device_name}} ({{$device_each->device_id}})</option>
+                                            <option value="{{{$device_each["device_id"]}}}">{{$device_each["device_name"]}} ({{$device_each["device_id"]}})</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -505,9 +547,15 @@
                                     <div class="chart tab-pane" id="backup-log">
                                         <div class="card-header">
                                             <h3 class="card-title">@lang("Device Log")</h3>
-                                            <button type="button" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm float-right" style="margin-right: 5px;">
-                                                <i class="fas fa-tras"></i> @lang("Delete all records")
-                                            </button>
+                                            @if (session("1752051_current_device")["device_pid"] == null)
+                                                <button type="button" onclick="deleteAllLog('@lang("Are you sure?")','@lang("You might not want to delete all log of "){{{ session("1752051_current_device")["device_id"] }}} !!!','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted all log of ") {{{ session("1752051_current_device")["device_id"] }}} !!!','@lang("OK")',1)" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm float-right" style="margin-right: 5px;">
+                                                    <i class="fas fa-trash"></i> @lang("Delete all records")
+                                                </button>
+                                            @else
+                                                <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
+                                                    <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
+                                                </button>
+                                            @endif
                                         </div>
                                         <div class="card-body">
                                             <form action="device-search-time-range" method="post">
@@ -533,23 +581,33 @@
                                                 <thead>
                                                 <tr>
                                                     <th class="text-center">
-                                                        <div class="icheck-success d-inline">
-                                                            <input type="checkbox" id="checkboxSuccess1">
-                                                            <label for="checkboxSuccess1">
-                                                            </label>
-                                                        </div>
+                                                        @if (session("1752051_current_device")["device_pid"] == null)
+                                                            <div class="icheck-success d-inline">
+                                                                <input onclick="checkAllCheckBox(1,0)" type="checkbox" id="check-mark-device-upper">
+                                                                <label for="check-mark-device-upper">
+                                                                </label>
+                                                            </div>
+                                                        @endif
                                                     </th>
                                                     <th>@lang("Order")</th>
                                                     <th>@lang("Device ID")</th>
                                                     <th>@lang("Device Status")</th>
                                                     <th>@lang("Device Status Value")</th>
+                                                    <th>@lang("Device Hours Usage")</th>
+                                                    <th>@lang("Device Electrical Connsumption")</th>
                                                     <th>@lang("Date")</th>
                                                     <th>
-                                                        <button data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
-                                                            <i class="fas fa-trash">
-                                                            </i>
-                                                            @lang("Delete selected")
-                                                        </button>
+                                                        @if (session("1752051_current_device")["device_pid"] == null)
+                                                            <button onclick="deleteLog('@lang("Are you sure?")','@lang("You might not want to delete these device logs !!!")','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted these device logs !!!")','@lang("OK")',1,'check-mark-device')" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
+                                                                <i class="fas fa-trash">
+                                                                </i>
+                                                                @lang("Delete selected")
+                                                            </button>
+                                                        @else
+                                                            <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
+                                                                <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
+                                                            </button>
+                                                        @endif
                                                     </th>
                                                 </tr>
                                                 </thead>
@@ -558,26 +616,38 @@
 
                                                     <tr>
                                                         <td class="text-center">
-                                                            <div class="icheck-success d-inline">
-                                                                <input type="checkbox" id="checkboxSuccess13">
-                                                                <label for="checkboxSuccess13">
-                                                                </label>
-                                                            </div>
+                                                            @if (session("1752051_current_device")["device_pid"] == null)
+                                                                    <div class="icheck-success d-inline">
+                                                                        <input value="{{{ $each["device_order"] }}}" type="checkbox" class="check-mark-device">
+                                                                    </div>
+                                                            @endif
                                                         </td>
                                                         <td>{{ $each["device_order"] }}</td>
                                                         <td>{{ $each["device_id"] }}</td>
                                                         <td>
-                                                            @php
-                                                                $status = explode(",",str_replace("[","",str_replace("]","",$each["device_status"])));
-                                                            @endphp
-                                                            @if($status[0] == '"1"')
+                                                            @if($each["device_status"] == true)
                                                                 <input type="checkbox" checked data-bootstrap-switch-disabled data-off-color="danger" data-on-color="success">
                                                             @else
                                                                 <input type="checkbox" data-bootstrap-switch-disabled data-off-color="danger" data-on-color="success">
                                                             @endif
                                                         </td>
-                                                        <td>{{ str_replace('"','',$status[1]) }}</td>
-                                                        <td> @php echo date('m/d/Y h:i A', $each["device_timestamp"]); @endphp </td>
+
+                                                        <td>{{ $each["device_status_value"] }}</td>
+                                                        <td>
+                                                            @if($each["device_status"] == true)
+                                                                ---
+                                                            @else
+                                                                {{ $each["device_hours_usage"] }}
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if($each["device_status"] == true)
+                                                                ---
+                                                            @else
+                                                                {{ $each["device_electrical_consumption"] }}
+                                                            @endif
+                                                        </td>
+                                                        <td> @php echo date('m/d/Y H:i:s', $each["device_timestamp"]); @endphp </td>
                                                         <td class="project-actions text-left">
                                                         </td>
                                                     </tr>
@@ -586,23 +656,33 @@
                                                 <tfoot>
                                                 <tr>
                                                     <th class="text-center">
-                                                        <div class="icheck-success d-inline">
-                                                            <input type="checkbox" id="checkboxSuccess999">
-                                                            <label for="checkboxSuccess999">
-                                                            </label>
-                                                        </div>
+                                                        @if (session("1752051_current_device")["device_pid"] == null)
+                                                            <div class="icheck-success d-inline">
+                                                                <input onclick="checkAllCheckBox(1,1)" type="checkbox" id="check-mark-device-lower">
+                                                                <label for="check-mark-device-lower">
+                                                                </label>
+                                                            </div>
+                                                        @endif
                                                     </th>
                                                     <th>@lang("Order")</th>
                                                     <th>@lang("Device ID")</th>
                                                     <th>@lang("Device Status")</th>
                                                     <th>@lang("Device Status Value")</th>
+                                                    <th>@lang("Device Hours Usage")</th>
+                                                    <th>@lang("Device Electrical Connsumption")</th>
                                                     <th>@lang("Date")</th>
                                                     <th>
-                                                        <button data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
-                                                            <i class="fas fa-trash">
-                                                            </i>
-                                                            @lang("Delete selected")
-                                                        </button>
+                                                        @if (session("1752051_current_device")["device_pid"] == null)
+                                                            <button onclick="deleteLog('@lang("Are you sure?")','@lang("You might not want to delete these device logs !!!")','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted these device logs !!!")','@lang("OK")',1,'check-mark-device')" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
+                                                                <i class="fas fa-trash">
+                                                                </i>
+                                                                @lang("Delete selected")
+                                                            </button>
+                                                        @else
+                                                            <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
+                                                                <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
+                                                            </button>
+                                                        @endif
                                                     </th>
                                                 </tr>
                                                 </tfoot>
@@ -628,15 +708,12 @@
 
                                         <div class="form-group row">
                                             <div class="col-sm-6">
-                                                <label for="device-additional" class="col-form-label">@lang("Device Additional Value:")</label>
-                                                <input value="{{{ session("1752051_current_device")["device_additional"] }}}" type="text" name="device_additional" class="form-control" id="device-additional">
+                                                <label for="device-kwh" class="col-form-label">@lang("Device KWH:")</label>
+                                                <input value="{{{ session("1752051_current_device")["device_kwh"] }}}" type="number" name="device_kwh" class="form-control" id="device-kwh">
                                             </div>
                                             <div class="col-sm-6">
                                                 <label for="device-status-value" class="col-form-label">@lang("Device Status Value:")</label>
-                                                @php
-                                                    $status = explode(",",str_replace("[","",str_replace("]","",session("1752051_current_device")["device_status"])));
-                                                @endphp
-                                                <input value="{{{ str_replace('"','',$status[1]) }}}" type="text" name="device_status_value" class="form-control" id="device-status-value">
+                                                <input value="{{{ session("1752051_current_device")["device_status_value"] }}}" type="number" name="device_status_value" class="form-control" id="device-status-value">
                                             </div>
                                         </div>
 
@@ -667,17 +744,31 @@
                                                 <label for="device-password" class="col-form-label">@lang("MQTT Password:")</label>
                                                 <input value="{{{ session("1752051_current_device")["device_password"] }}}" type="text" name="device_password" class="form-control" id="device-password">
                                             </div>
+                                            <div class="col-sm-6">
+                                                <label for="device-lower-threshold" class="col-form-label">@lang("Device Lower Threshold:")</label>
+                                                <input value="{{{ session("1752051_current_device")["device_lower_threshold"] }}}" type="number" name="device_lower_threshold" class="form-control" id="device-lower-threshold">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-6">
+                                                <label for="device-upper-threshold" class="col-form-label">@lang("Device Upper Threshold:")</label>
+                                                <input value="{{{ session("1752051_current_device")["device_upper_threshold"] }}}" type="number" name="device_upper_threshold" class="form-control" id="device-upper-threshold">
+                                            </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <div class="offset-sm-2 col-sm-10 text-right">
-                                                <button type="submit" name="btn-delete" value="1" class="btn btn-danger" data-dismiss="modal">@lang("Delete")</button>
+                                                @if (session("1752051_current_device")["device_pid"] == null)
+                                                    <button type="submit" id="current-{{{ session("1752051_current_device")["device_id"] }}}" name="btn-delete" value="1" hidden></button>
+                                                    <button type="button" class="btn btn-danger" onclick="deleteSensorDevice('@lang("Are you sure?")','@lang("You might not want to delete "){{{ session("1752051_current_device")["device_id"] }}} !!!','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted ") {{{ session("1752051_current_device")["device_id"] }}} !!!','@lang("OK")','current-{{{ session("1752051_current_device")["device_id"] }}}')" data-dismiss="modal">@lang("Delete")</button>
+                                                @endif
                                                 @if (session("1752051_current_device")["device_pid"] != null)
-                                                    <button type="button" onclick="runStopDevice(1,'@lang("Successfully stopped !!!")','@lang("You can turn on later !!!")','@lang("Are you sure you want to turn off device?")','@lang("You will stop device immediately !!!")','@lang("Yes, turn it off!")','@lang("OK")','@lang("Cancel")','@lang("Device is opening !!!")','@lang("Device will be on in !!!")','@lang("millisecond(s)")')" class="btn btn-info">@lang("Off")</button>
+                                                    <button type="button" onclick="runStopDevice(1,'@lang("Successfully stopped !!!")','@lang("You can turn on later !!!")','@lang("Are you sure you want to turn off device?")','@lang("You will stop device immediately !!!")','@lang("Yes, turn it off!")','@lang("OK")','@lang("Cancel")','@lang("Device is opening !!!")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")')" class="btn btn-info">@lang("Off")</button>
                                                 @endif
                                                 @if (session("1752051_current_device")["device_pid"] == null)
                                                     <button type="submit" class="btn btn-success">@lang("Update")</button>
-                                                    <button type="button" onclick="runStopDevice(2,'@lang("Successfully ran !!!")','@lang("You can turn off later !!!")','@lang("Are you sure you want to turn on device ?")','','@lang("Yes, turn it on!")','@lang("OK")','@lang("Cancel")','@lang("Device is opening !!!")','@lang("Device will be on in !!!")','@lang("millisecond(s)")')" class="btn btn-primary">@lang("On")</button>
+                                                    <button type="button" onclick="runStopDevice(2,'@lang("Successfully ran !!!")','@lang("You can turn off later !!!")','@lang("Are you sure you want to turn on device ?")','','@lang("Yes, turn it on!")','@lang("OK")','@lang("Cancel")','@lang("Device is opening !!!")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")')" class="btn btn-primary">@lang("On")</button>
                                                 @endif
                                             </div>
                                         </div>
@@ -700,6 +791,7 @@
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
+
     </section>
     <!-- /.content -->
   </div>
@@ -754,6 +846,9 @@
 <script src="../assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <!-- ChartJS -->
 <script src="../assets/plugins/chart.js/Chart.min.js"></script>
+<script src="../assets/js/chartjs-plugin-streaming.js"></script>
+<!-- Apexharts -->
+<script src="../assets/apexcharts-bundle/dist/apexcharts.min.js"></script>
 <!-- jQuery Knob Chart -->
 <script src="../assets/plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- FLOT CHARTS -->
@@ -762,8 +857,6 @@
 <script src="../assets/plugins/flot-old/jquery.flot.resize.min.js"></script>
 <!-- FLOT PIE PLUGIN - also used to draw donut charts -->
 <script src="../assets/plugins/flot-old/jquery.flot.pie.min.js"></script>
-<!-- DRAW -->
-<script src="../assets/js/pages/room.js"></script>
 <!-- date-range-picker -->
 <script src="../assets/plugins/moment/moment.min.js"></script>
 <script src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -1070,7 +1163,7 @@
         })
     }
 
-    function runStopSensor(button,notice_title,notice_text,title_ask,text_warning,confirms,reconfirm,cancel,sensor_title,sensor_html_1,sensor_html_2){
+    function runStopSensor(button,notice_title,notice_text,title_ask,text_warning,confirms,reconfirm,cancel,sensor_title,error_title,error_text){
 
         if (button == 2){
 
@@ -1092,13 +1185,13 @@
                         async: true,
                         success: function (data) {
                             // alert(data);
-                            // window.location.href = "room";
+                            // window.location.reload();
                         }
                     })
 
                     Swal.fire({
                         title: notice_title,
-                        text:  notice_text,
+                        text: notice_text,
                         icon: 'success',
                         showCancelButton: false,
                         allowOutsideClick: false,
@@ -1107,35 +1200,7 @@
                         confirmButtonText: reconfirm
                     }).then((result) => {
                         if (result.value) {
-                            let timerInterval
-                            Swal.fire({
-                                title: sensor_title,
-                                html: '<b></b>',
-                                timer: 1,
-                                timerProgressBar: true,
-                                allowOutsideClick: false,
-                                onBeforeOpen: () => {
-                                    Swal.showLoading()
-                                    timerInterval = setInterval(() => {
-                                        const content = Swal.getContent()
-                                        if (content) {
-                                            const b = content.querySelector('b')
-                                            if (b) {
-                                                b.textContent = Swal.getTimerLeft()
-                                            }
-                                        }
-                                    }, 100)
-                                },
-                                onClose: () => {
-                                    clearInterval(timerInterval)
-                                }
-                            }).then((result) => {
-                                /* Read more about handling dismissals below */
-                                if (result.dismiss === Swal.DismissReason.timer) {
-                                    console.log('I was closed by the timer')
-                                    refreshSensor();
-                                }
-                            })
+                            window.location.reload();
                         }
                     })
 
@@ -1161,25 +1226,42 @@
                         url: "run-stop-sensor",
                         type: "POST",
                         data: {_token: "{{csrf_token()}}", button: button },
-                        async: true,
+                        async: false,
                         success: function (data) {
                             // alert(data);
-                            // window.location.href = "room";
-                        }
-                    })
-
-                    Swal.fire({
-                        title: notice_title,
-                        text: notice_text,
-                        icon: 'error',
-                        showCancelButton: false,
-                        allowOutsideClick: false,
-                        confirmButtonColor: '#dc3545',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: reconfirm
-                    }).then((result) => {
-                        if (result.value) {
-                            window.location.reload();
+                            // window.location.reload();
+                            Swal.fire({
+                                title: notice_title,
+                                text: notice_text,
+                                icon: 'success',
+                                showCancelButton: false,
+                                allowOutsideClick: false,
+                                confirmButtonColor: '#28a745',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: reconfirm
+                            }).then((result) => {
+                                if (result.value) {
+                                    window.location.reload();
+                                }
+                            })
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            // alert(xhr.message);
+                            // alert(thrownError);
+                            Swal.fire({
+                                title: error_title,
+                                text: error_text,
+                                icon: 'error',
+                                showCancelButton: false,
+                                allowOutsideClick: false,
+                                confirmButtonColor: '#dc3545',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: reconfirm
+                            }).then((result) => {
+                                if (result.value) {
+                                    window.location.reload();
+                                }
+                            })
                         }
                     })
                 }
@@ -1187,7 +1269,7 @@
         }
     }
 
-    function runStopDevice(button,notice_title,notice_text,title_ask,text_warning,confirms,reconfirm,cancel,sensor_title,sensor_html_1,sensor_html_2){
+    function runStopDevice(button,notice_title,notice_text,title_ask,text_warning,confirms,reconfirm,cancel,sensor_title,error_title,error_text){
 
         if (button == 2){
             Swal.fire({
@@ -1205,51 +1287,40 @@
                         url: "run-stop-device",
                         type: "POST",
                         data: {_token: "{{csrf_token()}}", button: button },
-                        async: true,
+                        async: false,
                         success: function (data) {
                             // alert(data);
-                            // window.location.href = "room";
-                        }
-                    })
-
-                    Swal.fire({
-                        title: notice_title,
-                        text:  notice_text,
-                        icon: 'success',
-                        showCancelButton: false,
-                        allowOutsideClick: false,
-                        confirmButtonColor: '#28a745',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: reconfirm
-                    }).then((result) => {
-                        if (result.value) {
-                            let timerInterval
+                            // window.location.reload();
                             Swal.fire({
-                                title: sensor_title,
-                                html: '<b></b>',
-                                timer: 1,
-                                timerProgressBar: true,
+                                title: notice_title,
+                                text: notice_text,
+                                icon: 'success',
+                                showCancelButton: false,
                                 allowOutsideClick: false,
-                                onBeforeOpen: () => {
-                                    Swal.showLoading()
-                                    timerInterval = setInterval(() => {
-                                        const content = Swal.getContent()
-                                        if (content) {
-                                            const b = content.querySelector('b')
-                                            if (b) {
-                                                b.textContent = Swal.getTimerLeft()
-                                            }
-                                        }
-                                    }, 100)
-                                },
-                                onClose: () => {
-                                    clearInterval(timerInterval)
-                                }
+                                confirmButtonColor: '#28a745',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: reconfirm
                             }).then((result) => {
-                                /* Read more about handling dismissals below */
-                                if (result.dismiss === Swal.DismissReason.timer) {
-                                    console.log('I was closed by the timer')
-                                    refreshDevice();
+                                if (result.value) {
+                                    window.location.reload();
+                                }
+                            })
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            // alert(xhr.message);
+                            // alert(thrownError);
+                            Swal.fire({
+                                title: error_title,
+                                text: error_text,
+                                icon: 'error',
+                                showCancelButton: false,
+                                allowOutsideClick: false,
+                                confirmButtonColor: '#dc3545',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: reconfirm
+                            }).then((result) => {
+                                if (result.value) {
+                                    window.location.reload();
                                 }
                             })
                         }
@@ -1277,27 +1348,45 @@
                         url: "run-stop-device",
                         type: "POST",
                         data: {_token: "{{csrf_token()}}", button: button },
-                        async: true,
+                        async: false,
                         success: function (data) {
                             // alert(data);
-                            // window.location.href = "room";
+                            // window.location.reload();
+                            Swal.fire({
+                                title: notice_title,
+                                text: notice_text,
+                                icon: 'success',
+                                showCancelButton: false,
+                                allowOutsideClick: false,
+                                confirmButtonColor: '#28a745',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: reconfirm
+                            }).then((result) => {
+                                if (result.value) {
+                                    window.location.reload();
+                                }
+                            })
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            // alert(xhr.message);
+                            // alert(thrownError);
+                            Swal.fire({
+                                title: error_title,
+                                text: error_text,
+                                icon: 'error',
+                                showCancelButton: false,
+                                allowOutsideClick: false,
+                                confirmButtonColor: '#dc3545',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: reconfirm
+                            }).then((result) => {
+                                if (result.value) {
+                                    window.location.reload();
+                                }
+                            })
                         }
                     })
 
-                    Swal.fire({
-                        title: notice_title,
-                        text: notice_text,
-                        icon: 'error',
-                        showCancelButton: false,
-                        allowOutsideClick: false,
-                        confirmButtonColor: '#dc3545',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: reconfirm
-                    }).then((result) => {
-                        if (result.value) {
-                            window.location.reload();
-                        }
-                    })
                 }
             })
         }
@@ -1331,99 +1420,159 @@
         })
     }
 
-    function addNewBuilding(building_title,building_text,floor_title,floor_text,room_title,room_text,required,error_title,error_text,reconfirm,success_title,success_text,confirm_button) {
-
-        Swal.mixin({
-            input: 'text',
-            confirmButtonText: confirm_button,
+    function deleteSensorDevice(title_ask,text_warning,confirm,cancel,title_inform,text_inform,reconfirm,current_button){
+        Swal.fire({
+            title: title_ask,
+            text: text_warning,
+            icon: 'warning',
             showCancelButton: true,
-            progressSteps: ['1', '2', '3']
-        }).queue([
-            {
-                title: building_title,
-                text: building_text,
-                inputValidator: (value) => {
-                    if (!value) {
-                        return required
-                    }
-                },
-                inputAttributes: {
-                    autocapitalize: 'off',
-                }
-            },
-            {
-                title: floor_title,
-                text: floor_text,
-                inputValidator: (value) => {
-                    if (!value) {
-                        return required
-                    }
-                },
-                inputAttributes: {
-                    autocapitalize: 'off',
-                }
-            },
-            {
-                title: room_title,
-                text: room_text,
-                inputValidator: (value) => {
-                    if (!value) {
-                        return required
-                    }
-                },
-                inputAttributes: {
-                    autocapitalize: 'off',
-                }
-            }
-        ]).then((result) => {
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirm,
+            cancelButtonText: cancel
+        }).then((result) => {
             if (result.value) {
-                // alert(1);
-                // alert(result.value[0]);
-                const answers = result.value
-                $.ajax({
-                    url: "create-building",
-                    type: "POST",
-                    data: {_token: "{{csrf_token()}}", building: answers[0], floor: answers[1], room: answers[2] },
-                    async: false,
-                    success: function (data) {
-                        // alert(data);
-                        // window.location.reload();
-                        Swal.fire({
-                            title: success_title,
-                            text: success_text,
-                            icon: 'success',
-                            showCancelButton: false,
-                            allowOutsideClick: false,
-                            confirmButtonColor: '#28a745',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: reconfirm
-                        }).then((result) => {
-                            if (result.value) {
-                                window.location.reload();
-                            }
-                        })
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        // alert(xhr.message);
-                        // alert(thrownError);
-                        Swal.fire({
-                            title: error_title,
-                            text: error_text,
-                            icon: 'error',
-                            showCancelButton: false,
-                            allowOutsideClick: false,
-                            confirmButtonColor: '#dc3545',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: reconfirm
-                        }).then((result) => {
-                            if (result.value) {
-                                window.location.reload();
-                            }
-                        })
+                Swal.fire({
+                    title: title_inform,
+                    text: text_inform,
+                    icon: 'success',
+                    showCancelButton: false,
+                    allowOutsideClick: false,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: reconfirm
+                }).then((result) => {
+                    if (result.value) {
+                        $("#"+current_button).click();
                     }
                 })
             }
         })
+
+    }
+
+    function deleteAllLog(title_ask,text_warning,confirm,cancel,title_inform,text_inform,reconfirm,delete_type){
+        Swal.fire({
+            title: title_ask,
+            text: text_warning,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirm,
+            cancelButtonText: cancel
+        }).then((result) => {
+            if (result.value) {
+
+                $.ajax({
+                    url: "delete-all-log",
+                    type: "POST",
+                    data: {_token: "{{csrf_token()}}", delete_type: delete_type},
+                    async: false,
+                    success: function (data) {
+                        // alert(data);
+                        // window.location.reload();
+                    }
+                })
+
+                Swal.fire({
+                    title: title_inform,
+                    text: text_inform,
+                    icon: 'success',
+                    showCancelButton: false,
+                    allowOutsideClick: false,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: reconfirm
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.reload();
+                    }
+                })
+
+            }
+        })
+
+    }
+
+    function deleteLog(title_ask,text_warning,confirm,cancel,title_inform,text_inform,reconfirm,delete_type,delete_name){
+        Swal.fire({
+            title: title_ask,
+            text: text_warning,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirm,
+            cancelButtonText: cancel
+        }).then((result) => {
+            if (result.value) {
+
+                var checkbox = document.getElementsByClassName(delete_name);
+                for (var i = 0; i < checkbox.length; i++){
+                    if (checkbox[i].checked == true) {
+                        $.ajax({
+                            url: "delete-log",
+                            type: "POST",
+                            data: {_token: "{{csrf_token()}}", delete_type: delete_type, delete_order: checkbox[i].value},
+                            async: true,
+                            success: function (data) {
+                                // alert(data);
+                                // window.location.reload();
+                            }
+                        })
+                    }
+                }
+
+                Swal.fire({
+                    title: title_inform,
+                    text: text_inform,
+                    icon: 'success',
+                    showCancelButton: false,
+                    allowOutsideClick: false,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: reconfirm
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.reload();
+                    }
+                })
+
+            }
+        })
+
+    }
+
+    function checkAllCheckBox(current,divide){
+        if (current == 0){
+            var lower = document.getElementById("check-mark-sensor-lower");
+            var upper = document.getElementById("check-mark-sensor-upper");
+            if (divide == 0){
+                lower.checked = upper.checked;
+            }
+            else{
+                upper.checked = lower.checked;
+            }
+            var checkbox = document.getElementsByClassName("check-mark-sensor");
+            for (var i = 0; i < checkbox.length; i++){
+                checkbox[i].checked = upper.checked;
+            }
+        }
+        else{
+            var lower = document.getElementById("check-mark-device-lower");
+            var upper = document.getElementById("check-mark-device-upper");
+            if (divide == 0){
+                lower.checked = upper.checked;
+            }
+            else{
+                upper.checked = lower.checked;
+            }
+            var checkbox = document.getElementsByClassName("check-mark-device");
+            for (var i = 0; i < checkbox.length; i++){
+                checkbox[i].checked = upper.checked;
+            }
+        }
     }
 
     $(".bootstrap-switch-success").text('@lang("ON")');
@@ -1486,23 +1635,55 @@
 
     $('#reservation-sensor').daterangepicker()
     //Date range picker with time picker
-    $('#reservationtime-sensor').daterangepicker({
-        timePicker: true,
-        timePickerIncrement: 30,
-        locale: {
-            format: 'DD/MM/YYYY hh:mm A'
-        }
-    })
+    @if (session('1752051_sensor_start_datetime') != null && session('1752051_sensor_end_datetime') != null)
+        $('#reservationtime-sensor').daterangepicker({
+            timePicker: true,
+            timePicker24Hour: true,
+            timePickerSeconds: true,
+            timePickerIncrement: 1,
+            startDate: "{{{ session('1752051_sensor_start_datetime') }}}",
+            endDate: "{{{ session('1752051_sensor_end_datetime') }}}",
+            locale: {
+                format: 'DD/MM/YYYY HH:mm:ss'
+            }
+        })
+    @else
+        $('#reservationtime-sensor').daterangepicker({
+            timePicker: true,
+            timePicker24Hour: true,
+            timePickerSeconds: true,
+            timePickerIncrement: 1,
+            locale: {
+                format: 'DD/MM/YYYY HH:mm:ss'
+            }
+        })
+    @endif
 
     $('#reservation-device').daterangepicker()
     //Date range picker with time picker
-    $('#reservationtime-device').daterangepicker({
-        timePicker: true,
-        timePickerIncrement: 30,
-        locale: {
-            format: 'DD/MM/YYYY hh:mm A'
-        }
-    })
+    @if (session('1752051_device_start_datetime') != null && session('1752051_device_end_datetime') != null)
+        $('#reservationtime-device').daterangepicker({
+            timePicker: true,
+            timePicker24Hour: true,
+            timePickerSeconds: true,
+            timePickerIncrement: 1,
+            startDate: "{{{ session('1752051_device_start_datetime') }}}",
+            endDate: "{{{ session('1752051_device_end_datetime') }}}",
+            locale: {
+                format: 'DD/MM/YYYY HH:mm:ss'
+            }
+        })
+    @else
+        $('#reservationtime-device').daterangepicker({
+            timePicker: true,
+            timePicker24Hour: true,
+            timePickerSeconds: true,
+            timePickerIncrement: 1,
+            locale: {
+                format: 'DD/MM/YYYY HH:mm:ss'
+            }
+        })
+    @endif
 
     function changeButtonsCopy(name){
         $('.buttons-copy').text(name);
@@ -1560,6 +1741,7 @@
     });
 
 </script>
+@include("include/room-js")
 @include("include/session-timeout")
 @include("include/chatbot")
 </body>

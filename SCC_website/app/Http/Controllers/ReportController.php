@@ -447,6 +447,42 @@ class ReportController extends MainController {
 
     }
 
+    /* Delete all log */
+
+    public function delete_all_log(Request $request){
+
+        if ($request["delete_type"] == 0){
+            SensorLogInfo::where('sensor_id',$request->session()->get("1752051_current_sensor")["sensor_id"])->delete();
+            $sensor_log = SensorLogInfo::where('sensor_id',$request->session()->get("1752051_current_sensor")["sensor_id"])->orderBy('sensor_timestamp', 'DESC')->get();
+            $request->session()->put("1752051_current_sensor_log",$sensor_log);
+        }
+        else {
+            DeviceLogInfo::where('device_id',$request->session()->get("1752051_current_device")["device_id"])->delete();
+            $device_log = DeviceLogInfo::where('device_id',$request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->get();
+            $request->session()->put("1752051_current_device_log",$device_log);
+        }
+
+        echo "Success";
+
+    }
+
+    public function delete_log(Request $request){
+
+        if ($request["delete_type"] == 0){
+            SensorLogInfo::where('sensor_order',$request["delete_order"])->delete();
+            $sensor_log = SensorLogInfo::where('sensor_id',$request->session()->get("1752051_current_sensor")["sensor_id"])->orderBy('sensor_timestamp', 'DESC')->get();
+            $request->session()->put("1752051_current_sensor_log",$sensor_log);
+        }
+        else {
+            DeviceLogInfo::where('device_order',$request["delete_order"])->delete();
+            $device_log = DeviceLogInfo::where('device_id',$request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->get();
+            $request->session()->put("1752051_current_device_log",$device_log);
+        }
+
+        echo "Success";
+
+    }
+
 
 
 
@@ -466,8 +502,8 @@ class ReportController extends MainController {
         $validator = Validator::make($request->all(), [
             'sensor_id' => 'required|unique:sensor|max:255',
             'sensor_name' => 'required|max:255',
-            'sensor_ip' => 'required|max:255',
-            'sensor_port' => 'required|max:255',
+            'sensor_ip' => 'required|max:255|ip',
+            'sensor_port' => 'required|integer',
             'sensor_topic' => 'required|max:255',
             'sensor_username' => 'max:255',
             'sensor_password' => 'max:255',
@@ -479,9 +515,11 @@ class ReportController extends MainController {
                 'sensor_name.required' => Lang::get('You need to input sensor name'),
                 'sensor_name.max' => Lang::get('Sensor name has maximum 255 characters'),
                 'sensor_ip.required' => Lang::get('You need to input MQTT IP'),
+                'sensor_ip.ip' => Lang::get('MQTT IP is not valid'),
                 'sensor_ip.max' => Lang::get('MQTT IP has maximum 255 characters'),
                 'sensor_port.required' => Lang::get('You need to input MQTT port'),
                 'sensor_port.max' => Lang::get('MQTT port has maximum 255 characters'),
+                'sensor_port.integer' => Lang::get('MQTT port must be integer'),
                 'sensor_topic.required' => Lang::get('You need to input MQTT topic'),
                 'sensor_topic.max' => Lang::get('MQTT topic has maximum 255 characters'),
                 'sensor_name.max' => Lang::get('MQTT username has maximum 255 characters'),
@@ -552,8 +590,8 @@ class ReportController extends MainController {
                 $validator = Validator::make($request->all(), [
                     'sensor_id' => 'required|unique:sensor|max:255',
                     'sensor_name' => 'required|max:255',
-                    'sensor_ip' => 'required|max:255',
-                    'sensor_port' => 'required|max:255',
+                    'sensor_ip' => 'required|max:255|ip',
+                    'sensor_port' => 'required|integer',
                     'sensor_topic' => 'required|max:255',
                     'sensor_username' => 'max:255',
                     'sensor_password' => 'max:255',
@@ -565,9 +603,11 @@ class ReportController extends MainController {
                         'sensor_name.required' => Lang::get('You need to input sensor name'),
                         'sensor_name.max' => Lang::get('Sensor name has maximum 255 characters'),
                         'sensor_ip.required' => Lang::get('You need to input MQTT IP'),
+                        'sensor_ip.ip' => Lang::get('MQTT IP is not valid'),
                         'sensor_ip.max' => Lang::get('MQTT IP has maximum 255 characters'),
                         'sensor_port.required' => Lang::get('You need to input MQTT port'),
                         'sensor_port.max' => Lang::get('MQTT port has maximum 255 characters'),
+                        'sensor_port.integer' => Lang::get('MQTT port must be integer'),
                         'sensor_topic.required' => Lang::get('You need to input MQTT topic'),
                         'sensor_topic.max' => Lang::get('MQTT topic has maximum 255 characters'),
                         'sensor_name.max' => Lang::get('MQTT username has maximum 255 characters'),
@@ -598,8 +638,8 @@ class ReportController extends MainController {
                 $validator = Validator::make($request->all(), [
                     'sensor_id' => 'required|max:255',
                     'sensor_name' => 'required|max:255',
-                    'sensor_ip' => 'required|max:255',
-                    'sensor_port' => 'required|max:255',
+                    'sensor_ip' => 'required|max:255|ip',
+                    'sensor_port' => 'required|integer',
                     'sensor_topic' => 'required|max:255',
                     'sensor_username' => 'max:255',
                     'sensor_password' => 'max:255',
@@ -610,9 +650,11 @@ class ReportController extends MainController {
                         'sensor_name.required' => Lang::get('You need to input sensor name'),
                         'sensor_name.max' => Lang::get('Sensor name has maximum 255 characters'),
                         'sensor_ip.required' => Lang::get('You need to input MQTT IP'),
+                        'sensor_ip.ip' => Lang::get('MQTT IP is not valid'),
                         'sensor_ip.max' => Lang::get('MQTT IP has maximum 255 characters'),
                         'sensor_port.required' => Lang::get('You need to input MQTT port'),
                         'sensor_port.max' => Lang::get('MQTT port has maximum 255 characters'),
+                        'sensor_port.integer' => Lang::get('MQTT port must be integer'),
                         'sensor_topic.required' => Lang::get('You need to input MQTT topic'),
                         'sensor_topic.max' => Lang::get('MQTT topic has maximum 255 characters'),
                         'sensor_name.max' => Lang::get('MQTT username has maximum 255 characters'),
@@ -684,6 +726,10 @@ class ReportController extends MainController {
 
         $sensor_log = SensorLogInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->orderBy('sensor_timestamp', 'DESC')->get();
 
+        $request->session()->forget("1752051_sensor_start_datetime");
+
+        $request->session()->forget("1752051_sensor_end_datetime");
+
         $request->session()->put("1752051_current_sensor_log",$sensor_log);
 
         $request->session()->put("1752051_current_sensor",$sensor);
@@ -712,65 +758,103 @@ class ReportController extends MainController {
 
     public function run_stop_sensor(Request $request){
 
-        if ($request["button"] == 1){
+        try {
+
+            if ($request["button"] == 1){
 
 //            echo 2;
 
-            $sensor = SensorInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->first();
+                $sensor = SensorInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->first();
 
-            $process = new Process('kill -9 '.$sensor["sensor_pid"]);
+                $process = new Process('kill -9 '.$sensor["sensor_pid"]);
 
-            $process->run();
+                $process->run();
 
-            $sensor["sensor_pid"] = null;
+                $sensor["sensor_pid"] = null;
 
-            $sensor->save();
+                $sensor->save();
 
-            $sensor_log = SensorLogInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->orderBy('sensor_timestamp', 'DESC')->get();
+                $sensor_log = SensorLogInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->orderBy('sensor_timestamp', 'DESC')->get();
 
-            $request->session()->put("1752051_current_sensor",$sensor);
+                $request->session()->put("1752051_current_sensor",$sensor);
 
-            $request->session()->put("1752051_current_sensor_log",$sensor_log);
+                $request->session()->put("1752051_current_sensor_log",$sensor_log);
 
-        }
-        else {
+            }
+            else {
 
 //            echo 1;
 
-            $process = new BackgroundProcess('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_real_sensor.py "BKvm" "Hcmut_CSE_2020" "52.187.125.59" "1883" "Topic/TempHumi" "TempHumi"');
-            # python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_temp_humid.py "BKvm2" "Hcmut_CSE_2020" "13.76.250.158" "1883" "Topic/TempHumi" "TEMP-HUD100"
+                $process = new BackgroundProcess('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_real_sensor.py '.session("1752051_current_sensor")["sensor_username"].' '.session("1752051_current_sensor")["sensor_password"].' '.session("1752051_current_sensor")["sensor_ip"].' '.session("1752051_current_sensor")["sensor_port"].' '.session("1752051_current_sensor")["sensor_topic"].' '.session("1752051_current_sensor")["sensor_id"]);
+                # python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_temp_humid.py "BKvm2" "Hcmut_CSE_2020" "13.76.250.158" "1883" "Topic/TempHumi" "TEMP-HUD100"
 
 //            $process->setTimeout(3100000000);
 
-            $process->run();
+                $process->run();
 
-            $sensor = SensorInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->first();
+                $sensor = SensorInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->first();
 
-            $sensor["sensor_pid"] = $process->getPid();
+                $sensor["sensor_pid"] = $process->getPid();
 
-            $sensor->save();
+                $sensor->save();
 
-            $sensor = SensorInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->first();
+                $sensor = SensorInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->first();
 
-            $request->session()->put("1752051_current_sensor", $sensor);
+                $request->session()->put("1752051_current_sensor", $sensor);
 
+            }
+
+        } catch ( \Exception $e ) {
+//            dd($e);
+            abort(404);
         }
+
     }
 
     /* Sensor search time range */
 
-
     public function sensor_search_time_range(Request $request){
 
         $times = explode(" - ",$request["sensor_time_range"]);
-        $time0 = Carbon::createFromFormat('d/m/Y h:i A', $times[0])->timestamp;
-        $time1 = Carbon::createFromFormat('d/m/Y h:i A', $times[1])->timestamp;
+        $time0 = Carbon::createFromFormat('d/m/Y H:i:s', $times[0])->timestamp;
+        $time1 = Carbon::createFromFormat('d/m/Y H:i:s', $times[1])->timestamp;
 
         $sensor_log = SensorLogInfo::where("sensor_id", $request["sensor_id"])->whereBetween("sensor_timestamp",[$time0,$time1])->orderBy('sensor_timestamp', 'DESC')->get();
 
         $request->session()->put("1752051_current_sensor_log",$sensor_log);
 
+        $request->session()->put("1752051_sensor_start_datetime",$times[0]);
+        $request->session()->put("1752051_sensor_end_datetime",$times[1]);
+
         return redirect("room");
+
+    }
+
+    /* Get sensor real time temperature */
+
+    public function get_sensor_real_time(Request $request){
+
+        if ($request["sensor_real_time_type"] == 0){
+
+            $each = SensorLogInfo::where("sensor_id", $request["sensor_id"])->orderBy('sensor_timestamp', 'DESC')->first(['sensor_timestamp','sensor_temp']);
+
+            echo $each['sensor_timestamp'].",".$each['sensor_temp'];
+
+        }
+        if ($request["sensor_real_time_type"] == 1){
+
+            $each = SensorLogInfo::where("sensor_id", $request["sensor_id"])->orderBy('sensor_timestamp', 'DESC')->first(['sensor_timestamp','sensor_humid']);
+
+            echo $each['sensor_timestamp'].",".$each['sensor_humid'];
+
+        }
+        else {
+
+            $each = SensorLogInfo::where("sensor_id", $request["sensor_id"])->orderBy('sensor_timestamp', 'DESC')->first(['sensor_timestamp','sensor_heat_index']);
+
+            echo $each['sensor_timestamp'].",".$each['sensor_heat_index'];
+
+        }
 
     }
 
@@ -788,14 +872,18 @@ class ReportController extends MainController {
 
     public function create_device(Request $request){
 
+//        dd($request["device_port"]);
+
         $validator = Validator::make($request->all(), [
             'device_id' => 'required|unique:device|max:255',
             'device_name' => 'required|max:255',
-            'device_ip' => 'required|max:255',
-            'device_port' => 'required|max:255',
+            'device_ip' => 'required|max:255|ip',
+            'device_port' => 'required|integer',
             'device_topic' => 'required|max:255',
             'device_username' => 'max:255',
             'device_password' => 'max:255',
+            'device_kwh' => 'required|numeric',
+            'device_status_value' => 'required|numeric',
         ],
             [
                 'device_id.required' => Lang::get('You need to input sensor ID'),
@@ -805,12 +893,17 @@ class ReportController extends MainController {
                 'device_name.max' => Lang::get('Device name has maximum 255 characters'),
                 'device_ip.required' => Lang::get('You need to input MQTT IP'),
                 'device_ip.max' => Lang::get('MQTT IP has maximum 255 characters'),
+                'device_ip.ip' => Lang::get('MQTT IP is not valid'),
                 'device_port.required' => Lang::get('You need to input MQTT port'),
-                'device_port.max' => Lang::get('MQTT port has maximum 255 characters'),
+                'device_port.integer' => Lang::get('MQTT port must be integer'),
                 'device_topic.required' => Lang::get('You need to input MQTT topic'),
                 'device_topic.max' => Lang::get('MQTT topic has maximum 255 characters'),
                 'device_username.max' => Lang::get('MQTT username has maximum 255 characters'),
                 'device_password.max' => Lang::get('MQTT password has maximum 255 characters'),
+                'device_kwh.numeric' => Lang::get('Device electrical consumption must be numeric'),
+                'device_kwh.required' => Lang::get('You need to input device electrical consumption'),
+                'device_status_value.numeric' => Lang::get('Device status value must be numeric'),
+                'device_status_value.required' => Lang::get('You need to input device status value')
             ]);
 
         if ($validator->fails()) {
@@ -836,14 +929,14 @@ class ReportController extends MainController {
         $device["device_building_name"] = $request->session()->get("1752051_room_building");
         $device["device_id"] = $request["device_id"];
         $device["device_name"] = $request["device_name"];
-        $device["device_status"] = '["0","0"]';
+        $device["device_status_value"] = $request["device_status_value"];
+        $device["device_kwh"] = $request["device_kwh"];
         $device["device_automation"] = false;
         $device["device_ip"] = $request["device_ip"];
         $device["device_port"] = $request["device_port"];
         $device["device_topic"] = $request["device_topic"];
         $device["device_username"] = $request["device_username"];
         $device["device_password"] = $request["device_password"];
-        $device["device_additional"] = $request["device_additional"];
         $device->save();
 
         $device = DeviceInfo::where("device_id", $request["device_id"])->first();
@@ -882,27 +975,32 @@ class ReportController extends MainController {
                     'device_name' => 'required|max:255',
                     'device_status_value' => 'required|max:255',
                     'device_ip' => 'required|max:255',
-                    'device_port' => 'required|max:255',
+                    'device_port' => 'required|integer',
                     'device_topic' => 'required|max:255',
                     'device_username' => 'max:255',
                     'device_password' => 'max:255',
+                    'device_kwh' => 'required|numeric',
+                    'device_status_value' => 'required|numeric',
                 ],
                     [
                         'device_id.required' => Lang::get('You need to input device ID'),
                         'device_id.unique' => Lang::get('This device ID had already existed'),
                         'device_id.max' => Lang::get('Device ID has maximum 255 characters'),
-                        'device_name.required' => Lang::get('You need to input sensor name'),
+                        'device_name.required' => Lang::get('You need to input device name'),
                         'device_name.max' => Lang::get('Device name has maximum 255 characters'),
-                        'device_status_value.required' => Lang::get('You need to input status value'),
-                        'device_status_value.max' => Lang::get('Status value has maximum 255 characters'),
                         'device_ip.required' => Lang::get('You need to input MQTT IP'),
                         'device_ip.max' => Lang::get('MQTT IP has maximum 255 characters'),
+                        'device_ip.ip' => Lang::get('MQTT IP is not valid'),
                         'device_port.required' => Lang::get('You need to input MQTT port'),
-                        'device_port.max' => Lang::get('MQTT port has maximum 255 characters'),
+                        'device_port.integer' => Lang::get('MQTT port must be integer'),
                         'device_topic.required' => Lang::get('You need to input MQTT topic'),
                         'device_topic.max' => Lang::get('MQTT topic has maximum 255 characters'),
                         'device_username.max' => Lang::get('MQTT username has maximum 255 characters'),
                         'device_password.max' => Lang::get('MQTT password has maximum 255 characters'),
+                        'device_kwh.numeric' => Lang::get('Device electrical consumption must be numeric'),
+                        'device_kwh.required' => Lang::get('You need to input device electrical consumption'),
+                        'device_status_value.numeric' => Lang::get('Device status value must be numeric'),
+                        'device_status_value.required' => Lang::get('You need to input device status value')
                     ]);
 
                 if ($validator->fails()) {
@@ -929,28 +1027,36 @@ class ReportController extends MainController {
                 $validator = Validator::make($request->all(), [
                     'device_id' => 'required|max:255',
                     'device_name' => 'required|max:255',
-                    'device_status_value' => 'required|max:255',
-                    'device_ip' => 'required|max:255',
-                    'device_port' => 'required|max:255',
+                    'device_ip' => 'required|max:255|ip',
+                    'device_port' => 'required|integer',
                     'device_topic' => 'required|max:255',
                     'device_username' => 'max:255',
                     'device_password' => 'max:255',
+                    'device_kwh' => 'required|numeric',
+                    'device_status_value' => 'required|numeric',
+                    'device_lower_threshold' => 'numeric',
+                    'device_upper_threshold' => 'numeric',
                 ],
                     [
-                        'device_id.required' => Lang::get('You need to input device ID'),
+                        'device_id.required' => Lang::get('You need to input sensor ID'),
                         'device_id.max' => Lang::get('Device ID has maximum 255 characters'),
                         'device_name.required' => Lang::get('You need to input device name'),
                         'device_name.max' => Lang::get('Device name has maximum 255 characters'),
-                        'device_status_value.required' => Lang::get('You need to input status value'),
-                        'device_status_value.max' => Lang::get('Status value has maximum 255 characters'),
                         'device_ip.required' => Lang::get('You need to input MQTT IP'),
                         'device_ip.max' => Lang::get('MQTT IP has maximum 255 characters'),
+                        'device_ip.ip' => Lang::get('MQTT IP is not valid'),
                         'device_port.required' => Lang::get('You need to input MQTT port'),
-                        'device_port.max' => Lang::get('MQTT port has maximum 255 characters'),
+                        'device_port.integer' => Lang::get('MQTT port must be integer'),
                         'device_topic.required' => Lang::get('You need to input MQTT topic'),
                         'device_topic.max' => Lang::get('MQTT topic has maximum 255 characters'),
                         'device_username.max' => Lang::get('MQTT username has maximum 255 characters'),
                         'device_password.max' => Lang::get('MQTT password has maximum 255 characters'),
+                        'device_kwh.numeric' => Lang::get('Device electrical consumption must be numeric'),
+                        'device_kwh.required' => Lang::get('You need to input device electrical consumption'),
+                        'device_status_value.numeric' => Lang::get('Device status value must be numeric'),
+                        'device_status_value.required' => Lang::get('You need to input device status value'),
+                        'device_lower_threshold.numeric' => Lang::get('Device lower threshold must be numeric'),
+                        'device_upper_threshold.numeric' => Lang::get('Device upper threshold must be numeric')
                     ]);
 
                 if ($validator->fails()) {
@@ -979,16 +1085,15 @@ class ReportController extends MainController {
             $device["device_id"] = $request["device_id"];
             $device["device_name"] = $request["device_name"];
 
-            $status = explode(",",str_replace("[","",str_replace("]","",$device["device_status"])));
-
-            $device["device_status"] = "[".$status[0].',"'.$request["device_status_value"].'"]';
-
+            $device["device_status_value"] = $request["device_status_value"];
+            $device["device_kwh"] = $request["device_kwh"];
             $device["device_ip"] = $request["device_ip"];
             $device["device_port"] = $request["device_port"];
             $device["device_topic"] = $request["device_topic"];
             $device["device_username"] = $request["device_username"];
             $device["device_password"] = $request["device_password"];
-            $device["device_additional"] = $request["device_additional"];
+            $device["device_lower_threshold"] = $request["device_lower_threshold"];
+            $device["device_upper_threshold"] = $request["device_upper_threshold"];
             $device->save();
 
             $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->get();
@@ -1023,6 +1128,10 @@ class ReportController extends MainController {
         $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
 
         $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->get();
+
+        $request->session()->forget("1752051_device_start_datetime");
+
+        $request->session()->forget("1752051_device_end_datetime");
 
         $request->session()->put("1752051_current_device_log",$device_log);
 
@@ -1059,28 +1168,28 @@ class ReportController extends MainController {
         $electrical_consumption = 0;
         $current_timestamp = 0;
 
-        foreach($device_log_db as $device_log_each){
-            $status = explode(",",str_replace("[","",str_replace("]","",$device_log_each->device_status)));
-
-
-
-//            if ($hours_usage_plot[])
-
-            if ($status[0] == '"1"'){
-                $current_timestamp = $device_log_each->device_timestamp;
-            }
-            else{
-                $past_hours = ($device_log_each->device_timestamp - $current_timestamp) / 3600;
-                $hours_usage += $past_hours;
-
-                $device_kwh = floatval(explode(",",str_replace("[","",str_replace("[","",$device_log_each->device_additional)))[$enum["device_kwh"]]);
-                $electrical_consumption +=  $past_hours * $device_kwh;
-                $current_timestamp = 0;
-            }
-        }
-
-        $hours_usage = round($hours_usage,2);
-        $electrical_consumption = round($electrical_consumption,2);
+//        foreach($device_log_db as $device_log_each){
+//            $status = explode(",",str_replace("[","",str_replace("]","",$device_log_each->device_status)));
+//
+//
+//
+////            if ($hours_usage_plot[])
+//
+//            if ($status[0] == '"1"'){
+//                $current_timestamp = $device_log_each->device_timestamp;
+//            }
+//            else{
+//                $past_hours = ($device_log_each->device_timestamp - $current_timestamp) / 3600;
+//                $hours_usage += $past_hours;
+//
+//                $device_kwh = floatval(explode(",",str_replace("[","",str_replace("[","",$device_log_each->device_additional)))[$enum["device_kwh"]]);
+//                $electrical_consumption +=  $past_hours * $device_kwh;
+//                $current_timestamp = 0;
+//            }
+//        }
+//
+//        $hours_usage = round($hours_usage,2);
+//        $electrical_consumption = round($electrical_consumption,2);
 
         $request->session()->put("1752051_device_hours_usage",$hours_usage);
         $request->session()->put("1752051_device_hours_usage",$electrical_consumption);
@@ -1093,91 +1202,108 @@ class ReportController extends MainController {
 
     public function run_stop_device(Request $request){
 
-        if ($request["button"] == 1){
+        try {
 
-//            echo session("1752051_current_device")["device_username"];
+            if ($request["button"] == 1){
 
-            $process = new Process('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/publish_real_device.py '.session("1752051_current_device")["device_username"].' '.session("1752051_current_device")["device_password"].' '.session("1752051_current_device")["device_ip"].' '.session("1752051_current_device")["device_port"].' '.session("1752051_current_device")["device_topic"].' ["0","0"]');
-            # python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_temp_humid.py "BKvm2" "Hcmut_CSE_2020" "13.76.250.158" "1883" "Topic/TempHumi" "TEMP-HUD100"
+//            echo 1;
+
+                $process = new Process('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/publish_real_device.py '.session("1752051_current_device")["device_username"].' '.session("1752051_current_device")["device_password"].' '.session("1752051_current_device")["device_ip"].' '.session("1752051_current_device")["device_port"].' '.session("1752051_current_device")["device_topic"].' ["0","0"]');
+                # python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_temp_humid.py "BKvm2" "Hcmut_CSE_2020" "13.76.250.158" "1883" "Topic/TempHumi" "TEMP-HUD100"
 
 //            echo 2;
 
 
-            $process->run();
+                $process->run();
 
-            if (!$process->isSuccessful()) {
+                if (!$process->isSuccessful()) {
 //                echo 3;
 
-                throw new ProcessFailedException($process);
+                    throw new ProcessFailedException($process);
+                }
+
+                $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
+
+                $device["device_pid"] = null;
+
+                $device->save();
+
+                $device_log = new DeviceLogInfo();
+
+                $device_log["device_id"] = $request->session()->get("1752051_current_device")["device_id"];
+                $device_log["device_status"] = false;
+
+                $timestamp_now = Carbon::now()->timestamp;
+
+                $device_log["device_timestamp"] = $timestamp_now;
+                $device_log["device_updated_by"] = session("1752051_user")["user_fullname"];
+                $device_log["device_status_value"] = session("1752051_current_device")["device_status_value"];
+
+                $hours_duration = floatval($timestamp_now - $request->session()->get('previous_timestamp')) / 3600.0;
+                $device_log["device_hours_usage"] = $hours_duration;
+                echo $hours_duration * floatval($request->session()->get('previous_kwh'));
+                $device_log["device_electrical_consumption"] = $hours_duration * floatval($request->session()->get('previous_kwh'));
+
+                $device_log->save();
+
+                $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->get();
+
+                $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
+
+                $request->session()->put("1752051_current_device",$device);
+
+                $request->session()->put("1752051_current_device_log",$device_log);
+
             }
-
-            $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
-
-            $device["device_status"] = '["0","0"]';
-
-            $device->save();
-
-            $device["device_pid"] = null;
-
-            $device->save();
-
-            $device_log = new DeviceLogInfo();
-
-            $device_log["device_id"] = $request->session()->get("1752051_current_device")["device_id"];
-            $device_log["device_status"] = '["0","0"]';
-            $device_log["device_timestamp"] = Carbon::now()->timestamp;
-            $device_log["device_updated_by"] = session("1752051_user")["user_fullname"];
-            $device_log->save();
-
-            $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->get();
-
-            $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
-
-            $request->session()->put("1752051_current_device",$device);
-
-            $request->session()->put("1752051_current_device_log",$device_log);
-
-        }
-        else {
+            else {
 
 //            echo 1;
 
-            $status = explode(",",str_replace("[","",str_replace("]","",session("1752051_current_device")["device_status"])));
+                $process = new Process('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/publish_real_device.py '.session("1752051_current_device")["device_username"].' '.session("1752051_current_device")["device_password"].' '.session("1752051_current_device")["device_ip"].' '.session("1752051_current_device")["device_port"].' '.session("1752051_current_device")["device_topic"].' ["1",'.session("1752051_current_device")["device_status_value"].']');
+                # python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_temp_humid.py "BKvm2" "Hcmut_CSE_2020" "13.76.250.158" "1883" "Topic/TempHumi" "TEMP-HUD100"
 
-            $process = new Process('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/publish_real_device.py '.session("1752051_current_device")["device_username"].' '.session("1752051_current_device")["device_password"].' '.session("1752051_current_device")["device_ip"].' '.session("1752051_current_device")["device_port"].' '.session("1752051_current_device")["device_topic"].' ["1",'.$status[1].']');
-            # python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_temp_humid.py "BKvm2" "Hcmut_CSE_2020" "13.76.250.158" "1883" "Topic/TempHumi" "TEMP-HUD100"
+                // waiting for process to finish
 
-            // waiting for process to finish
+                $device_log = new DeviceLogInfo();
 
-            $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
+                $device_log["device_id"] = $request->session()->get("1752051_current_device")["device_id"];
+                $device_log["device_status"] = true;
 
-            $device["device_status"] = '["1",'.$status[1].']';
+                $timestamp_now = Carbon::now()->timestamp;
+                $request->session()->put('previous_timestamp', $timestamp_now);
 
-            $device->save();
+                $request->session()->put('previous_kwh',$request->session()->get("1752051_current_device")["device_kwh"]);
 
-            $device_log = new DeviceLogInfo();
+                $device_log["device_timestamp"] = $timestamp_now;
+                $device_log["device_updated_by"] = session("1752051_user")["user_fullname"];
+                $device_log["device_status_value"] = session("1752051_current_device")["device_status_value"];
+                $device_log->save();
 
-            $device_log["device_id"] = $request->session()->get("1752051_current_device")["device_id"];
-            $device_log["device_status"] = '["1",'.$status[1].']';
-            $device_log["device_timestamp"] = Carbon::now()->timestamp;
-            $device_log["device_updated_by"] = session("1752051_user")["user_fullname"];
-            $device_log->save();
+                $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
 
-            $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
+                $process->start();
 
-            $process->start();
+                $device["device_pid"] = $process->getPid();
 
-            $device["device_pid"] = $process->getPid();
+                $process->wait();
 
-            $process->wait();
+                $device->save();
 
-            $device->save();
+                $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->get();
 
-            $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
+                $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
 
-            $request->session()->put("1752051_current_device", $device);
+                $request->session()->put("1752051_current_device", $device);
 
+                $request->session()->put("1752051_current_device_log",$device_log);
+
+            }
+
+        } catch ( \Exception $e ) {
+//            dd($e);
+            abort(404);
         }
+
     }
 
     /* Sensor search time range */
@@ -1186,12 +1312,15 @@ class ReportController extends MainController {
     public function device_search_time_range(Request $request){
 
         $times = explode(" - ",$request["device_time_range"]);
-        $time0 = Carbon::createFromFormat('d/m/Y h:i A', $times[0])->timestamp;
-        $time1 = Carbon::createFromFormat('d/m/Y h:i A', $times[1])->timestamp;
+        $time0 = Carbon::createFromFormat('d/m/Y H:i:s', $times[0])->timestamp;
+        $time1 = Carbon::createFromFormat('d/m/Y H:i:s', $times[1])->timestamp;
 
         $device_log = DeviceLogInfo::where("device_id", $request["device_id"])->whereBetween("device_timestamp",[$time0,$time1])->orderBy('device_timestamp', 'DESC')->get();
 
         $request->session()->put("1752051_current_device_log",$device_log);
+
+        $request->session()->put("1752051_device_start_datetime",$times[0]);
+        $request->session()->put("1752051_device_end_datetime",$times[1]);
 
         return redirect("room");
 
@@ -1399,7 +1528,7 @@ class ReportController extends MainController {
 
     public function activate_deactivate_building(Request $request){
 
-//        echo 1;
+        echo 1;
 
         if ($request["button"] == 1) {
 

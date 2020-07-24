@@ -105,7 +105,7 @@
                           <label class="custom-file-label custom-custom-file-label" for="avatar-upload">@lang("Avatar")</label>
                       </div>
                       <div class="input-group-append">
-                          <span class="input-group-text custom-upload-btn" onclick='$("#upload-avatar").submit();' id="">@lang("Upload")</span>
+                          <span id="change-span-upload-icon" class="input-group-text custom-upload-btn" onclick='changeSpanUploadIcon();$("#upload-avatar").submit();' id="">@lang("Upload")</span>
                       </div>
                   </div>
 
@@ -243,7 +243,7 @@
                         </div>
                       <div class="form-group row">
                         <div class="offset-sm-2 col-sm-10 text-right">
-                          <button type="submit" class="btn btn-danger">@lang("Update")</button>
+                          <button onclick="$('#change-update-icon').removeClass('fas fa-sync-alt').addClass('fas fa-spinner fa-pulse');" type="submit" class="btn btn-danger"><i id="change-update-icon" class="fas fa-sync-alt"></i> @lang("Update")</button>
                         </div>
                       </div>
                     </form>
@@ -458,6 +458,10 @@
             })
         });
     });
+
+    function changeSpanUploadIcon() {
+        $("#change-span-upload-icon").html('<i id="change-update-icon" class="fas fa-spinner fa-pulse"></i>');
+    }
 
 </script>
 @if (session("msg_type_profile") == "success")

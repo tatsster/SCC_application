@@ -69,7 +69,7 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-          <form id="upload-avatar" method="post" action="register" enctype="multipart/form-data">
+          <form method="post" action="register" enctype="multipart/form-data">
             <div class="row">
           <div class="col-md-3">
 
@@ -85,7 +85,7 @@
                   <div class="input-group">
                       <div class="custom-file">
                               {{csrf_field()}}
-                              <input name="user_avatar" type="file" class="custom-file-inputs" id="avatar-upload" hidden required>
+                              <input name="user_avatar" type="file" class="custom-file-inputs" id="avatar-upload" hidden>
 {{--                          </form>--}}
                           <label class="custom-file-label custom-custom-file-label" for="avatar-upload">@lang("Avatar")</label>
                       </div>
@@ -159,7 +159,7 @@
                         </div>
                       <div class="form-group row">
                         <div class="offset-sm-2 col-sm-10 text-right">
-                          <button type="submit" class="btn btn-danger">@lang("Register")</button>
+                          <button onclick="$('#change-update-icon').removeClass('fas fa-sync-alt').addClass('fas fa-spinner fa-pulse');" type="submit" class="btn btn-danger"><i id="change-update-icon" class="fas fa-sync-alt"></i> @lang("Register")</button>
                         </div>
                       </div>
                   </div>

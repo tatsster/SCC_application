@@ -149,9 +149,9 @@
                     </div>
                     <div class="card-footer">
                       <div class="text-right">
-                        <a href="#" class="btn btn-sm bg-teal">
-                          <i class="fas fa-comments"></i>
-                        </a>
+{{--                        <a href="#" class="btn btn-sm bg-teal">--}}
+{{--                          <i class="fas fa-comments"></i>--}}
+{{--                        </a>--}}
                           @if($user_each["user_id"] != session("1752051_user")["user_id"] && session("1752051_user_role")["permission_edit_user"] == "true")
                               <form action="edit-other-profile-get" method="post" style="display: inline-block">
                                   {{ csrf_field() }}

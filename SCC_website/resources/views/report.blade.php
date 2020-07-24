@@ -79,15 +79,15 @@
                         {{csrf_field()}}
 {{--                      <h5 class="mt-4 mb-2">@lang("Choose role and set permission")</h5>--}}
 
-                      <select name="user_lang" id="select2bs4-building" style="" class="form-control select2bs4" style="width: 100%;">
+                      <select name="user_lang" id="select2bs4-building" class="form-control select2bs4" style="width: 100%;">
                           @if (session("1752051_current_building")["building"] == null)
                               <option></option>
                           @endif
                           @foreach( $building_db as $building_each)
-                              @if (session("1752051_current_building")["building"]["building_name"] == $building_each->building_name)
-                                  <option selected value="{{{$building_each->building_name}}}">{{$building_each->building_name}}</option>
+                              @if (session("1752051_current_building")["building"]["building_name"] == $building_each["building_name"])
+                                  <option selected value="{{{$building_each["building_name"]}}}">{{$building_each["building_name"]}}</option>
                               @else
-                                  <option value="{{{$building_each->building_name}}}">{{$building_each->building_name}}</option>
+                                  <option value="{{{$building_each["building_name"]}}}">{{$building_each["building_name"]}}</option>
                               @endif
                           @endforeach
                       </select>

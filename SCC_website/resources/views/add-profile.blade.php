@@ -58,7 +58,7 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <form id="upload-avatar" method="post" action="new-profile" enctype="multipart/form-data">
+        <form method="post" action="new-profile" enctype="multipart/form-data">
             <div class="row">
               <div class="col-md-3">
 
@@ -74,7 +74,7 @@
                       <div class="input-group">
                           <div class="custom-file">
                                   {{csrf_field()}}
-                                  <input name="user_avatar" type="file" class="custom-file-inputs" id="avatar-upload" hidden required>
+                                  <input name="user_avatar" type="file" class="custom-file-inputs" id="avatar-upload" hidden>
     {{--                          </form>--}}
                               <label class="custom-file-label custom-custom-file-label" for="avatar-upload">@lang("Avatar")</label>
                           </div>
@@ -120,7 +120,7 @@
                         <div class="form-group row">
                             <label for="inputName2" class="col-sm-2 col-form-label">@lang("Role")</label>
                             <div class="col-sm-10">
-                                <select name="user_role" id="select2bs4-role" style="" class="form-control select2bs4" style="width: 100%;">
+                                <select name="user_role" id="select2bs4-role" class="form-control select2bs4" style="width: 100%;">
                                     <option></option>
                                     @foreach( $permission_db as $permission_each)
                                         <option value="{{{$permission_each->permission_role}}}">{{$permission_each->permission_role}}</option>
@@ -129,9 +129,9 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="inputName" class="col-sm-2 col-form-label">@lang("Address")</label>
+                            <label for="inputNames" class="col-sm-2 col-form-label">@lang("Address")</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="inputName" name="user_address" placeholder="@lang("Fill in new address")">
+                                <input type="text" class="form-control" id="inputNames" name="user_address" placeholder="@lang("Fill in new address")">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -154,7 +154,7 @@
                         </div>
                       <div class="form-group row">
                         <div class="offset-sm-2 col-sm-10 text-right">
-                          <button type="submit" class="btn btn-danger">@lang("Update")</button>
+                          <button onclick="$('#change-update-icon').removeClass('fas fa-sync-alt').addClass('fas fa-spinner fa-pulse');" type="submit" class="btn btn-danger"><i id="change-update-icon" class="fas fa-sync-alt"></i> @lang("Update")</button>
                         </div>
                       </div>
                   </div>

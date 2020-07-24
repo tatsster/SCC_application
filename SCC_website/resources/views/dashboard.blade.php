@@ -122,7 +122,7 @@
               <div class="inner">
                   <h3>{{$electrical_consumption}}<sup>kwh</sup></h3>
 
-                  <p>@lang("Electrical Consumption")</p>
+                  <p>@lang("Electrical Consumption (Devices)")</p>
               </div>
               <div class="icon">
                 <i class="fas fa-bolt"></i>

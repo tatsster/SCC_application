@@ -109,18 +109,16 @@ Route::post('send-recover-password','SignInController@send_recover_password');
 /* Change Language */
 
 Route::post('change-language','ChangeLanguageController@change_language');
-
 Route::post('change-language-cookie','ChangeLanguageController@change_language_cookie');
 
 /* Change System Setting */
 
 Route::post('change-system-settings','SettingsController@change_system_settings');
+//Route::post('change-dashboard-settings','SettingsController@change_dashboard_settings');
 
-Route::post('change-dashboard-settings','SettingsController@change_dashboard_settings');
+/* Get Real Time */
 
-/* Get Real Time Temperature */
-
-//Route::post('get-real-time-temp','MainController@get_real_time_temp');
+Route::post('get-sensor-real-time','ReportController@get_sensor_real_time');
 
 /* Role */
 
@@ -189,3 +187,8 @@ Route::post('set-lockscreen','MainController@set_lockscreen');
 /* ChatBot */
 
 Route::post('chatbot','MainController@chatbot');
+
+/* Delete log */
+
+Route::post('delete-all-log','ReportController@delete_all_log');
+Route::post('delete-log','ReportController@delete_log');
