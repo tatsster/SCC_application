@@ -60,15 +60,12 @@ class MainController extends Controller {
         return response()->json($response, 200);
     }
 
-    protected function send_error($error, $errorMessages = [], $code = 404) {
+    protected function send_error($error, $message, $code = 404) {
         $response = [
             'success' => false,
-            'data' => '',
-            'message' => $error,
+            'data' => $error,
+            'message' => $message,
         ];
-        if(!empty($errorMessages)){
-            $response['data'] = $errorMessages;
-        }
         return response()->json($response, $code);
     }
 

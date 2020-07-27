@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ReportController extends MainController {
 
@@ -785,7 +786,7 @@ class ReportController extends MainController {
 
 //            echo 1;
 
-                $process = new BackgroundProcess('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_real_sensor.py '.session("1752051_current_sensor")["sensor_username"].' '.session("1752051_current_sensor")["sensor_password"].' '.session("1752051_current_sensor")["sensor_ip"].' '.session("1752051_current_sensor")["sensor_port"].' '.session("1752051_current_sensor")["sensor_topic"].' '.session("1752051_current_sensor")["sensor_id"]);
+                $process = new BackgroundProcess('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_real_sensor.py "'.session("1752051_current_sensor")["sensor_username"].'" "'.session("1752051_current_sensor")["sensor_password"].'" "'.session("1752051_current_sensor")["sensor_ip"].'" "'.session("1752051_current_sensor")["sensor_port"].'" "'.session("1752051_current_sensor")["sensor_topic"].'" "'.session("1752051_current_sensor")["sensor_id"].'"');
                 # python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_temp_humid.py "BKvm2" "Hcmut_CSE_2020" "13.76.250.158" "1883" "Topic/TempHumi" "TEMP-HUD100"
 
 //            $process->setTimeout(3100000000);
@@ -855,6 +856,22 @@ class ReportController extends MainController {
             echo $each['sensor_timestamp'].",".$each['sensor_heat_index'];
 
         }
+
+    }
+
+    public function update_sensor_real_time(Request $request){
+
+        $each = SensorLogInfo::where("sensor_id", $request["sensor_id"])->orderBy('sensor_timestamp', 'DESC')->first();
+
+        echo $each['sensor_order'].",".$each['sensor_id'].",".$each['sensor_temp'].",".$each['sensor_humid'].",".$each['sensor_heat_index'].",".$each['sensor_timestamp'];
+
+    }
+
+    public function update_device_real_time(Request $request){
+
+        $each = DeviceLogInfo::where("device_id", $request["device_id"])->orderBy('device_timestamp', 'DESC')->first();
+
+        echo $each['device_order'].",".$each['device_id'].",".$each['device_status'].",".$each['device_status_value'].",".$each['device_hours_usage'].",".$each['device_electrical_consumption'].",".$each['device_timestamp'];
 
     }
 
@@ -931,7 +948,6 @@ class ReportController extends MainController {
         $device["device_name"] = $request["device_name"];
         $device["device_status_value"] = $request["device_status_value"];
         $device["device_kwh"] = $request["device_kwh"];
-        $device["device_automation"] = false;
         $device["device_ip"] = $request["device_ip"];
         $device["device_port"] = $request["device_port"];
         $device["device_topic"] = $request["device_topic"];
@@ -973,12 +989,12 @@ class ReportController extends MainController {
                 $validator = Validator::make($request->all(), [
                     'device_id' => 'required|unique:device|max:255',
                     'device_name' => 'required|max:255',
-                    'device_status_value' => 'required|max:255',
                     'device_ip' => 'required|max:255',
                     'device_port' => 'required|integer',
                     'device_topic' => 'required|max:255',
                     'device_username' => 'max:255',
                     'device_password' => 'max:255',
+                    'device_auto_based_on_sensor_topic' => 'max:255',
                     'device_kwh' => 'required|numeric',
                     'device_status_value' => 'required|numeric',
                 ],
@@ -997,6 +1013,7 @@ class ReportController extends MainController {
                         'device_topic.max' => Lang::get('MQTT topic has maximum 255 characters'),
                         'device_username.max' => Lang::get('MQTT username has maximum 255 characters'),
                         'device_password.max' => Lang::get('MQTT password has maximum 255 characters'),
+                        'device_auto_based_on_sensor_topic.max' => Lang::get('Device auto based on sensor topic has maximum 255 characters'),
                         'device_kwh.numeric' => Lang::get('Device electrical consumption must be numeric'),
                         'device_kwh.required' => Lang::get('You need to input device electrical consumption'),
                         'device_status_value.numeric' => Lang::get('Device status value must be numeric'),
@@ -1032,6 +1049,7 @@ class ReportController extends MainController {
                     'device_topic' => 'required|max:255',
                     'device_username' => 'max:255',
                     'device_password' => 'max:255',
+                    'device_auto_based_on_sensor_topic' => 'max:255',
                     'device_kwh' => 'required|numeric',
                     'device_status_value' => 'required|numeric',
                     'device_lower_threshold' => 'numeric',
@@ -1051,6 +1069,7 @@ class ReportController extends MainController {
                         'device_topic.max' => Lang::get('MQTT topic has maximum 255 characters'),
                         'device_username.max' => Lang::get('MQTT username has maximum 255 characters'),
                         'device_password.max' => Lang::get('MQTT password has maximum 255 characters'),
+                        'device_auto_based_on_sensor_topic.max' => Lang::get('Device auto based on sensor topic has maximum 255 characters'),
                         'device_kwh.numeric' => Lang::get('Device electrical consumption must be numeric'),
                         'device_kwh.required' => Lang::get('You need to input device electrical consumption'),
                         'device_status_value.numeric' => Lang::get('Device status value must be numeric'),
@@ -1094,6 +1113,7 @@ class ReportController extends MainController {
             $device["device_password"] = $request["device_password"];
             $device["device_lower_threshold"] = $request["device_lower_threshold"];
             $device["device_upper_threshold"] = $request["device_upper_threshold"];
+            $device["device_auto_based_on_sensor_topic"] = $request["device_auto_based_on_sensor_topic"];
             $device->save();
 
             $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->get();
@@ -1208,7 +1228,7 @@ class ReportController extends MainController {
 
 //            echo 1;
 
-                $process = new Process('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/publish_real_device.py '.session("1752051_current_device")["device_username"].' '.session("1752051_current_device")["device_password"].' '.session("1752051_current_device")["device_ip"].' '.session("1752051_current_device")["device_port"].' '.session("1752051_current_device")["device_topic"].' ["0","0"]');
+                $process = new Process('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/publish_real_device.py "'.session("1752051_current_device")["device_username"].'" "'.session("1752051_current_device")["device_password"].'" "'.session("1752051_current_device")["device_ip"].'" "'.session("1752051_current_device")["device_port"].'" "'.session("1752051_current_device")["device_topic"].'" ["0","0"] "'.session("1752051_current_device")["device_id"].'"');
                 # python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_temp_humid.py "BKvm2" "Hcmut_CSE_2020" "13.76.250.158" "1883" "Topic/TempHumi" "TEMP-HUD100"
 
 //            echo 2;
@@ -1224,27 +1244,36 @@ class ReportController extends MainController {
 
                 $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
 
+                $process = new Process('kill -9 '.$device["device_pid"]);
+
+                $process->run();
+
                 $device["device_pid"] = null;
 
                 $device->save();
 
-                $device_log = new DeviceLogInfo();
+                $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->first();
 
-                $device_log["device_id"] = $request->session()->get("1752051_current_device")["device_id"];
-                $device_log["device_status"] = false;
+                if ($device_log["device_status"] == true) {
 
-                $timestamp_now = Carbon::now()->timestamp;
+                    $device_log = new DeviceLogInfo();
 
-                $device_log["device_timestamp"] = $timestamp_now;
-                $device_log["device_updated_by"] = session("1752051_user")["user_fullname"];
-                $device_log["device_status_value"] = session("1752051_current_device")["device_status_value"];
+                    $device_log["device_id"] = $request->session()->get("1752051_current_device")["device_id"];
+                    $device_log["device_status"] = false;
 
-                $hours_duration = floatval($timestamp_now - $request->session()->get('previous_timestamp')) / 3600.0;
-                $device_log["device_hours_usage"] = $hours_duration;
-                echo $hours_duration * floatval($request->session()->get('previous_kwh'));
-                $device_log["device_electrical_consumption"] = $hours_duration * floatval($request->session()->get('previous_kwh'));
+                    $timestamp_now = Carbon::now()->timestamp;
 
-                $device_log->save();
+                    $device_log["device_timestamp"] = $timestamp_now;
+                    $device_log["device_status_value"] = session("1752051_current_device")["device_status_value"];
+
+                    $hours_duration = floatval($timestamp_now - $request->session()->get('previous_timestamp')) / 3600.0;
+                    $device_log["device_hours_usage"] = $hours_duration;
+
+                    $device_log["device_electrical_consumption"] = $hours_duration * floatval($request->session()->get('previous_kwh'));
+
+                    $device_log->save();
+
+                }
 
                 $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->get();
 
@@ -1259,7 +1288,7 @@ class ReportController extends MainController {
 
 //            echo 1;
 
-                $process = new Process('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/publish_real_device.py '.session("1752051_current_device")["device_username"].' '.session("1752051_current_device")["device_password"].' '.session("1752051_current_device")["device_ip"].' '.session("1752051_current_device")["device_port"].' '.session("1752051_current_device")["device_topic"].' ["1",'.session("1752051_current_device")["device_status_value"].']');
+                $process = new Process('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/publish_real_device.py "'.session("1752051_current_device")["device_username"].'" "'.session("1752051_current_device")["device_password"].'" "'.session("1752051_current_device")["device_ip"].'" "'.session("1752051_current_device")["device_port"].'" "'.session("1752051_current_device")["device_topic"].'" ["1",'.session("1752051_current_device")["device_status_value"].'] "'.session("1752051_current_device")["device_id"].'"');
                 # python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_temp_humid.py "BKvm2" "Hcmut_CSE_2020" "13.76.250.158" "1883" "Topic/TempHumi" "TEMP-HUD100"
 
                 // waiting for process to finish
@@ -1275,7 +1304,6 @@ class ReportController extends MainController {
                 $request->session()->put('previous_kwh',$request->session()->get("1752051_current_device")["device_kwh"]);
 
                 $device_log["device_timestamp"] = $timestamp_now;
-                $device_log["device_updated_by"] = session("1752051_user")["user_fullname"];
                 $device_log["device_status_value"] = session("1752051_current_device")["device_status_value"];
                 $device_log->save();
 
@@ -1298,6 +1326,55 @@ class ReportController extends MainController {
                 $request->session()->put("1752051_current_device_log",$device_log);
 
             }
+
+        } catch ( \Exception $e ) {
+//            echo $e;
+            abort(404);
+        }
+
+    }
+
+    public function auto_run_stop_device(Request $request){
+
+        try {
+
+//            echo 1;
+
+            $timestamp_now = Carbon::now()->timestamp;
+
+            $process = new BackgroundProcess('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/publish_auto_real_device.py "'.session("1752051_current_device")["device_username"].'" "'.session("1752051_current_device")["device_password"].'" "'.session("1752051_current_device")["device_ip"].'" "'.session("1752051_current_device")["device_port"].'" "'.session("1752051_current_device")["device_auto_based_on_sensor_topic"].'" "'.session("1752051_current_device")["device_topic"].'" "'.session("1752051_current_device")["device_status_value"].'" "'.session("1752051_current_device")["device_lower_threshold"].'" "'.session("1752051_current_device")["device_upper_threshold"].'" "'.session("1752051_current_device")["device_id"].'" "'.$timestamp_now.'" "'.session("1752051_current_device")["device_kwh"].'"');
+            # python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_temp_humid.py "BKvm2" "Hcmut_CSE_2020" "13.76.250.158" "1883" "Topic/TempHumi" "TEMP-HUD100"
+
+//            $process->setTimeout(3100000000);
+
+            $process->run();
+
+            $device_log = new DeviceLogInfo();
+
+            $device_log["device_id"] = $request->session()->get("1752051_current_device")["device_id"];
+            $device_log["device_status"] = true;
+
+            $request->session()->put('previous_timestamp', $timestamp_now);
+
+            $request->session()->put('previous_kwh',$request->session()->get("1752051_current_device")["device_kwh"]);
+
+            $device_log["device_timestamp"] = $timestamp_now;
+            $device_log["device_status_value"] = session("1752051_current_device")["device_status_value"];
+            $device_log->save();
+
+            $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
+
+            $device["device_pid"] = $process->getPid();
+
+            $device->save();
+
+            $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->get();
+
+            $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
+
+            $request->session()->put("1752051_current_device", $device);
+
+            $request->session()->put("1752051_current_device_log",$device_log);
 
         } catch ( \Exception $e ) {
 //            dd($e);

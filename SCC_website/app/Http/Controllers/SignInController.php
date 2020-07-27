@@ -18,7 +18,7 @@ class SignInController extends MainController {
 
     /* Sign in the system */
 
-    private $pwd = null;
+    protected $pwd = null;
 
     public function send_sign_in(Request $request, Response $response){
 
@@ -134,7 +134,6 @@ class SignInController extends MainController {
             $user_role = PermissionInfo::where("permission_role", $user_db['user_role'])->first();
 
             unset($user_db['user_password']);
-            unset($user_db['user_login_attempt']);
             unset($user_db['user_remember_token']);
 
             $request->session()->put("1752051_user",$user_db);

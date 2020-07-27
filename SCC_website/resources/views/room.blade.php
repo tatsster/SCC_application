@@ -227,11 +227,11 @@
                                     <div class="chart tab-pane" id="backup-log">
                                         <div class="card-header">
                                             <h3 class="card-title">@lang("Sensor Log")</h3>
-                                            @if (session("1752051_current_sensor")["sensor_pid"] == null)
+                                            @if (session("1752051_current_sensor")["sensor_pid"] == null && session("1752051_user_role")["permission_delete_device_sensor"] == true)
                                                 <button type="button" onclick="deleteAllLog('@lang("Are you sure?")','@lang("You might not want to delete all log of "){{{ session("1752051_current_sensor")["sensor_id"] }}} !!!','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted all log of ") {{{ session("1752051_current_sensor")["sensor_id"] }}} !!!','@lang("OK")',0)" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm float-right" style="margin-right: 5px;">
                                                     <i class="fas fa-trash"></i> @lang("Delete all records")
                                                 </button>
-                                            @else
+                                            @elseif (session("1752051_current_sensor")["sensor_pid"] != null)
                                                 <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
                                                     <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
                                                 </button>
@@ -251,6 +251,15 @@
                                                             </li>
                                                             <li class="nav-item">
                                                                 <a class="nav-link" href="#real-time-heat-index" data-toggle="tab">@lang('Real-time Heat Index')</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="#all-records-temperature" data-toggle="tab">@lang('All Temperature Records')</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="#all-records-humidity" data-toggle="tab">@lang('All Humidity Records')</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="#all-records-heat-index" data-toggle="tab">@lang('All Heat Index Records')</a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -330,6 +339,57 @@
                                                                 <canvas id="chart-real-time-heat-index"></canvas>
                                                             </div>
                                                         </div>
+                                                        <div class="chart tab-pane" id="all-records-temperature">
+                                                            <div class="card-header">
+                                                                <h3 class="card-title">
+                                                                    <i class="far fa-chart-bar"></i>
+                                                                    @lang('Celsius Degree')
+                                                                </h3>
+
+                                                                <div class="card-tools">
+                                                                    <div class="btn-group" id="realtime" data-toggle="btn-toggle">
+                                                                        <button onclick="resetZoomTemperature()" type="button" class="btn btn-default btn-sm active" data-toggle="on">@lang("Refresh Zoom")</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <canvas id="chart-all-records-temperature"></canvas>
+                                                            </div>
+                                                        </div>
+                                                        <div class="chart tab-pane" id="all-records-humidity">
+                                                            <div class="card-header">
+                                                                <h3 class="card-title">
+                                                                    <i class="far fa-chart-bar"></i>
+                                                                    %
+                                                                </h3>
+
+                                                                <div class="card-tools">
+                                                                    <div class="btn-group" id="realtime" data-toggle="btn-toggle">
+                                                                        <button onclick="resetZoomHumidity()" type="button" class="btn btn-default btn-sm active" data-toggle="on">@lang("Refresh Zoom")</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <canvas id="chart-all-records-humidity"></canvas>
+                                                            </div>
+                                                        </div>
+                                                        <div class="chart tab-pane" id="all-records-heat-index">
+                                                            <div class="card-header">
+                                                                <h3 class="card-title">
+                                                                    <i class="far fa-chart-bar"></i>
+                                                                    %
+                                                                </h3>
+
+                                                                <div class="card-tools">
+                                                                    <div class="btn-group" id="realtime" data-toggle="btn-toggle">
+                                                                        <button onclick="resetZoomHeatIndex()" type="button" class="btn btn-default btn-sm active" data-toggle="on">@lang("Refresh Zoom")</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <canvas id="chart-all-records-heat-index"></canvas>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div><!-- /.card-body -->
                                             </div>
@@ -363,12 +423,14 @@
                                                 <thead>
                                                 <tr>
                                                     <th class="text-center">
-                                                        @if (session("1752051_current_sensor")["sensor_pid"] == null)
-                                                            <div class="icheck-success d-inline">
-                                                                <input type="checkbox" onclick="checkAllCheckBox(0,0)" id="check-mark-sensor-upper">
-                                                                <label for="check-mark-sensor-upper">
-                                                                </label>
-                                                            </div>
+                                                        @if (session("1752051_user_role")["permission_delete_device_sensor"] == true)
+                                                            @if (session("1752051_current_sensor")["sensor_pid"] == null)
+                                                                <div class="icheck-success d-inline">
+                                                                    <input type="checkbox" onclick="checkAllCheckBox(0,0)" id="check-mark-sensor-upper">
+                                                                    <label for="check-mark-sensor-upper">
+                                                                    </label>
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                     </th>
                                                     <th>@lang("Order")</th>
@@ -378,13 +440,13 @@
                                                     <th>@lang("Heat Index")</th>
                                                     <th>@lang("Date")</th>
                                                     <th>
-                                                        @if (session("1752051_current_sensor")["sensor_pid"] == null)
+                                                        @if (session("1752051_current_sensor")["sensor_pid"] == null && session("1752051_user_role")["permission_delete_device_sensor"] == true)
                                                             <button onclick="deleteLog('@lang("Are you sure?")','@lang("You might not want to delete these sensor logs !!!")','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted these sensor logs !!!")','@lang("OK")',0,'check-mark-sensor')" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
                                                                 <i class="fas fa-trash">
                                                                 </i>
                                                                 @lang("Delete selected")
                                                             </button>
-                                                        @else
+                                                        @elseif (session("1752051_current_sensor")["sensor_pid"] != null)
                                                             <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
                                                                 <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
                                                             </button>
@@ -392,20 +454,51 @@
                                                     </th>
                                                 </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="sensor-tbody">
 {{--                                                @php--}}
 
 {{--                                                dd(session("1752051_current_sensor_log"))--}}
 
 {{--                                                    @endphp--}}
+                                                <script>
+                                                    var staticTemperatureData = [];
+                                                    var staticHumidityData = [];
+                                                    var staticHeatIndexData = [];
+                                                </script>
                                                 @foreach (session("1752051_current_sensor_log") as $each)
+                                                    <script>
+                                                        staticTemperatureData.push({
+                                                                x: parseInt("{{{ $each["sensor_timestamp"] }}}") * 1000,
+                                                                y: parseFloat("{{{ $each["sensor_temp"] }}}"),
+                                                                {{--z: "{{{ $each["sensor_humid"] }}}",--}}
+                                                                {{--t: "{{{ $each["sensor_heat_index"] }}}",--}}
+                                                            }
+                                                        );
 
+                                                        staticHumidityData.push({
+                                                                x: parseInt("{{{ $each["sensor_timestamp"] }}}") * 1000,
+                                                                y: parseFloat("{{{ $each["sensor_humid"] }}}"),
+                                                                {{--z: "{{{ $each["sensor_humid"] }}}",--}}
+                                                                {{--t: "{{{ $each["sensor_heat_index"] }}}",--}}
+                                                            }
+                                                        );
+
+                                                        staticHeatIndexData.push({
+                                                                x: parseInt("{{{ $each["sensor_timestamp"] }}}") * 1000,
+                                                                y: parseFloat("{{{ $each["sensor_heat_index"] }}}"),
+                                                                {{--z: "{{{ $each["sensor_humid"] }}}",--}}
+                                                                {{--t: "{{{ $each["sensor_heat_index"] }}}",--}}
+                                                            }
+                                                        );
+                                                    </script>
                                                     <tr>
                                                         <td class="text-center">
-                                                            @if (session("1752051_current_sensor")["sensor_pid"] == null)
-                                                                <div class="icheck-success d-inline">
-                                                                    <input value="{{{ $each["sensor_order"] }}}" type="checkbox" class="check-mark-sensor">
-                                                                </div>
+                                                            @if (session("1752051_user_role")["permission_delete_device_sensor"] == true)
+                                                                @if (session("1752051_current_sensor")["sensor_pid"] == null)
+                                                                    <div class="icheck-success d-inline">
+                                                                        <input value="{{{ $each["sensor_order"] }}}" type="checkbox" class="check-mark-sensor">
+                                                                    </div>
+                                                                @endif
                                                             @endif
                                                         </td>
                                                         <td>{{ $each["sensor_order"] }}</td>
@@ -413,7 +506,10 @@
                                                         <td>{{ $each["sensor_temp"] }}</td>
                                                         <td>{{ $each["sensor_humid"] }}</td>
                                                         <td>{{ $each["sensor_heat_index"] }}</td>
-                                                        <td> @php echo date('m/d/Y H:i:s', $each["sensor_timestamp"]); @endphp </td>
+                                                        @if ($loop->iteration == 1)
+                                                            <input type="hidden" id="newest-timestamp-sensor" value="{{{ $each["sensor_timestamp"] }}}">
+                                                        @endif
+                                                        <td> @php echo date('d/m/Y H:i:s', $each["sensor_timestamp"]); @endphp </td>
                                                         <td class="project-actions text-left">
                                                         </td>
                                                     </tr>
@@ -422,12 +518,14 @@
                                                 <tfoot>
                                                 <tr>
                                                     <th class="text-center">
-                                                        @if (session("1752051_current_sensor")["sensor_pid"] == null)
-                                                            <div class="icheck-success d-inline">
-                                                                <input type="checkbox" onclick="checkAllCheckBox(0,1)" id="check-mark-sensor-lower">
-                                                                <label for="check-mark-sensor-lower">
-                                                                </label>
-                                                            </div>
+                                                        @if (session("1752051_user_role")["permission_delete_device_sensor"] == true)
+                                                            @if (session("1752051_current_sensor")["sensor_pid"] == null)
+                                                                <div class="icheck-success d-inline">
+                                                                    <input type="checkbox" onclick="checkAllCheckBox(0,1)" id="check-mark-sensor-lower">
+                                                                    <label for="check-mark-sensor-lower">
+                                                                    </label>
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                     </th>
                                                     <th>@lang("Order")</th>
@@ -437,13 +535,13 @@
                                                     <th>@lang("Heat Index")</th>
                                                     <th>@lang("Date")</th>
                                                     <th>
-                                                        @if (session("1752051_current_sensor")["sensor_pid"] == null)
+                                                        @if (session("1752051_current_sensor")["sensor_pid"] == null && session("1752051_user_role")["permission_delete_device_sensor"] == true)
                                                             <button onclick="deleteLog('@lang("Are you sure?")','@lang("You might not want to delete these sensor logs !!!")','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted these sensor logs !!!")','@lang("OK")',0,'check-mark-sensor')" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
                                                                 <i class="fas fa-trash">
                                                                 </i>
                                                                 @lang("Delete selected")
                                                             </button>
-                                                        @else
+                                                        @elseif (session("1752051_current_sensor")["sensor_pid"] != null)
                                                             <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
                                                                 <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
                                                             </button>
@@ -502,9 +600,11 @@
 
                                         <div class="form-group row">
                                             <div class="offset-sm-2 col-sm-10 text-right">
-                                                @if (session("1752051_current_sensor")["sensor_pid"] == null)
-                                                    <button type="submit" id="current-{{{ session("1752051_current_sensor")["sensor_id"] }}}" name="btn-delete" value="1" hidden></button>
-                                                    <button type="button" class="btn btn-danger" onclick="deleteSensorDevice('@lang("Are you sure?")','@lang("You might not want to delete "){{{ session("1752051_current_sensor")["sensor_id"] }}} !!!','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted ") {{{ session("1752051_current_sensor")["sensor_id"] }}} !!!','@lang("OK")','current-{{{ session("1752051_current_sensor")["sensor_id"] }}}')" data-dismiss="modal">@lang("Delete")</button>
+                                                @if (session("1752051_user_role")["permission_delete_device_sensor"] == true)
+                                                    @if (session("1752051_current_sensor")["sensor_pid"] == null)
+                                                        <button type="submit" id="current-{{{ session("1752051_current_sensor")["sensor_id"] }}}" name="btn-delete" value="1" hidden></button>
+                                                        <button type="button" class="btn btn-danger" onclick="deleteSensorDevice('@lang("Are you sure?")','@lang("You might not want to delete "){{{ session("1752051_current_sensor")["sensor_id"] }}} !!!','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted ") {{{ session("1752051_current_sensor")["sensor_id"] }}} !!!','@lang("OK")','current-{{{ session("1752051_current_sensor")["sensor_id"] }}}')" data-dismiss="modal">@lang("Delete")</button>
+                                                    @endif
                                                 @endif
                                                 @if (session("1752051_current_sensor")["sensor_pid"] != null)
                                                     <button type="button" onclick="runStopSensor(1,'@lang("Successfully stopped !!!")','@lang("You can turn on later !!!")','@lang("Are you sure you want to turn off sensor?")','@lang("You will stop sensor immediately !!!")','@lang("Yes, turn it off!")','@lang("OK")','@lang("Cancel")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")')" class="btn btn-info">@lang("Stop")</button>
@@ -547,16 +647,72 @@
                                     <div class="chart tab-pane" id="backup-log">
                                         <div class="card-header">
                                             <h3 class="card-title">@lang("Device Log")</h3>
-                                            @if (session("1752051_current_device")["device_pid"] == null)
+                                            @if (session("1752051_current_device")["device_pid"] == null && session("1752051_user_role")["permission_delete_device_sensor"] == true)
                                                 <button type="button" onclick="deleteAllLog('@lang("Are you sure?")','@lang("You might not want to delete all log of "){{{ session("1752051_current_device")["device_id"] }}} !!!','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted all log of ") {{{ session("1752051_current_device")["device_id"] }}} !!!','@lang("OK")',1)" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm float-right" style="margin-right: 5px;">
                                                     <i class="fas fa-trash"></i> @lang("Delete all records")
                                                 </button>
-                                            @else
+                                            @elseif (session("1752051_current_device")["device_pid"] != null)
                                                 <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
                                                     <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
                                                 </button>
                                             @endif
                                         </div>
+
+                                        <section class="col-lg-12 connectedSortable">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <div class="card-tools">
+                                                        <ul class="nav nav-pills ml-auto">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active" href="#all-records-device-hours" data-toggle="tab">@lang('Hours Usage')</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="#all-records-device-consumption" data-toggle="tab">@lang('Electrical Consumption')</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div><!-- /.card-header -->
+                                                <div class="card-body">
+                                                    <div class="tab-content p-0">
+                                                        <!-- Morris chart - Sales -->
+                                                        <div class="chart tab-pane active" id="all-records-device-hours">
+                                                            <div class="card-header">
+                                                                <h3 class="card-title">
+                                                                    <i class="far fa-chart-bar"></i>
+                                                                    @lang('Hours Usage')
+                                                                </h3>
+
+                                                                <div class="card-tools">
+                                                                    <div class="btn-group" id="realtime" data-toggle="btn-toggle">
+                                                                        <button onclick="resetZoomDeviceHours()" type="button" class="btn btn-default btn-sm active" data-toggle="on">@lang("Refresh Zoom")</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <canvas id="chart-all-records-device-hours"></canvas>
+                                                            </div>
+                                                        </div>
+                                                        <div class="chart tab-pane" id="all-records-device-consumption">
+                                                            <div class="card-header">
+                                                                <h3 class="card-title">
+                                                                    <i class="far fa-chart-bar"></i>
+                                                                    @lang('Electrical Consumption')
+                                                                </h3>
+
+                                                                <div class="card-tools">
+                                                                    <div class="btn-group" id="realtime" data-toggle="btn-toggle">
+                                                                        <button onclick="resetZoomDeviceConsumption()" type="button" class="btn btn-default btn-sm active" data-toggle="on">@lang("Refresh Zoom")</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <canvas id="chart-all-records-device-consumption"></canvas>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div><!-- /.card-body -->
+                                            </div>
+
                                         <div class="card-body">
                                             <form action="device-search-time-range" method="post">
                                                 {{ csrf_field() }}
@@ -581,12 +737,14 @@
                                                 <thead>
                                                 <tr>
                                                     <th class="text-center">
-                                                        @if (session("1752051_current_device")["device_pid"] == null)
-                                                            <div class="icheck-success d-inline">
-                                                                <input onclick="checkAllCheckBox(1,0)" type="checkbox" id="check-mark-device-upper">
-                                                                <label for="check-mark-device-upper">
-                                                                </label>
-                                                            </div>
+                                                        @if (session("1752051_user_role")["permission_delete_device_sensor"] == true)
+                                                            @if (session("1752051_current_device")["device_pid"] == null)
+                                                                <div class="icheck-success d-inline">
+                                                                    <input onclick="checkAllCheckBox(1,0)" type="checkbox" id="check-mark-device-upper">
+                                                                    <label for="check-mark-device-upper">
+                                                                    </label>
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                     </th>
                                                     <th>@lang("Order")</th>
@@ -597,13 +755,13 @@
                                                     <th>@lang("Device Electrical Connsumption")</th>
                                                     <th>@lang("Date")</th>
                                                     <th>
-                                                        @if (session("1752051_current_device")["device_pid"] == null)
+                                                        @if (session("1752051_current_device")["device_pid"] == null && session("1752051_user_role")["permission_delete_device_sensor"] == true)
                                                             <button onclick="deleteLog('@lang("Are you sure?")','@lang("You might not want to delete these device logs !!!")','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted these device logs !!!")','@lang("OK")',1,'check-mark-device')" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
                                                                 <i class="fas fa-trash">
                                                                 </i>
                                                                 @lang("Delete selected")
                                                             </button>
-                                                        @else
+                                                        @elseif (session("1752051_current_device")["device_pid"] != null)
                                                             <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
                                                                 <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
                                                             </button>
@@ -611,15 +769,26 @@
                                                     </th>
                                                 </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="device-tbody">
+                                                <script>
+                                                    var staticDeviceTime = [];
+                                                    var staticDeviceHours = [];
+                                                    var staticDeviceConsumption = [];
+                                                </script>
                                                 @foreach (session("1752051_current_device_log") as $each)
-
+                                                    <script>
+                                                        staticDeviceTime.push(parseInt("{{{ $each['device_timestamp'] }}}") * 1000);
+                                                        staticDeviceHours.push(parseFloat("{{{ $each["device_hours_usage"] }}}"));
+                                                        staticDeviceConsumption.push(parseFloat("{{{ $each["device_electrical_consumption"] }}}"));
+                                                    </script>
                                                     <tr>
                                                         <td class="text-center">
-                                                            @if (session("1752051_current_device")["device_pid"] == null)
-                                                                    <div class="icheck-success d-inline">
-                                                                        <input value="{{{ $each["device_order"] }}}" type="checkbox" class="check-mark-device">
-                                                                    </div>
+                                                            @if (session("1752051_user_role")["permission_delete_device_sensor"] == true)
+                                                                @if (session("1752051_current_device")["device_pid"] == null)
+                                                                        <div class="icheck-success d-inline">
+                                                                            <input value="{{{ $each["device_order"] }}}" type="checkbox" class="check-mark-device">
+                                                                        </div>
+                                                                @endif
                                                             @endif
                                                         </td>
                                                         <td>{{ $each["device_order"] }}</td>
@@ -647,7 +816,10 @@
                                                                 {{ $each["device_electrical_consumption"] }}
                                                             @endif
                                                         </td>
-                                                        <td> @php echo date('m/d/Y H:i:s', $each["device_timestamp"]); @endphp </td>
+                                                        @if ($loop->iteration == 1)
+                                                            <input type="hidden" id="newest-timestamp-device" value="{{{ $each["device_timestamp"] }}}">
+                                                        @endif
+                                                        <td> @php echo date('d/m/Y H:i:s', $each["device_timestamp"]); @endphp </td>
                                                         <td class="project-actions text-left">
                                                         </td>
                                                     </tr>
@@ -656,12 +828,14 @@
                                                 <tfoot>
                                                 <tr>
                                                     <th class="text-center">
-                                                        @if (session("1752051_current_device")["device_pid"] == null)
-                                                            <div class="icheck-success d-inline">
-                                                                <input onclick="checkAllCheckBox(1,1)" type="checkbox" id="check-mark-device-lower">
-                                                                <label for="check-mark-device-lower">
-                                                                </label>
-                                                            </div>
+                                                        @if (session("1752051_user_role")["permission_delete_device_sensor"] == true)
+                                                            @if (session("1752051_current_device")["device_pid"] == null)
+                                                                <div class="icheck-success d-inline">
+                                                                    <input onclick="checkAllCheckBox(1,1)" type="checkbox" id="check-mark-device-lower">
+                                                                    <label for="check-mark-device-lower">
+                                                                    </label>
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                     </th>
                                                     <th>@lang("Order")</th>
@@ -672,13 +846,13 @@
                                                     <th>@lang("Device Electrical Connsumption")</th>
                                                     <th>@lang("Date")</th>
                                                     <th>
-                                                        @if (session("1752051_current_device")["device_pid"] == null)
+                                                        @if (session("1752051_current_device")["device_pid"] == null && session("1752051_user_role")["permission_delete_device_sensor"] == true)
                                                             <button onclick="deleteLog('@lang("Are you sure?")','@lang("You might not want to delete these device logs !!!")','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted these device logs !!!")','@lang("OK")',1,'check-mark-device')" data-toggle="modal" data-target="#modal-danger" class="btn btn-danger btn-sm" href="#">
                                                                 <i class="fas fa-trash">
                                                                 </i>
                                                                 @lang("Delete selected")
                                                             </button>
-                                                        @else
+                                                        @elseif (session("1752051_current_device")["device_pid"] != null)
                                                             <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
                                                                 <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
                                                             </button>
@@ -755,19 +929,26 @@
                                                 <label for="device-upper-threshold" class="col-form-label">@lang("Device Upper Threshold:")</label>
                                                 <input value="{{{ session("1752051_current_device")["device_upper_threshold"] }}}" type="number" name="device_upper_threshold" class="form-control" id="device-upper-threshold">
                                             </div>
+                                            <div class="col-sm-6">
+                                                <label for="device-auto-based-on-sensor-topic" class="col-form-label">@lang("Device Auto Based On Sensor Topic:")</label>
+                                                <input value="{{{ session("1752051_current_device")["device_auto_based_on_sensor_topic"] }}}" type="text" name="device_auto_based_on_sensor_topic" class="form-control" id="device-auto-based-on-sensor-topic">
+                                            </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <div class="offset-sm-2 col-sm-10 text-right">
-                                                @if (session("1752051_current_device")["device_pid"] == null)
-                                                    <button type="submit" id="current-{{{ session("1752051_current_device")["device_id"] }}}" name="btn-delete" value="1" hidden></button>
-                                                    <button type="button" class="btn btn-danger" onclick="deleteSensorDevice('@lang("Are you sure?")','@lang("You might not want to delete "){{{ session("1752051_current_device")["device_id"] }}} !!!','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted ") {{{ session("1752051_current_device")["device_id"] }}} !!!','@lang("OK")','current-{{{ session("1752051_current_device")["device_id"] }}}')" data-dismiss="modal">@lang("Delete")</button>
+                                                @if (session("1752051_user_role")["permission_delete_device_sensor"] == true)
+                                                    @if (session("1752051_current_device")["device_pid"] == null)
+                                                        <button type="submit" id="current-{{{ session("1752051_current_device")["device_id"] }}}" name="btn-delete" value="1" hidden></button>
+                                                        <button type="button" class="btn btn-danger" onclick="deleteSensorDevice('@lang("Are you sure?")','@lang("You might not want to delete "){{{ session("1752051_current_device")["device_id"] }}} !!!','@lang("Yes, delete!")','@lang("Cancel")','@lang("Delete!")','@lang("You deleted ") {{{ session("1752051_current_device")["device_id"] }}} !!!','@lang("OK")','current-{{{ session("1752051_current_device")["device_id"] }}}')" data-dismiss="modal">@lang("Delete")</button>
+                                                    @endif
                                                 @endif
                                                 @if (session("1752051_current_device")["device_pid"] != null)
                                                     <button type="button" onclick="runStopDevice(1,'@lang("Successfully stopped !!!")','@lang("You can turn on later !!!")','@lang("Are you sure you want to turn off device?")','@lang("You will stop device immediately !!!")','@lang("Yes, turn it off!")','@lang("OK")','@lang("Cancel")','@lang("Device is opening !!!")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")')" class="btn btn-info">@lang("Off")</button>
                                                 @endif
                                                 @if (session("1752051_current_device")["device_pid"] == null)
                                                     <button type="submit" class="btn btn-success">@lang("Update")</button>
+                                                    <button type="button" onclick="autoRunStopDevice('@lang("Successfully ran !!!")','@lang("You can turn off later !!!")','@lang("Are you sure you want to turn on auto mode for device ?")','','@lang("Yes, turn it on!")','@lang("OK")','@lang("Cancel")')" class="btn btn-warning">@lang("Auto")</button>
                                                     <button type="button" onclick="runStopDevice(2,'@lang("Successfully ran !!!")','@lang("You can turn off later !!!")','@lang("Are you sure you want to turn on device ?")','','@lang("Yes, turn it on!")','@lang("OK")','@lang("Cancel")','@lang("Device is opening !!!")','@lang("Error !!!")','@lang("Something wrong happened, please try again !!!")')" class="btn btn-primary">@lang("On")</button>
                                                 @endif
                                             </div>
@@ -1390,6 +1571,49 @@
                 }
             })
         }
+    }
+
+    function autoRunStopDevice(notice_title,notice_text,title_ask,text_warning,confirms,reconfirm,cancel){
+
+        Swal.fire({
+            title: title_ask,
+            text: text_warning,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirms,
+            cancelButtonText: cancel
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "auto-run-stop-device",
+                    type: "POST",
+                    data: {_token: "{{csrf_token()}}"},
+                    async: true,
+                    success: function (data) {
+                        // alert(data);
+                        // window.location.reload();
+                    }
+                })
+
+                Swal.fire({
+                    title: notice_title,
+                    text: notice_text,
+                    icon: 'success',
+                    showCancelButton: false,
+                    allowOutsideClick: false,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: reconfirm
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.reload();
+                    }
+                })
+
+            }
+        })
     }
 
     function refreshSensor(){

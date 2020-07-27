@@ -119,6 +119,8 @@ Route::post('change-system-settings','SettingsController@change_system_settings'
 /* Get Real Time */
 
 Route::post('get-sensor-real-time','ReportController@get_sensor_real_time');
+Route::post('update-sensor-real-time','ReportController@update_sensor_real_time');
+Route::post('update-device-real-time','ReportController@update_device_real_time');
 
 /* Role */
 
@@ -177,6 +179,7 @@ Route::post('create-device','ReportController@create_device');
 Route::post('choose-device','ReportController@choose_device');
 Route::post('update-device','ReportController@update_device');
 Route::post('run-stop-device','ReportController@run_stop_device');
+Route::post('auto-run-stop-device','ReportController@auto_run_stop_device');
 Route::post('refresh-device','ReportController@refresh_device');
 Route::post('device-search-time-range','ReportController@device_search_time_range');
 
