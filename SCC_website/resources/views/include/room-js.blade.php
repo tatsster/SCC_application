@@ -168,8 +168,6 @@
         }
     };
 
-    var showData = staticTemperatureData.reverse();
-
     configStaticTemperature.data.datasets.forEach(function(dataset) {
 
         dataset.data = staticTemperatureData;
@@ -287,8 +285,6 @@
             },
         }
     };
-
-    var showData = staticHumidityData.reverse();
 
     configStaticHumidity.data.datasets.forEach(function(dataset) {
 
@@ -408,8 +404,6 @@
         }
     };
 
-    var showData = staticHeatIndexData.reverse();
-
     configStaticHeatIndex.data.datasets.forEach(function(dataset) {
 
         dataset.data = staticHeatIndexData;
@@ -431,24 +425,16 @@
         window.myLineDeviceConsumption.resetZoom();
     }
 
-    staticDeviceTime = staticDeviceTime.reverse();
-    staticDeviceHours = staticDeviceHours.reverse();
-    staticDeviceConsumption = staticDeviceConsumption.reverse();
-
     var configStaticDeviceHours = {
-        type: "bar",
+        type: "line",
         data: {
-            labels: staticDeviceTime,
             datasets: [{
                 label: $("#device-hours-usage-label").text(),
                 backgroundColor: chartColors.green,
                 borderColor: chartColors.green,
                 fill: true,
-                barPercentage: 0.5,
-                barThickness: 6,
-                maxBarThickness: 8,
-                minBarLength: 2,
-                data: staticDeviceHours
+                cubicInterpolationMode: 'monotone',
+                data: []
             }]
         },
         options: {
@@ -540,25 +526,27 @@
         }
     };
 
+    configStaticDeviceHours.data.datasets.forEach(function(dataset) {
+
+        dataset.data = staticDeviceHours;
+
+    });
+
     $("#chart-all-records-device-hours").ready(function() {
         var ctx = document.getElementById("chart-all-records-device-hours").getContext("2d");
         window.myLineDeviceHours = new Chart(ctx, configStaticDeviceHours);
     });
 
     var configStaticDeviceConsumption = {
-        type: "bar",
+        type: "line",
         data: {
-            labels: staticDeviceTime,
             datasets: [{
                 label: $("#device-electrical-consumption-label").text(),
                 backgroundColor: chartColors.yellow,
                 borderColor: chartColors.yellow,
                 fill: true,
-                barPercentage: 0.5,
-                barThickness: 6,
-                maxBarThickness: 8,
-                minBarLength: 2,
-                data: staticDeviceConsumption
+                cubicInterpolationMode: 'monotone',
+                data: []
             }]
         },
         options: {
@@ -650,6 +638,12 @@
         }
     };
 
+    configStaticDeviceConsumption.data.datasets.forEach(function(dataset) {
+
+        dataset.data = staticDeviceConsumption;
+
+    });
+
     $("#chart-all-records-device-consumption").ready(function() {
         var ctx = document.getElementById("chart-all-records-device-consumption").getContext("2d");
         window.myLineDeviceConsumption = new Chart(ctx, configStaticDeviceConsumption);
@@ -675,15 +669,15 @@
 
                     var date = moment(parseInt(finalData[6]) * 1000);
 
-                    if (finalData[2] === "true") {
+                    if (finalData[2] === "1") {
 
-                        var insertHtml = '<tr> <td class="text-center"></td> <td>' + finalData[0] + '</td> <td>' + finalData[1] + '</td> <td> <input id="on-toggle' + finalData[6] + '" type="checkbox" checked data-bootstrap-switch-disabled data-off-color="danger" data-on-color="success"> </td> <td>' + finalData[3] + '</td> <td> --- </td> <td> --- </td> <td>' + date + '</td> <td class="project-actions text-left"> </td> </tr>';
+                        var insertHtml = '<tr> <td class="text-center"></td> <td>' + finalData[0] + '</td> <td>' + finalData[1] + '</td> <td> <input id="on-toggle' + finalData[6] + '" type="checkbox" checked data-bootstrap-switch-disabled data-off-color="danger" data-on-color="success"> </td> <td>' + finalData[3] + '</td> <td> --- </td> <td> --- </td> <td>' + date.format("DD/MM/YYYY HH:mm:ss") + '</td> <td class="project-actions text-left"> </td> </tr>';
 
                     }
 
                     else {
 
-                        var insertHtml = '<tr> <td class="text-center"></td> <td>' + finalData[0] + '</td> <td>' + finalData[1] + '</td> <td>  <input id="off-toggle' + finalData[6] + '" type="checkbox" data-bootstrap-switch-disabled data-off-color="danger" data-on-color="success"> </td> <td>' + finalData[3] + '</td> <td>' + finalData[4] + '</td> <td>' + finalData[5] + '</td> <td>' + date + '</td> <td class="project-actions text-left"> </td> </tr>';
+                        var insertHtml = '<tr> <td class="text-center"></td> <td>' + finalData[0] + '</td> <td>' + finalData[1] + '</td> <td>  <input id="off-toggle' + finalData[6] + '" type="checkbox" data-bootstrap-switch-disabled data-off-color="danger" data-on-color="success"> </td> <td>' + finalData[3] + '</td> <td>' + finalData[4] + '</td> <td>' + finalData[5] + '</td> <td>' + date.format("DD/MM/YYYY HH:mm:ss") + '</td> <td class="project-actions text-left"> </td> </tr>';
 
                     }
 
@@ -839,6 +833,26 @@
             hover: {
                 mode: 'nearest',
                 intersect: false
+            },
+            pan: {
+                enabled: true,    // Enable panning
+                mode: 'x',        // Allow panning in the x direction
+                rangeMin: {
+                    x: null       // Min value of the delay option
+                },
+                rangeMax: {
+                    x: null       // Max value of the delay option
+                }
+            },
+            zoom: {
+                enabled: true,    // Enable zooming
+                mode: 'x',        // Allow zooming in the x direction
+                rangeMin: {
+                    x: null       // Min value of the duration option
+                },
+                rangeMax: {
+                    x: null       // Max value of the duration option
+                }
             }
         }
     };
@@ -941,22 +955,26 @@
                     }
                 }
             },
-            // hover: {
-            //     mode: 'nearest',
-            //     intersect: false
-            // },
-            // animation: {
-            //     duration: 0                    // general animation time
-            // },
-            // hover: {
-            //     animationDuration: 0           // duration of animations when hovering an item
-            // },
-            // responsiveAnimationDuration: 0,    // animation duration after a resize
-            // plugins: {
-            //     streaming: {
-            //         frameRate: 5               // chart is drawn 5 times every second
-            //     }
-            // }
+            pan: {
+                enabled: true,    // Enable panning
+                mode: 'x',        // Allow panning in the x direction
+                rangeMin: {
+                    x: null       // Min value of the delay option
+                },
+                rangeMax: {
+                    x: null       // Max value of the delay option
+                }
+            },
+            zoom: {
+                enabled: true,    // Enable zooming
+                mode: 'x',        // Allow zooming in the x direction
+                rangeMin: {
+                    x: null       // Min value of the duration option
+                },
+                rangeMax: {
+                    x: null       // Max value of the duration option
+                }
+            }
         }
     };
 
@@ -1062,6 +1080,26 @@
             hover: {
                 mode: 'nearest',
                 intersect: false
+            },
+            pan: {
+                enabled: true,    // Enable panning
+                mode: 'x',        // Allow panning in the x direction
+                rangeMin: {
+                    x: null       // Min value of the delay option
+                },
+                rangeMax: {
+                    x: null       // Max value of the delay option
+                }
+            },
+            zoom: {
+                enabled: true,    // Enable zooming
+                mode: 'x',        // Allow zooming in the x direction
+                rangeMin: {
+                    x: null       // Min value of the duration option
+                },
+                rangeMax: {
+                    x: null       // Max value of the duration option
+                }
             }
         }
     };

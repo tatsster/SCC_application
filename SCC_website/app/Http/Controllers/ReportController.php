@@ -1256,22 +1256,24 @@ class ReportController extends MainController {
 
                 if ($device_log["device_status"] == true) {
 
-                    $device_log = new DeviceLogInfo();
+                    $device_kwh = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first(["device_kwh"])["device_kwh"];
 
-                    $device_log["device_id"] = $request->session()->get("1752051_current_device")["device_id"];
-                    $device_log["device_status"] = false;
+                    $device_new_log = new DeviceLogInfo();
+
+                    $device_new_log["device_id"] = $request->session()->get("1752051_current_device")["device_id"];
+                    $device_new_log["device_status"] = false;
 
                     $timestamp_now = Carbon::now()->timestamp;
 
-                    $device_log["device_timestamp"] = $timestamp_now;
-                    $device_log["device_status_value"] = session("1752051_current_device")["device_status_value"];
+                    $device_new_log["device_timestamp"] = $timestamp_now;
+                    $device_new_log["device_status_value"] = $request->session()->get("1752051_current_device")["device_status_value"];
 
-                    $hours_duration = floatval($timestamp_now - $request->session()->get('previous_timestamp')) / 3600.0;
-                    $device_log["device_hours_usage"] = $hours_duration;
+                    $hours_duration = floatval($timestamp_now - intval($device_log["device_timestamp"])) / 3600.0;
+                    $device_new_log["device_hours_usage"] = $hours_duration;
 
-                    $device_log["device_electrical_consumption"] = $hours_duration * floatval($request->session()->get('previous_kwh'));
+                    $device_new_log["device_electrical_consumption"] = $hours_duration * floatval($device_kwh);
 
-                    $device_log->save();
+                    $device_new_log->save();
 
                 }
 
@@ -1299,12 +1301,9 @@ class ReportController extends MainController {
                 $device_log["device_status"] = true;
 
                 $timestamp_now = Carbon::now()->timestamp;
-                $request->session()->put('previous_timestamp', $timestamp_now);
-
-                $request->session()->put('previous_kwh',$request->session()->get("1752051_current_device")["device_kwh"]);
 
                 $device_log["device_timestamp"] = $timestamp_now;
-                $device_log["device_status_value"] = session("1752051_current_device")["device_status_value"];
+                $device_log["device_status_value"] = $request->session()->get("1752051_current_device")["device_status_value"];
                 $device_log->save();
 
                 $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();

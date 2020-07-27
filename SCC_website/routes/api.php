@@ -42,3 +42,14 @@ Route::post('hours-usage-electrical-consumption','API\APIController@hours_usage_
 Route::post('get-building','API\APIController@get_building');
 Route::post('get-floor','API\APIController@get_floor');
 Route::post('get-room','API\APIController@get_room');
+
+/* Sensor */
+
+Route::post('run-stop-sensor','API\APIController@run_stop_sensor');
+
+/* Device */
+
+Route::post('run-stop-device','API\APIController@run_stop_device');
+Route::post('auto-run-stop-device','API\APIController@auto_run_stop_device');
+
+

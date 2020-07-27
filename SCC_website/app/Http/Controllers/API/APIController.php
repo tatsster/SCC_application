@@ -3,6 +3,8 @@
 
 namespace App\Http\Controllers\API;
 use App\BuildingInfo;
+use App\DeviceInfo;
+use App\DeviceLogInfo;
 use App\FloorInfo;
 use App\RoomInfo;
 use App\ContactInfo;
@@ -13,8 +15,11 @@ use App\Mail\EmailFoodNotice;
 use App\Mail\EmailSendEmailSuccess;
 use App\Mail\EmailSignUp;
 use App\PermissionInfo;
+use App\SensorInfo;
+use App\SensorLogInfo;
 use App\UserInfo;
 use Carbon\Carbon;
+use Cocur\BackgroundProcess\BackgroundProcess;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
 use App\Schedules;
@@ -24,6 +29,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Ixudra\Curl\Facades\Curl;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class APIController extends Controller{
 
@@ -568,6 +575,234 @@ class APIController extends Controller{
 
             return $this->send_response(RoomInfo::get(), Lang::get('Successfully sent !!!'));
 
+        }
+
+    }
+
+    public function run_stop_sensor(Request $request){
+
+        try {
+
+            if ($request["button"] == 1){
+
+//            echo 2;
+
+                $sensor = SensorInfo::where("sensor_id", $request["sensor_id"])->first();
+
+                $process = new Process('kill -9 '.$sensor["sensor_pid"]);
+
+                $process->run();
+
+                $sensor["sensor_pid"] = null;
+
+                $sensor->save();
+
+//                $sensor_log = SensorLogInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->orderBy('sensor_timestamp', 'DESC')->get();
+//
+//                $request->session()->put("1752051_current_sensor",$sensor);
+//
+//                $request->session()->put("1752051_current_sensor_log",$sensor_log);
+
+                return $this->send_response([], Lang::get('Successfully turn off sensor !!!'));
+
+            }
+            else {
+
+//            echo 1;
+
+                $process = new BackgroundProcess('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_real_sensor.py "'.$request["sensor_username"].'" "'.$request["sensor_password"].'" "'.$request["sensor_ip"].'" "'.$request["sensor_port"].'" "'.$request["sensor_topic"].'" "'.$request["sensor_id"].'"');
+                # python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_temp_humid.py "BKvm2" "Hcmut_CSE_2020" "13.76.250.158" "1883" "Topic/TempHumi" "TEMP-HUD100"
+
+//            $process->setTimeout(3100000000);
+
+                $process->run();
+
+                $sensor = SensorInfo::where("sensor_id", $request["sensor_id"])->first();
+
+                $sensor["sensor_pid"] = $process->getPid();
+
+                $sensor->save();
+
+//                $sensor = SensorInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->first();
+//
+//                $request->session()->put("1752051_current_sensor", $sensor);
+
+                return $this->send_response([], Lang::get('Successfully turn on sensor !!!'));
+
+            }
+
+        } catch ( \Exception $e ) {
+//            dd($e);
+//            abort(404);
+//            echo $e;
+            return $this->send_error($e, Lang::get('Fail to execute !!!'));
+        }
+
+    }
+
+    public function run_stop_device(Request $request){
+
+        try {
+
+            if ($request["button"] == 1){
+
+//            echo 1;
+
+                $process = new Process('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/publish_real_device.py "'.$request["device_username"].'" "'.$request["device_password"].'" "'.$request["device_ip"].'" "'.$request["device_port"].'" "'.$request["device_topic"].'" ["0","0"] "'.$request["device_id"].'"');
+                # python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_temp_humid.py "BKvm2" "Hcmut_CSE_2020" "13.76.250.158" "1883" "Topic/TempHumi" "TEMP-HUD100"
+
+//            echo 2;
+
+
+                $process->run();
+
+                if (!$process->isSuccessful()) {
+//                echo 3;
+
+                    throw new ProcessFailedException($process);
+                }
+
+                $device = DeviceInfo::where("device_id", $request["device_id"])->first();
+
+                $process = new Process('kill -9 '.$device["device_pid"]);
+
+                $process->run();
+
+                $device["device_pid"] = null;
+
+                $device->save();
+
+                $device_log = DeviceLogInfo::where("device_id", $request["device_id"])->orderBy('device_timestamp', 'DESC')->first();
+
+                if ($device_log["device_status"] == true) {
+
+                    $device_kwh = DeviceInfo::where("device_id", $request["device_id"])->first(["device_kwh"])["device_kwh"];
+
+                    $device_new_log = new DeviceLogInfo();
+
+                    $device_new_log["device_id"] = $request["device_id"];
+                    $device_new_log["device_status"] = false;
+
+                    $timestamp_now = Carbon::now()->timestamp;
+
+                    $device_new_log["device_timestamp"] = $timestamp_now;
+                    $device_new_log["device_status_value"] = $request["device_status_value"];
+
+                    $hours_duration = floatval($timestamp_now - intval($device_log["device_timestamp"])) / 3600.0;
+                    $device_new_log["device_hours_usage"] = $hours_duration;
+
+                    $device_new_log["device_electrical_consumption"] = $hours_duration * floatval($device_kwh);
+
+                    $device_new_log->save();
+
+                }
+//
+//                $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->get();
+//
+//                $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
+//
+//                $request->session()->put("1752051_current_device",$device);
+//
+//                $request->session()->put("1752051_current_device_log",$device_log);
+
+                return $this->send_response([], Lang::get('Successfully turn off device !!!'));
+
+            }
+            else {
+
+//            echo 1;
+
+                $process = new Process('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/publish_real_device.py "'.$request["device_username"].'" "'.$request["device_password"].'" "'.$request["device_ip"].'" "'.$request["device_port"].'" "'.$request["device_topic"].'" ["1",'.$request["device_status_value"].'] "'.$request["device_id"].'"');
+                # python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_temp_humid.py "BKvm2" "Hcmut_CSE_2020" "13.76.250.158" "1883" "Topic/TempHumi" "TEMP-HUD100"
+
+                // waiting for process to finish
+
+                $device_log = new DeviceLogInfo();
+
+                $device_log["device_id"] = $request["device_id"];
+                $device_log["device_status"] = true;
+
+                $timestamp_now = Carbon::now()->timestamp;
+
+                $device_log["device_timestamp"] = $timestamp_now;
+                $device_log["device_status_value"] = $request["device_status_value"];
+                $device_log->save();
+
+                $device = DeviceInfo::where("device_id", $request["device_id"])->first();
+
+                $process->start();
+
+                $device["device_pid"] = $process->getPid();
+
+                $process->wait();
+
+                $device->save();
+
+//                $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->get();
+//
+//                $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
+//
+//                $request->session()->put("1752051_current_device", $device);
+//
+//                $request->session()->put("1752051_current_device_log",$device_log);
+
+                return $this->send_response([], Lang::get('Successfully turn on device !!!'));
+
+            }
+
+        } catch ( \Exception $e ) {
+//            echo $e;
+//            abort(404);
+            return $this->send_error([$e], Lang::get('Fail to execute !!!'));
+        }
+
+    }
+
+    public function auto_run_stop_device(Request $request){
+
+        try {
+
+//            echo 1;
+
+            $timestamp_now = Carbon::now()->timestamp;
+
+            $process = new BackgroundProcess('python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/publish_auto_real_device.py "'.session("1752051_current_device")["device_username"].'" "'.session("1752051_current_device")["device_password"].'" "'.session("1752051_current_device")["device_ip"].'" "'.session("1752051_current_device")["device_port"].'" "'.session("1752051_current_device")["device_auto_based_on_sensor_topic"].'" "'.session("1752051_current_device")["device_topic"].'" "'.session("1752051_current_device")["device_status_value"].'" "'.session("1752051_current_device")["device_lower_threshold"].'" "'.session("1752051_current_device")["device_upper_threshold"].'" "'.session("1752051_current_device")["device_id"].'" "'.$timestamp_now.'" "'.session("1752051_current_device")["device_kwh"].'"');
+            # python3 /Users/WhiteWolf21/Documents/Heroku/SCC/final/subscribe_temp_humid.py "BKvm2" "Hcmut_CSE_2020" "13.76.250.158" "1883" "Topic/TempHumi" "TEMP-HUD100"
+
+//            $process->setTimeout(3100000000);
+
+            $process->run();
+
+            $device_log = new DeviceLogInfo();
+
+            $device_log["device_id"] = $request->session()->get("1752051_current_device")["device_id"];
+            $device_log["device_status"] = true;
+
+            $request->session()->put('previous_timestamp', $timestamp_now);
+
+            $request->session()->put('previous_kwh',$request->session()->get("1752051_current_device")["device_kwh"]);
+
+            $device_log["device_timestamp"] = $timestamp_now;
+            $device_log["device_status_value"] = session("1752051_current_device")["device_status_value"];
+            $device_log->save();
+
+            $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
+
+            $device["device_pid"] = $process->getPid();
+
+            $device->save();
+
+            $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->get();
+
+            $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
+
+            $request->session()->put("1752051_current_device", $device);
+
+            $request->session()->put("1752051_current_device_log",$device_log);
+
+        } catch ( \Exception $e ) {
+//            dd($e);
+            abort(404);
         }
 
     }

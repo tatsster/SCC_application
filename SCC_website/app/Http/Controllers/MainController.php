@@ -3,10 +3,13 @@ namespace App\Http\Controllers;
 
 use App\BuildingInfo;
 use App\DeviceInfo;
+use App\DeviceLogInfo;
 use App\FloorInfo;
 use App\LanguageInfo;
 use App\PermissionInfo;
+use App\RoomInfo;
 use App\SensorInfo;
+use App\SensorLogInfo;
 use App\SettingsInfo;
 use App\UserInfo;
 use Illuminate\Http\Request;
@@ -212,12 +215,34 @@ class MainController extends Controller {
             $request->session()->forget("1752051_current_sensor_log");
 
         }
+        else{
+
+            $sensor = SensorInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->first();
+
+            $sensor_log = SensorLogInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->orderBy('sensor_timestamp', 'DESC')->get();
+
+            $request->session()->put("1752051_current_sensor",$sensor);
+
+            $request->session()->put("1752051_current_sensor_log",$sensor_log);
+
+        }
 
         if ($request->session()->get("1752051_room_building") != $request->session()->get("1752051_current_device")["device_building_name"] || $request->session()->get("1752051_room_floor") != $request->session()->get("1752051_current_device")["device_floor_name"] || $request->session()->get("1752051_room_name") != $request->session()->get("1752051_current_device")["device_room_name"]){
 
             $request->session()->forget("1752051_current_device");
 
             $request->session()->forget("1752051_current_device_log");
+
+        }
+        else{
+
+            $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->get();
+
+            $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
+
+            $request->session()->put("1752051_current_device",$device);
+
+            $request->session()->put("1752051_current_device_log",$device_log);
 
         }
 
@@ -530,6 +555,47 @@ class MainController extends Controller {
     public function chatbot(Request $request){
 
         echo $request["user_fullname"]." --- ".$request["user_message"]." --- ".$request["user_datetime"]." --- ".$request["user_timestamp"];
+
+    }
+
+    /* Get Full Report */
+
+    public function full_report(Request $request){
+
+        /* Prepare user session */
+
+        if ($this->prepare_user_session($request) != null) {
+            return $this->prepare_user_session($request);
+        }
+
+        /* Get language options */
+
+        $lang_db = LanguageInfo::all();
+
+        if ($request["building"] != null && $request["floor"] != null && $request["room"] != null){
+
+            return $this->send_response([RoomInfo::where("room_building",$request["building"])->where("room_floor",$request["floor"])->where("room_name",$request["room"])->first()], Lang::get('Successfully sent !!!'));
+
+        }
+        else if ($request["building"] != null && $request["floor"] != null){
+
+            return $this->send_response(RoomInfo::where("room_building",$request["building"])->where("room_floor",$request["floor"])->get(), Lang::get('Successfully sent !!!'));
+
+        }
+        else if ($request["building"] != null){
+
+            return $this->send_response(RoomInfo::where("room_building",$request["building"])->get(), Lang::get('Successfully sent !!!'));
+
+        }
+        else{
+
+            $sensor_db = SensorInfo::get();
+
+            $device_db = DeviceInfo::get();
+
+            return view("full-report", compact('lang_db', 'sensor_db', 'device_db'));
+
+        }
 
     }
 

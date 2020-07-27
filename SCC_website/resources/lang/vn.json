@@ -29,7 +29,7 @@
     "Password Is Wrong": "Mật Khẩu Không Chính Xác",
     "Account Is Not Activated Yet / Contact Us For More Information: 0888315899": "Tài Khoản Chưa Được Kích Hoạt / Liên Hệ Với Chúng Tôi Để Biết Thêm Thôn Tin: 0888315899",
     "Please Check Email And Sign In With Temporary Password !!! Remember To Change New Password !!!": "Vui Lòng Kiểm Tra Email Và Đăng Nhập Bằng Mật Khẩu Tạm Thời !!! Nhớ Đổi Mật Khẩu Mới !!!",
-
+    "Print All": "In Tất Cả",
 
 
 
@@ -60,9 +60,14 @@
     "second(s)": "giây",
     "Zoom In": "Phóng To",
     "Zoom Out": "Thu Nhỏ",
-    "Zoom Options:": "Tùy Chọn Thu Phóng:",
+    "Stream Duration:": "Thời Lượng Phát:",
     "Pause:": "Tạm Dừng",
-
+    "Successfully turn on sensor !!!": "Mở cảm biến thành công !!!",
+    "Successfully turn on device !!!": "Mở thiết bị thành công !!!",
+    "Successfully turn on device auto mode !!!": "Mở chế độ tự động của thiết bị thành công !!!",
+    "Successfully turn off sensor !!!": "Tắt cảm biến thành công !!!",
+    "Successfully turn off device !!!": "Tắt thiết bị thành công !!!",
+    "Fail to execute !!!": "Thực hiện thất bại !!!",
 
     "Profile": "Tài Khoản Cá Nhân",
     "Avatar": "Ảnh",

@@ -92,6 +92,10 @@ Route::get('settings','MainController@settings');
 
 Route::get('permission','MainController@permission');
 
+/* Full Report */
+
+Route::get('full-report','MainController@full_report');
+
 /*
 |--------------------------------------------------------------------------
 | Users Features
@@ -195,3 +199,5 @@ Route::post('chatbot','MainController@chatbot');
 
 Route::post('delete-all-log','ReportController@delete_all_log');
 Route::post('delete-log','ReportController@delete_log');
+
+

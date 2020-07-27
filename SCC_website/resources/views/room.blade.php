@@ -275,7 +275,7 @@
                                                                 </h3>
 
                                                                 <div class="card-tools">
-                                                                    <div class="label">@lang("Zoom Options:")</div>
+                                                                    <div class="label">@lang("Stream Duration:")</div>
                                                                     {{--                                                                        <span id="durationValue" class="value">20000</span>--}}
                                                                     <span><input type="range" min="1000" max="60000" step="100" value="20000" id="duration-temperature" class="control"></span>
                                                                 </div>
@@ -299,7 +299,7 @@
                                                                 </h3>
 
                                                                 <div class="card-tools">
-                                                                    <div class="label">@lang("Zoom Options:")</div>
+                                                                    <div class="label">@lang("Stream Duration:")</div>
                                                                     {{--                                                                        <span id="durationValue" class="value">20000</span>--}}
                                                                     <span><input type="range" min="1000" max="60000" step="100" value="20000" id="duration-humidity" class="control"></span>
                                                                 </div>
@@ -323,7 +323,7 @@
                                                                 </h3>
 
                                                                 <div class="card-tools">
-                                                                    <div class="label">@lang("Zoom Options:")</div>
+                                                                    <div class="label">@lang("Stream Duration:")</div>
                                                                     {{--                                                                        <span id="durationValue" class="value">20000</span>--}}
                                                                     <span><input type="range" min="1000" max="60000" step="100" value="20000" id="duration-heat-index" class="control"></span>
                                                                 </div>
@@ -470,24 +470,18 @@
                                                         staticTemperatureData.push({
                                                                 x: parseInt("{{{ $each["sensor_timestamp"] }}}") * 1000,
                                                                 y: parseFloat("{{{ $each["sensor_temp"] }}}"),
-                                                                {{--z: "{{{ $each["sensor_humid"] }}}",--}}
-                                                                {{--t: "{{{ $each["sensor_heat_index"] }}}",--}}
                                                             }
                                                         );
 
                                                         staticHumidityData.push({
                                                                 x: parseInt("{{{ $each["sensor_timestamp"] }}}") * 1000,
                                                                 y: parseFloat("{{{ $each["sensor_humid"] }}}"),
-                                                                {{--z: "{{{ $each["sensor_humid"] }}}",--}}
-                                                                {{--t: "{{{ $each["sensor_heat_index"] }}}",--}}
                                                             }
                                                         );
 
                                                         staticHeatIndexData.push({
                                                                 x: parseInt("{{{ $each["sensor_timestamp"] }}}") * 1000,
                                                                 y: parseFloat("{{{ $each["sensor_heat_index"] }}}"),
-                                                                {{--z: "{{{ $each["sensor_humid"] }}}",--}}
-                                                                {{--t: "{{{ $each["sensor_heat_index"] }}}",--}}
                                                             }
                                                         );
                                                     </script>
@@ -771,16 +765,10 @@
                                                 </thead>
                                                 <tbody id="device-tbody">
                                                 <script>
-                                                    var staticDeviceTime = [];
                                                     var staticDeviceHours = [];
                                                     var staticDeviceConsumption = [];
                                                 </script>
                                                 @foreach (session("1752051_current_device_log") as $each)
-                                                    <script>
-                                                        staticDeviceTime.push(parseInt("{{{ $each['device_timestamp'] }}}") * 1000);
-                                                        staticDeviceHours.push(parseFloat("{{{ $each["device_hours_usage"] }}}"));
-                                                        staticDeviceConsumption.push(parseFloat("{{{ $each["device_electrical_consumption"] }}}"));
-                                                    </script>
                                                     <tr>
                                                         <td class="text-center">
                                                             @if (session("1752051_user_role")["permission_delete_device_sensor"] == true)
@@ -798,6 +786,18 @@
                                                                 <input type="checkbox" checked data-bootstrap-switch-disabled data-off-color="danger" data-on-color="success">
                                                             @else
                                                                 <input type="checkbox" data-bootstrap-switch-disabled data-off-color="danger" data-on-color="success">
+                                                                <script>
+                                                                    staticDeviceHours.push({
+                                                                            x: parseInt("{{{ $each["device_timestamp"] }}}") * 1000,
+                                                                            y: parseFloat("{{{ $each["device_hours_usage"] }}}"),
+                                                                        }
+                                                                    );
+                                                                    staticDeviceConsumption.push({
+                                                                            x: parseInt("{{{ $each["device_timestamp"] }}}") * 1000,
+                                                                            y: parseFloat("{{{ $each["device_electrical_consumption"] }}}"),
+                                                                        }
+                                                                    );
+                                                                </script>
                                                             @endif
                                                         </td>
 
