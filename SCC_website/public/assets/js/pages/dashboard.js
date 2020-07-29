@@ -113,167 +113,167 @@ $(function () {
     //--------------
 
     // Get context with jQuery - using jQuery's .get() method.
-    var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
+    // var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
 
-    var stackBarChartData = {
-        labels  : ['4/5/2020', '5/5/2020', '6/5/2020', '7/5/2020', '8/5/2020', '9/5/2020', '10/5/2020'],
-        datasets: [
-            // {
-            //     label               : 'Temperature',
-            //     backgroundColor     : 'rgba(220, 53, 69, 0.9)',
-            //     borderColor         : 'rgba(220, 53, 69, 0.8)',
-            //     pointRadius          : false,
-            //     pointColor          : '#3b8bba',
-            //     pointStrokeColor    : 'rgba(60,141,188,1)',
-            //     pointHighlightFill  : '#fff',
-            //     pointHighlightStroke: 'rgba(60,141,188,1)',
-            //     data                : [28, 38, 40, 24, 36, 37, 30]
-            // },
-            {
-                label               : 'Total Hours Usage',
-                backgroundColor     : 'rgba(40, 167, 69, 0.9)',
-                borderColor         : 'rgba(40, 167, 69, 0.8)',
-                pointRadius         : false,
-                pointColor          : 'rgba(210, 214, 222, 1)',
-                pointStrokeColor    : '#c1c7d1',
-                pointHighlightFill  : '#fff',
-                pointHighlightStroke: 'rgba(220,220,220,1)',
-                data                : [75, 80, 40, 32, 44, 55, 60]
-            },
-        ]
-    }
-
-    var areaChartData = {
-        labels  : ['4/5/2020', '5/5/2020', '6/5/2020', '7/5/2020', '8/5/2020', '9/5/2020', '10/5/2020'],
-        datasets: [
-            // {
-            //     label               : 'Temperature',
-            //     backgroundColor     : 'rgba(220, 53, 69, 0.9)',
-            //     borderColor         : 'rgba(220, 53, 69, 0.8)',
-            //     pointRadius          : false,
-            //     pointColor          : '#3b8bba',
-            //     pointStrokeColor    : 'rgba(60,141,188,1)',
-            //     pointHighlightFill  : '#fff',
-            //     pointHighlightStroke: 'rgba(60,141,188,1)',
-            //     data                : [28, 38, 40, 24, 36, 37, 30]
-            // },
-            {
-                label               : 'Humidity',
-                backgroundColor     : 'rgba(23, 162, 184, 0.9)',
-                borderColor         : 'rgba(23, 162, 184, 0.8)',
-                pointRadius         : false,
-                pointColor          : 'rgba(210, 214, 222, 1)',
-                pointStrokeColor    : '#c1c7d1',
-                pointHighlightFill  : '#fff',
-                pointHighlightStroke: 'rgba(220,220,220,1)',
-                data                : [50, 30, 24, 40, 44, 45, 50]
-            },
-        ]
-    }
-
-    var lineChartData = {
-        labels  : ['5/5/2020', '6/5/2020', '7/5/2020', '8/5/2020', '9/5/2020', '10/5/2020', '11/5/2020'],
-        datasets: [
-            {
-                label               : 'Temperature',
-                backgroundColor     : 'rgba(220, 53, 69, 0.9)',
-                borderColor         : 'rgba(220, 53, 69, 0.8)',
-                pointRadius          : false,
-                pointColor          : '#3b8bba',
-                pointStrokeColor    : 'rgba(60,141,188,1)',
-                pointHighlightFill  : '#fff',
-                pointHighlightStroke: 'rgba(60,141,188,1)',
-                data                : [28, 38, 40, 24, 36, 37, 34]
-            },
-            // {
-            //     label               : 'Humidity',
-            //     backgroundColor     : 'rgba(23, 162, 184, 0.9)',
-            //     borderColor         : 'rgba(23, 162, 184, 0.8)',
-            //     pointRadius         : false,
-            //     pointColor          : 'rgba(210, 214, 222, 1)',
-            //     pointStrokeColor    : '#c1c7d1',
-            //     pointHighlightFill  : '#fff',
-            //     pointHighlightStroke: 'rgba(220,220,220,1)',
-            //     data                : [50, 30, 24, 40, 44, 45, 50]
-            // },
-        ]
-    }
-
-    var areaChartOptions = {
-        maintainAspectRatio : false,
-        responsive : true,
-        legend: {
-            display: true
-        },
-        scales: {
-            xAxes: [{
-                gridLines : {
-                    display : false,
-                }
-            }],
-            yAxes: [{
-                gridLines : {
-                    display : false,
-                }
-            }]
-        }
-    }
+    // var stackBarChartData = {
+    //     labels  : ['4/5/2020', '5/5/2020', '6/5/2020', '7/5/2020', '8/5/2020', '9/5/2020', '10/5/2020'],
+    //     datasets: [
+    //         // {
+    //         //     label               : 'Temperature',
+    //         //     backgroundColor     : 'rgba(220, 53, 69, 0.9)',
+    //         //     borderColor         : 'rgba(220, 53, 69, 0.8)',
+    //         //     pointRadius          : false,
+    //         //     pointColor          : '#3b8bba',
+    //         //     pointStrokeColor    : 'rgba(60,141,188,1)',
+    //         //     pointHighlightFill  : '#fff',
+    //         //     pointHighlightStroke: 'rgba(60,141,188,1)',
+    //         //     data                : [28, 38, 40, 24, 36, 37, 30]
+    //         // },
+    //         {
+    //             label               : 'Total Hours Usage',
+    //             backgroundColor     : 'rgba(40, 167, 69, 0.9)',
+    //             borderColor         : 'rgba(40, 167, 69, 0.8)',
+    //             pointRadius         : false,
+    //             pointColor          : 'rgba(210, 214, 222, 1)',
+    //             pointStrokeColor    : '#c1c7d1',
+    //             pointHighlightFill  : '#fff',
+    //             pointHighlightStroke: 'rgba(220,220,220,1)',
+    //             data                : [75, 80, 40, 32, 44, 55, 60]
+    //         },
+    //     ]
+    // }
+    //
+    // var areaChartData = {
+    //     labels  : ['4/5/2020', '5/5/2020', '6/5/2020', '7/5/2020', '8/5/2020', '9/5/2020', '10/5/2020'],
+    //     datasets: [
+    //         // {
+    //         //     label               : 'Temperature',
+    //         //     backgroundColor     : 'rgba(220, 53, 69, 0.9)',
+    //         //     borderColor         : 'rgba(220, 53, 69, 0.8)',
+    //         //     pointRadius          : false,
+    //         //     pointColor          : '#3b8bba',
+    //         //     pointStrokeColor    : 'rgba(60,141,188,1)',
+    //         //     pointHighlightFill  : '#fff',
+    //         //     pointHighlightStroke: 'rgba(60,141,188,1)',
+    //         //     data                : [28, 38, 40, 24, 36, 37, 30]
+    //         // },
+    //         {
+    //             label               : 'Humidity',
+    //             backgroundColor     : 'rgba(23, 162, 184, 0.9)',
+    //             borderColor         : 'rgba(23, 162, 184, 0.8)',
+    //             pointRadius         : false,
+    //             pointColor          : 'rgba(210, 214, 222, 1)',
+    //             pointStrokeColor    : '#c1c7d1',
+    //             pointHighlightFill  : '#fff',
+    //             pointHighlightStroke: 'rgba(220,220,220,1)',
+    //             data                : [50, 30, 24, 40, 44, 45, 50]
+    //         },
+    //     ]
+    // }
+    //
+    // var lineChartData = {
+    //     labels  : ['5/5/2020', '6/5/2020', '7/5/2020', '8/5/2020', '9/5/2020', '10/5/2020', '11/5/2020'],
+    //     datasets: [
+    //         {
+    //             label               : 'Temperature',
+    //             backgroundColor     : 'rgba(220, 53, 69, 0.9)',
+    //             borderColor         : 'rgba(220, 53, 69, 0.8)',
+    //             pointRadius          : false,
+    //             pointColor          : '#3b8bba',
+    //             pointStrokeColor    : 'rgba(60,141,188,1)',
+    //             pointHighlightFill  : '#fff',
+    //             pointHighlightStroke: 'rgba(60,141,188,1)',
+    //             data                : [28, 38, 40, 24, 36, 37, 34]
+    //         },
+    //         // {
+    //         //     label               : 'Humidity',
+    //         //     backgroundColor     : 'rgba(23, 162, 184, 0.9)',
+    //         //     borderColor         : 'rgba(23, 162, 184, 0.8)',
+    //         //     pointRadius         : false,
+    //         //     pointColor          : 'rgba(210, 214, 222, 1)',
+    //         //     pointStrokeColor    : '#c1c7d1',
+    //         //     pointHighlightFill  : '#fff',
+    //         //     pointHighlightStroke: 'rgba(220,220,220,1)',
+    //         //     data                : [50, 30, 24, 40, 44, 45, 50]
+    //         // },
+    //     ]
+    // }
+    //
+    // var areaChartOptions = {
+    //     maintainAspectRatio : false,
+    //     responsive : true,
+    //     legend: {
+    //         display: true
+    //     },
+    //     scales: {
+    //         xAxes: [{
+    //             gridLines : {
+    //                 display : false,
+    //             }
+    //         }],
+    //         yAxes: [{
+    //             gridLines : {
+    //                 display : false,
+    //             }
+    //         }]
+    //     }
+    // }
 
     // This will get the first returned node in the jQuery collection.
-    var areaChart       = new Chart(areaChartCanvas, {
-        type: 'line',
-        data: areaChartData,
-        options: areaChartOptions
-    })
+    // var areaChart       = new Chart(areaChartCanvas, {
+    //     type: 'line',
+    //     data: areaChartData,
+    //     options: areaChartOptions
+    // })
 
     //-------------
     //- LINE CHART -
     //--------------
-    var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
-    var lineChartOptions = jQuery.extend(true, {}, areaChartOptions)
-    var lineChartData = jQuery.extend(true, {}, lineChartData)
-    lineChartData.datasets[0].fill = false;
-    // lineChartData.datasets[1].fill = false;
-    lineChartOptions.datasetFill = false
-
-    var lineChart = new Chart(lineChartCanvas, {
-        type: 'line',
-        data: lineChartData,
-        options: lineChartOptions
-    })
+    // var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
+    // var lineChartOptions = jQuery.extend(true, {}, areaChartOptions)
+    // var lineChartData = jQuery.extend(true, {}, lineChartData)
+    // lineChartData.datasets[0].fill = false;
+    // // lineChartData.datasets[1].fill = false;
+    // lineChartOptions.datasetFill = false
+    //
+    // var lineChart = new Chart(lineChartCanvas, {
+    //     type: 'line',
+    //     data: lineChartData,
+    //     options: lineChartOptions
+    // })
 
     //-------------
     //- DONUT CHART -
     //-------------
     // Get context with jQuery - using jQuery's .get() method.
-    var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
-    var donutData        = {
-        labels: [
-            "FAN100",
-            "LIGHT200",
-            "AIRC300",
-            "FAN101",
-            "LIGHT201",
-            "AIRC301",
-        ],
-        datasets: [
-            {
-                data: [700,500,400,600,300,100],
-                backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
-            }
-        ]
-    }
-    var donutOptions     = {
-        maintainAspectRatio : false,
-        responsive : true,
-    }
-    //Create pie or douhnut chart
-    // You can switch between pie and douhnut using the method below.
-    var donutChart = new Chart(donutChartCanvas, {
-        type: 'doughnut',
-        data: donutData,
-        options: donutOptions
-    })
+    // var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+    // var donutData        = {
+    //     labels: [
+    //         "FAN100",
+    //         "LIGHT200",
+    //         "AIRC300",
+    //         "FAN101",
+    //         "LIGHT201",
+    //         "AIRC301",
+    //     ],
+    //     datasets: [
+    //         {
+    //             data: [700,500,400,600,300,100],
+    //             backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+    //         }
+    //     ]
+    // }
+    // var donutOptions     = {
+    //     maintainAspectRatio : false,
+    //     responsive : true,
+    // }
+    // //Create pie or douhnut chart
+    // // You can switch between pie and douhnut using the method below.
+    // var donutChart = new Chart(donutChartCanvas, {
+    //     type: 'doughnut',
+    //     data: donutData,
+    //     options: donutOptions
+    // })
 
     //-------------
     //- PIE CHART -
@@ -318,27 +318,27 @@ $(function () {
     //---------------------
     //- STACKED BAR CHART -
     //---------------------
-    var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d')
-    var stackedBarChartData = jQuery.extend(true, {}, stackBarChartData)
-
-    var stackedBarChartOptions = {
-        responsive              : true,
-        maintainAspectRatio     : false,
-        scales: {
-            xAxes: [{
-                stacked: true,
-            }],
-            yAxes: [{
-                stacked: true
-            }]
-        }
-    }
-
-    var stackedBarChart = new Chart(stackedBarChartCanvas, {
-        type: 'bar',
-        data: stackedBarChartData,
-        options: stackedBarChartOptions
-    })
+    // var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d')
+    // var stackedBarChartData = jQuery.extend(true, {}, stackBarChartData)
+    //
+    // var stackedBarChartOptions = {
+    //     responsive              : true,
+    //     maintainAspectRatio     : false,
+    //     scales: {
+    //         xAxes: [{
+    //             stacked: true,
+    //         }],
+    //         yAxes: [{
+    //             stacked: true
+    //         }]
+    //     }
+    // }
+    //
+    // var stackedBarChart = new Chart(stackedBarChartCanvas, {
+    //     type: 'bar',
+    //     data: stackedBarChartData,
+    //     options: stackedBarChartOptions
+    // })
 
 
 
@@ -496,7 +496,7 @@ $(function () {
         var realtime       = 'on' //If == to on then fetch data every x seconds. else stop fetching
         var realtime2       = 'on'
         function update() {
-
+            // alert(getTemperaturData());
             interactive_plot.setData([getTemperaturData()])
 
             // Since the axes don't change, we don't need to call plot.setupGrid()

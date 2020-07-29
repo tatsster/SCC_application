@@ -13,12 +13,29 @@
 
 /*
 |--------------------------------------------------------------------------
+| Users Secret View
+|--------------------------------------------------------------------------
+|
+| Generate view for users
+|
+*/
+
+/* Confirm Information */
+
+Route::get('confirm-information','MainController@confirm_information');
+
+/*
+|--------------------------------------------------------------------------
 | Users View
 |--------------------------------------------------------------------------
 |
 | Generate view for users
 |
 */
+
+/* Lock Screen */
+
+Route::get('lockscreen','MainController@lockscreen');
 
 /* Dashboard */
 
@@ -29,6 +46,10 @@ Route::get('dashboard','MainController@dashboard');
 
 Route::get('sign-in','MainController@sign_in');
 
+/* Forgot Password */
+
+Route::get('forgot-password','MainController@forgot_password');
+
 /* Sign Out */
 
 Route::get('sign-out','MainController@sign_out');
@@ -37,28 +58,43 @@ Route::get('sign-out','MainController@sign_out');
 
 Route::get('profile','MainController@profile');
 
+/* Edit Profile */
+
+Route::post('edit-other-profile-get','MainController@edit_other_profile_get');
+Route::get('edit-other-profile','MainController@edit_other_profile');
+
 /* Add Profile */
 
 Route::get('add-profile','MainController@add_profile');
+
+/* Sign Up */
+
+Route::get('sign-up','MainController@sign_up');
 
 /* Report */
 
 Route::get('report','MainController@report');
 
+/* User List */
+
+Route::get('user-list','MainController@user_list');
+Route::get('find-profile','MainController@find_profile');
+
 /* Room Report */
 
 Route::get('room','MainController@room');
 
-Route::get('report-floor','MainController@report_floor');
-Route::get('report-device','MainController@report_device');
-Route::get('report-sensor','MainController@report_sensor');
+/* Settings */
+
 Route::get('settings','MainController@settings');
-Route::get('profile','MainController@profile');
-Route::get('user-list','MainController@user_list');
 
 /* Permission */
 
 Route::get('permission','MainController@permission');
+
+/* Full Report */
+
+Route::get('full-report','MainController@full_report');
 
 /*
 |--------------------------------------------------------------------------
@@ -71,72 +107,97 @@ Route::get('permission','MainController@permission');
 
 /* Sign In */
 
-Route::post('send-sign-in','MainController@send_sign_in');
+Route::post('send-sign-in','SignInController@send_sign_in');
+Route::post('send-recover-password','SignInController@send_recover_password');
 
 /* Change Language */
 
-Route::post('change-language','MainController@change_language');
+Route::post('change-language','ChangeLanguageController@change_language');
+Route::post('change-language-cookie','ChangeLanguageController@change_language_cookie');
 
 /* Change System Setting */
 
-Route::post('change-system-settings','MainController@change_system_settings');
+Route::post('change-system-settings','SettingsController@change_system_settings');
+//Route::post('change-dashboard-settings','SettingsController@change_dashboard_settings');
 
-/* Change Dashboard Setting */
+/* Get Real Time */
 
-Route::post('change-dashboard-settings','MainController@change_dashboard_settings');
+Route::post('get-sensor-real-time','ReportController@get_sensor_real_time');
+Route::post('update-sensor-real-time','ReportController@update_sensor_real_time');
+Route::post('update-device-real-time','ReportController@update_device_real_time');
 
-/* Get Real Time Temperature */
+/* Role */
 
-Route::post('get-real-time-temp','MainController@get_real_time_temp');
+Route::post('choose-role','PermissionController@choose_role');
+Route::post('create-role','PermissionController@create_role');
+Route::post('update-or-delete-role','PermissionController@update_or_delete_role');
 
-/* Choose role to edit */
+/* Profile */
 
-Route::post('choose-role','MainController@choose_role');
+Route::post('new-profile','ProfileController@new_profile');
+Route::post('register','ProfileController@register');
+Route::post('update-profile','ProfileController@update_profile');
+Route::post('update-profile-avatar','ProfileController@update_profile_avatar');
+Route::post('update-other-profile','ProfileController@update_other_profile');
+Route::post('update-other-profile-avatar','ProfileController@update_other_profile_avatar');
 
-/* Create role */
+/* Building */
 
-Route::post('create-role','MainController@create_role');
+Route::post('create-building','ReportController@create_building');
+Route::post('rename-building','ReportController@rename_building');
+Route::post('delete-building','ReportController@delete_building');
+Route::post('choose-building','ReportController@choose_building');
+Route::post('activate-deactivate-building','ReportController@activate_deactivate_building');
 
-/* Update or delete role */
+/* Floor */
 
-Route::post('update-or-delete-role','MainController@update_or_delete_role');
+Route::post('create-floor','ReportController@create_floor');
+Route::post('rename-floor','ReportController@rename_floor');
+Route::post('delete-floor','ReportController@delete_floor');
+Route::post('activate-deactivate-floor','ReportController@activate_deactivate_floor');
 
-/* Update profile */
+/* Room */
 
-Route::post('update-profile','MainController@update_profile');
+Route::post('create-room','ReportController@create_room');
+Route::post('rename-room','ReportController@rename_room');
+Route::post('delete-room','ReportController@delete_room');
+Route::post('choose-room','ReportController@choose_room');
+Route::post('activate-deactivate-room','ReportController@activate_deactivate_room');
 
-/* Update profile avatar */
+/* Set room tab */
 
-Route::post('update-profile-avatar','MainController@update_profile_avatar');
+Route::post('set-current-room-tab','MainController@set_current_room_tab');
 
-/* Create building */
+/* Sensor */
 
-Route::post('create-building','MainController@create_building');
+Route::post('create-sensor','ReportController@create_sensor');
+Route::post('choose-sensor','ReportController@choose_sensor');
+Route::post('update-sensor','ReportController@update_sensor');
+Route::post('run-stop-sensor','ReportController@run_stop_sensor');
+Route::post('refresh-sensor','ReportController@refresh_sensor');
+Route::post('sensor-search-time-range','ReportController@sensor_search_time_range');
 
-/* Choose building */
+/* Device */
 
-Route::post('choose-building','MainController@choose_building');
+Route::post('create-device','ReportController@create_device');
+Route::post('choose-device','ReportController@choose_device');
+Route::post('update-device','ReportController@update_device');
+Route::post('run-stop-device','ReportController@run_stop_device');
+Route::post('auto-run-stop-device','ReportController@auto_run_stop_device');
+Route::post('refresh-device','ReportController@refresh_device');
+Route::post('device-search-time-range','ReportController@device_search_time_range');
 
-/* Choose room */
+/* Set lock screen */
 
-Route::post('choose-room','MainController@choose_room');
+Route::post('set-lockscreen','MainController@set_lockscreen');
 
-/* Create room */
+/* ChatBot */
 
-Route::post('create-sensor','MainController@create_sensor');
+Route::post('chatbot','MainController@chatbot');
 
-/* Choose sensor */
+/* Delete log */
 
-Route::post('choose-sensor','MainController@choose_sensor');
+Route::post('delete-all-log','ReportController@delete_all_log');
+Route::post('delete-log','ReportController@delete_log');
 
-/* Update sensor */
 
-Route::post('update-sensor','MainController@update_sensor');
-
-/* Run stop sensor */
-
-Route::post('run-stop-sensor','MainController@run_stop_sensor');
-
-/* Rrefresh sensor */
-
-Route::post('refresh-sensor','MainController@refresh_sensor');

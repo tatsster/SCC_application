@@ -20,6 +20,11 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="../assets/css/custom.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="../assets/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="../assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- Flag Icon -->
+    <link rel="stylesheet" href="../assets/css/flag-icon.min.css">
 </head>
 <body class="hold-transition login-page login-page-custom outside-body">
 <div class="login-box login-box-custom">
@@ -36,11 +41,11 @@
         </ul>
     </div>
   <div class="card">
-    <div class="card-body login-card-body">
+    <div class="card-body login-card-body custom-login-card-body">
         <div class="login100-pic js-tilt" data-tilt>
             <img src="../assets/logo/hcmut-logo-removebg.png" alt="IMG">
         </div>
-      <p class="login-box-msg login-box-msg-custom">SCC - Let's Sign In</p>
+      <p class="login-box-msg login-box-msg-custom">SCC - @lang("Let's Sign In")</p>
 
         <form action="send-sign-in" method="post">
             {{csrf_field()}}
@@ -54,7 +59,7 @@
                 </div>
             @endif
             <div class="input-group mb-3">
-                <input name="user_email" type="email" class="form-control" placeholder="Email">
+                <input name="user_email" type="email" class="form-control" placeholder="@lang('Email')">
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-envelope"></span>
@@ -62,47 +67,59 @@
                 </div>
             </div>
             <div class="input-group mb-3">
-                <input name="user_password" type="password" class="form-control" placeholder="Password">
+                <input name="user_password" type="password" class="form-control" placeholder="@lang('Password')">
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-lock"></span>
                     </div>
                 </div>
             </div>
+            @if(Cookie::get('1752051_captcha') == true)
+                <div class="input-group mb-3">
+                    <label for="captcha">@lang('Captcha')</label>
+                    {!! NoCaptcha::renderJs() !!}
+                    {!! NoCaptcha::display() !!}
+                    <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-8">
                     <div class="icheck-primary">
                         <input name="user_remember" type="checkbox" id="remember">
                         <label for="remember">
-                            Remember Me
+                            @lang("Remember Me")
                         </label>
                     </div>
                 </div>
                 <!-- /.col -->
                 <div class="col-4">
-                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                    <button type="submit" class="btn btn-primary btn-block">@lang('Sign In')</button>
                 </div>
                 <!-- /.col -->
             </div>
         </form>
 
-        <div class="social-auth-links text-center mb-3">
-            <p>- OR -</p>
-            <a href="#" class="btn btn-block btn-primary">
-                <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-            </a>
-            <a href="#" class="btn btn-block btn-danger">
-                <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-            </a>
-        </div>
+{{--        <div class="social-auth-links text-center mb-3">--}}
+{{--            <p>- @lang('OR') -</p>--}}
+{{--            <a href="#" class="btn btn-block btn-primary">--}}
+{{--                <i class="fab fa-facebook mr-2"></i> @lang('Sign in using Facebook')--}}
+{{--            </a>--}}
+{{--            <a href="#" class="btn btn-block btn-danger">--}}
+{{--                <i class="fab fa-google-plus mr-2"></i> @lang('Sign in using Google+')--}}
+{{--            </a>--}}
+{{--        </div>--}}
         <!-- /.social-auth-links -->
 
         <p class="mb-1">
-            <a href="forgot-password.html">I forgot my password</a>
+            <a href="forgot-password">@lang('I forgot my password')</a>
         </p>
         <p class="mb-0">
-            <a href="register.html" class="text-center">Request a new membership</a>
+            <a href="sign-up" class="text-center">@lang('Register a new profile')</a>
         </p>
+
+        <br>
+
+        @include("include/change-language-outside")
 
     </div>
     <!-- /.login-card-body -->
@@ -116,6 +133,7 @@
 <script src="../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../assets/js/adminlte.min.js"></script>
+<!-- Tilt -->
 <script src="../assets/js/tilt.jquery.min.js"></script>
 <script >
     $('.js-tilt').tilt({
@@ -126,6 +144,50 @@
 <script>
     var scene = document.getElementById('scene');
     var parallax = new Parallax(scene);
+</script>
+<!-- Select2 -->
+<script src="../assets/plugins/select2/js/select2.full.min.js"></script>
+<script>
+
+    function formatState (state) {
+        if (!state.id) { return state; }
+        var $state = $(
+            '<span><span class="flag-icon flag-icon-' +  state.element.value.toLowerCase() + '"></span>&ensp;' +
+            state.text +     '</span>'
+        );
+        return $state;
+    };
+
+    $(function () {
+
+        //Initialize Select2 Elements
+        $('#select2bs4-language').select2({
+            templateResult: formatState,
+            templateSelection: formatState,
+            theme: 'bootstrap4',
+            language: {
+                "noResults": function(){
+                    return $('#select2-noResults').val();
+                }
+            }
+        })
+
+        $('#select2bs4-language').on('select2:select', function (e) {
+            var data = e.params.data;
+            // console.log(data);
+            $.ajax({
+                url: "change-language-cookie",
+                type: "POST",
+                data: {_token: "{{csrf_token()}}", user_lang: data.id },
+                async: false,
+                success: function (data) {
+                    // alert(data);
+                    window.location.reload();
+                }
+            })
+        });
+
+    });
 </script>
 </body>
 </html>

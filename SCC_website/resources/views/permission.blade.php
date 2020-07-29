@@ -150,7 +150,7 @@
                         {{csrf_field()}}
 {{--                      <h5 class="mt-4 mb-2">@lang("Choose role and set permission")</h5>--}}
 
-                      <select name="user_lang" id="select2bs4-role" style="" class="form-control select2bs4" style="width: 100%;">
+                      <select id="select2bs4-role" class="form-control select2bs4" style="width: 100%;">
                           @if (session("1752051_current_role")["permission_role"] == "")
                               <option></option>
                           @endif
@@ -590,6 +590,7 @@
         });
     </script>
 @endif
-</body>
+@include("include/session-timeout")
+@include("include/chatbot")
 </body>
 </html>
