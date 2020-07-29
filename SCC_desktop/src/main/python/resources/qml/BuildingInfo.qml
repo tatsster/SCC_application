@@ -3,7 +3,7 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 
 Rectangle{
-    id: settingsView
+    id: buildingInfo
     width: 1200
     height: 900
     color: "#f4f6f9"
@@ -21,8 +21,48 @@ Rectangle{
         font.pointSize: 14
     }
 
+    Rectangle {
+        width: 151
+        height: 45
+        color: "#007bff"
+        radius: 10
+        anchors.left: reportLabel.right
+        anchors.leftMargin: 0
+        anchors.top: parent.top
+        anchors.topMargin: 15
+        Text {
+            x: 136
+            y: 10
+            width: 127
+            height: 42
+            color: "#ffffff"
+            text: "Back"
+            horizontalAlignment: Text.AlignHCenter
+            font.bold: true
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            verticalAlignment: Text.AlignVCenter
+            font.family: "Verdana"
+            font.pixelSize: 20
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onPressed: {
+                parent.color = "#0262c9"
+            }
+            onReleased: {
+                mainViewLoader.source = "BuildingList.qml"
+            }
+        }
+    }
+
     ListView {
         id: buildingListView
+        x: 153
+        y: 126
+        width: 989
+        height: 536
         anchors.top: reportLabel.bottom
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -33,7 +73,7 @@ Rectangle{
 
         ScrollBar.vertical: ScrollBar {}
 
-        model: [{"name": "A4 Building"}]
+        model: con.getCurrentBuilding()
 
         delegate:
             Rectangle {
@@ -82,7 +122,6 @@ Rectangle{
                         parent.color = "#0262c9"
                     }
                     onReleased: {
-                        parent.color = "#007bff"
                         mainViewLoader.source = "BuildingReport.qml"
                     }
                 }
@@ -105,8 +144,7 @@ Rectangle{
                 spacing: 30
                 ScrollBar.vertical: ScrollBar {}
 
-                model: [{"id": "F005", "name": "Floor 5"}, {"id": "F004", "name": "Floor 4"}, {"id": "F003", "name": "Floor 3"}, {"id": "F002", "name": "Floor 2"}, {"id": "F001", "name": "Floor 1"},]
-//              model: con.getFloorList()
+                model: con.getFloorList(buildingName.text)
 
                 delegate: Rectangle {
                     height: 130
@@ -121,7 +159,6 @@ Rectangle{
                         id: floorsLabel
                         width: 89
                         height: 31
-                        property var floor_id: modelData.id
                         text: modelData.name
                         font.pointSize: 12
                         font.family: "Verdana"
@@ -138,8 +175,8 @@ Rectangle{
                             parent.color = "#d6d6d6"
                         }
                         onReleased: {
-                            parent.color = "#f1f1f1"
-                            // con.setCurrentFloor(modelData.id)
+                            con.setCurrentBuilding(buildingName.text)
+                            con.setCurrentFloor(modelData.name)
                             mainViewLoader.source = "FloorReport.qml"
                         }
                     }
@@ -164,8 +201,8 @@ Rectangle{
                         displayMarginEnd: -20
                         ScrollBar.vertical: ScrollBar {}
 
-                        model: [{"id": "R505", "name": "Room 505"}, {"id": "R504", "name": "Room 504"}, {"id": "R503", "name": "Room 503"},]
-//                      model: con.getRoomList(floorsLabel.floor_id)
+                        model: con.getRoomList(buildingName.text, floorsLabel.text)
+
                         delegate: Rectangle {
                             width: 140
                             height: 50
@@ -192,9 +229,9 @@ Rectangle{
                                     parent.color = "#288545"
                                 }
                                 onReleased: {
-                                    parent.color = "#28a745"
-                                    // con.setCurrentFloor(floor_id)
-                                    // con.setCurrentRoom(modelData.id)
+                                    con.setCurrentBuilding(buildingName.text)
+                                    con.setCurrentFloor(floorsLabel.text)
+                                    con.setCurrentRoom(modelData.name)
                                     mainViewLoader.source = "RoomReport.qml"
                                 }
                             }
@@ -205,11 +242,10 @@ Rectangle{
             }
         }
     }
-
 }
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.75}D{i:3;anchors_height:820;anchors_width:1125;anchors_x:21;anchors_y:80}
+    D{i:0;formeditorZoom:0.6600000262260437}D{i:3;anchors_height:820;anchors_width:1125;anchors_x:21;anchors_y:80}
 }
 ##^##*/

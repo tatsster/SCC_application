@@ -9,14 +9,14 @@ TableView {
     rowSpacing: 5
     boundsBehavior: Flickable.StopAtBounds
 
-    property var columnWidths: [170, 200, 100, 170, 180, 300, 150]
+    property var columnWidths: [190, 100, 230, 220, 230, 300]
     columnWidthProvider: function (column) { return columnWidths[column] }
 
     model: deviceTableModel
 
     delegate: DelegateChooser {
         DelegateChoice {
-            column: 2
+            column: 1
 
             delegate: Rectangle {
                 color: (model.display === "ON") ? "#28a745" : "#dc3545"
@@ -37,39 +37,7 @@ TableView {
                 }
             }
         }
-        DelegateChoice {
-            column: 6
 
-            delegate: Rectangle {
-                color: "#dc3545"
-                radius: 10
-
-                Label {
-                    width: 48
-                    height: 20
-                    color: "#ffffff"
-                    text: "Delete"
-                    horizontalAlignment: Text.AlignHCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    font.bold: true
-                    font.pointSize: 9
-                    font.family: "Verdana"
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onPressed: {
-                        parent.color = "#ad3545"
-                    }
-                    onReleased: {
-                        parent.color = "#dc3545"
-                        confirmDeleteSingleDeviceRecord.visible = true
-                        confirmDeleteSingleDeviceRecord.item_timestamp = model.display
-                    }
-                }
-            }
-        }
         DelegateChoice {
             delegate: Text {
                 text: model.display

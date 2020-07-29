@@ -1,13 +1,14 @@
 import QtQuick 2.0
 
 Rectangle {
-    id: rectangle
+    id: appView
     width: 1600
     height: 900
+    property alias sideBar: sideBar
     anchors.fill: parent
 
     Sidebar {
-        id: sidebar
+        id: sideBar
         anchors.right: parent.right
         anchors.rightMargin: 1300
         anchors.bottom: parent.bottom
@@ -22,7 +23,7 @@ Rectangle {
         id: mainView
         width: 1200
         height: 900
-        anchors.left: sidebar.right
+        anchors.left: sideBar.right
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.top: parent.top

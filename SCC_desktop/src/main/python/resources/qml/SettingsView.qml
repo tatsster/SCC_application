@@ -25,7 +25,7 @@ Rectangle{
     Rectangle {
         id: rectangle
         y: 94
-        height: 362
+        height: 286
         color: "#ffffff"
         radius: 10
         border.color: "#007bff"
@@ -33,86 +33,34 @@ Rectangle{
         anchors.rightMargin: 20
         anchors.left: parent.left
         anchors.leftMargin: 20
-
-        Label {
-            id: tempLabel
-            x: 25
-            y: 38
-            width: 323
-            height: 42
-            text: qsTr("Temperature Threshold (°C)")
-            font.family: "Verdana"
-            font.pointSize: 13
-        }
-
-        Label {
-            id: humidLabel
-            x: 25
-            width: 323
-            height: 42
-            text: qsTr("Humidity Threshold (%)")
-            anchors.top: tempLabel.bottom
-            anchors.topMargin: 52
-            font.pointSize: 13
-            font.family: "Verdana"
-        }
-
-        TextField {
-            id: textFieldTemp
-            y: 33
-            height: 40
-
-            text: ""
-            anchors.left: tempLabel.right
-            anchors.leftMargin: 22
-            anchors.right: parent.right
-            anchors.rightMargin: 20
-            font.pointSize: 12
-            font.family: "Verdana"
-            placeholderText: qsTr("37")
-            selectByMouse: true
-        }
-
-        TextField {
-            id: textFieldHumid
-            y: 127
-            height: 40
-
-            text: ""
-            anchors.left: humidLabel.right
-            anchors.leftMargin: 22
-            anchors.right: parent.right
-            anchors.rightMargin: 20
-            placeholderText: qsTr("50")
-            font.pointSize: 12
-            font.family: "Verdana"
-            selectByMouse: true
-        }
+        visible: false
 
         Label {
             id: backupLogLabel
-            x: 25
             width: 323
-            height: 42
-            text: qsTr("Backup Log System")
-            anchors.top: humidLabel.bottom
-            anchors.topMargin: 52
+            height: 30
+            text: "Backup Log System"
+            anchors.left: parent.left
+            anchors.leftMargin: 25
+            anchors.top: parent.top
+            anchors.topMargin: 40
             font.pointSize: 13
             font.family: "Verdana"
         }
 
         Rectangle {
-            id: statusButton
+            id: statusBackupLogButton
             y: 212
-            width: 106
+            width: 130
             height: 51
             radius: 10
-            anchors.left: textFieldHumid.left
-            anchors.leftMargin: 0
+            anchors.verticalCenter: backupLogLabel.verticalCenter
+            anchors.left: backupLogLabel.right
+            anchors.leftMargin: 25
             color: "#28a745"
 
             Label {
-                id: statusLabel
+                id: statusBackupLogLabel
                 x: 47
                 y: 13
                 width: 48
@@ -140,13 +88,13 @@ Rectangle{
                 onReleased: {
                     if (parent.color == "#288545") {
                         parent.color = "#dc3545"
-                        statusLabel.text = "OFF"
+                        statusBackupLogLabel.text = "OFF"
                     }
                     else {
                         parent.color = "#28a745"
-                        statusLabel.text = "ON"
+                        statusBackupLogLabel.text = "ON"
                     }
-                    //                  con.updateBLS()
+                    //con.updateBLS()
                 }
             }
         }
@@ -159,6 +107,8 @@ Rectangle{
             height: 51
             color: "#dc3545"
             radius: 10
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 20
             anchors.right: parent.right
             anchors.rightMargin: 20
             Label {
@@ -168,7 +118,7 @@ Rectangle{
                 width: 85
                 height: 25
                 color: "#ffffff"
-                text: qsTr("Update")
+                text: "Update"
                 font.bold: true
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -184,7 +134,69 @@ Rectangle{
                 }
                 onReleased: {
                     parent.color = "#dc3545"
-                    //                  con.updateThreshold(textFieldTemp.text, textFieldHumid.text)
+                }
+            }
+        }
+
+        Label {
+            id: maintenanceLabel
+            width: 323
+            height: 30
+            text: "Maintenance System"
+            font.pointSize: 13
+            font.family: "Verdana"
+            anchors.top: backupLogLabel.bottom
+            anchors.left: parent.left
+            anchors.topMargin: 70
+            anchors.leftMargin: 25
+        }
+
+        Rectangle {
+            id: statusMaintenanceButton
+            y: 212
+            width: 130
+            height: 51
+            color: "#28a745"
+            radius: 10
+            anchors.verticalCenter: maintenanceLabel.verticalCenter
+            anchors.left: maintenanceLabel.right
+            anchors.leftMargin: 25
+
+            Label {
+                id: statusMaintenanceLabel
+                x: 47
+                y: 13
+                width: 48
+                height: 25
+                color: "#ffffff"
+                text: "ON"
+                font.pointSize: 12
+                font.family: "Verdana"
+                font.bold: true
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onPressed: {
+                    if (parent.color == "#28a745") {
+                        parent.color = "#288545"
+                    }
+                    else {
+                        parent.color = "#ad3545"
+                    }
+                }
+                onReleased: {
+                    if (parent.color == "#288545") {
+                        parent.color = "#dc3545"
+                        statusMaintenanceLabel.text = "OFF"
+                    }
+                    else {
+                        parent.color = "#28a745"
+                        statusMaintenanceLabel.text = "ON"
+                    }
                 }
             }
         }
@@ -209,7 +221,7 @@ Rectangle{
             width: 85
             height: 29
             color: "#ffffff"
-            text: qsTr("Logout")
+            text: "Logout"
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             font.bold: true
@@ -224,32 +236,17 @@ Rectangle{
                 parent.color = "#ad3545"
             }
             onReleased: {
-                parent.color = "#dc3545"
                 appLoader.source = "LoginView.qml"
             }
         }
     }
-    /*
-    Component.onCompleted: {
-        statusLabel.text = con.getStatusBLS()
-        textFieldTemp.placeholderText = con.getTempThreshold()
-        textFieldHumid.placeholderText = con.getHumidThreshold()
-
-        if (statusLabel.text === "ON"){
-            statusButton.color = "#28a745"
-        } else {
-            statusButton.color = "#dc3545"
-        }
-    }
-    */
-
 }
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:1.5}D{i:4;anchors_y:132}D{i:5;anchors_width:770;anchors_x:370}
-D{i:6;anchors_width:770;anchors_x:370}D{i:7;anchors_y:221}D{i:9;anchors_x:47;anchors_y:13}
-D{i:8;anchors_x:370}D{i:12;anchors_x:47;anchors_y:13}D{i:11;anchors_x:47;anchors_y:13}
+    D{i:0;formeditorZoom:0.75}D{i:3;anchors_x:25;anchors_y:221}D{i:5;anchors_x:47;anchors_y:13}
+D{i:4;anchors_x:370}D{i:8;anchors_x:47;anchors_y:13}D{i:7;anchors_x:47;anchors_y:13}
+D{i:10;anchors_x:25;anchors_y:221}D{i:12;anchors_x:47;anchors_y:13}D{i:11;anchors_x:370}
 D{i:2;anchors_width:1139;anchors_x:21;anchors_y:94}
 }
 ##^##*/
