@@ -40,13 +40,13 @@ class Report extends StatelessWidget {
   }
 
   Widget buildBody(BuildContext context) {
-    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
+    final SSDbBloc = BlocProvider.of(context).bloc.ssDbBloc;
 
     return NotificationListener(
       child: buildDataLog(context),
       onNotification: (Notification notify) {
         if (notify is ScrollEndNotification) {
-          SSDbBloc.fetchLog(SSDbBloc.limit + 20);
+          SSDbBloc.fetchLog(context, SSDbBloc.limit + 20);
           return true;
         } else
           return false;
@@ -55,7 +55,7 @@ class Report extends StatelessWidget {
   }
 
   Widget buildDataLog(BuildContext context) {
-    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
+    final SSDbBloc = BlocProvider.of(context).bloc.ssDbBloc;
 
     return StreamBuilder(
       stream: SSDbBloc.temphumidLog,
@@ -136,7 +136,7 @@ class Report extends StatelessWidget {
   }
 
   Widget _generateFirstCol(BuildContext context, int index) {
-    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
+    final SSDbBloc = BlocProvider.of(context).bloc.ssDbBloc;
 
     return StreamBuilder(
       stream: SSDbBloc.temphumidLog,
@@ -163,7 +163,7 @@ class Report extends StatelessWidget {
   }
 
   Widget _generateRightCols(BuildContext context, int index) {
-    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
+    final SSDbBloc = BlocProvider.of(context).bloc.ssDbBloc;
 
     return StreamBuilder(
       stream: SSDbBloc.temphumidLog,

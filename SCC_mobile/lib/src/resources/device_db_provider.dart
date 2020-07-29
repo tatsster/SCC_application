@@ -1,29 +1,37 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:SCC_mobile/src/blocs/BlocProvider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
-import '../model/devices_db.dart';
+
+import '../model/device_db.dart';
 
 class DeviceProvider {
   Client client = Client();
+  var url = 'http://213d94a7b2e0.ngrok.io/';
 
-  Future<DeviceDB> fetchItem(String userId) async {
-    var url = 'http://8c5c82899b6c.ngrok.io/' +
-    'api/query?query=SELECT * FROM device&user_id=$userId';
+  Future<DeviceDB> fetchItem(
+      BuildContext context, String building, String room) async {
+    var userId = BlocProvider.of(context).user.data[0].user.userId;
+    var request = url +
+        "api/query?query=SELECT * FROM device WHERE device_room_name='$room' AND device_building_name='$building'&user_id=$userId";
     try {
-      var response = await client.post(url);
+      var response = await client.post(request);
       return DeviceDB.fromJson(json.decode(response.body));
     } on Exception catch (error) {
-      var data = Data(
-          deviceFloorName: "",
-          deviceRoomName: "",
-          deviceId: "",
-          deviceName: "",
-          deviceStatus: "",
-          deviceAutomation: false,
-          deviceAdditional: "",
-          deviceUpdatedBy: "",
-          deviceBuildingName: "");
-      return DeviceDB(success: false, message: "", data: [data]);
+      print(error);
+    }
+  }
+
+  Future<bool> turnDevice(BuildContext context, Data device, int status) async {
+    var userId = BlocProvider.of(context).user.data[0].user.userId;
+    var request = url +
+        "api/run-stop-device?device_id=${device.deviceId}&device_username=${device.deviceUsername}&device_password=${device.devicePassword}&device_ip=${device.deviceIp}&device_port=${device.devicePort}&device_topic=${device.deviceTopic}&button=$status&device_status_value=${device.deviceStatusValue}&user_id=$userId";
+    try {
+      var response = await client.post(request);
+      return DeviceDB.fromJson(json.decode(response.body)).success;
+    } on Exception catch (error) {
+      print(error);
     }
   }
 }

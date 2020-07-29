@@ -33,16 +33,12 @@ class Data {
   String sensorId;
   String sensorName;
   String sensorBuildingName;
-  String sensorValue;
   String sensorIp;
-  String sensorPort;
   String sensorTopic;
   String sensorUsername;
   String sensorPassword;
   String sensorPid;
-  // Important
-  int sensorTemp;
-  int sensorHumid;
+  int sensorPort;
 
   Data(
       {this.sensorFloorName,
@@ -50,13 +46,12 @@ class Data {
       this.sensorId,
       this.sensorName,
       this.sensorBuildingName,
-      this.sensorValue,
       this.sensorIp,
-      this.sensorPort,
       this.sensorTopic,
       this.sensorUsername,
       this.sensorPassword,
-      this.sensorPid});
+      this.sensorPid,
+      this.sensorPort});
 
   Data.fromJson(Map<String, dynamic> json) {
     sensorFloorName = json['sensor_floor_name'];
@@ -64,14 +59,12 @@ class Data {
     sensorId = json['sensor_id'];
     sensorName = json['sensor_name'];
     sensorBuildingName = json['sensor_building_name'];
-    sensorValue = json['sensor_value'];
     sensorIp = json['sensor_ip'];
-    sensorPort = json['sensor_port'];
     sensorTopic = json['sensor_topic'];
     sensorUsername = json['sensor_username'];
     sensorPassword = json['sensor_password'];
     sensorPid = json['sensor_pid'];
-    getCurrentValue();
+    sensorPort = json['sensor_port'];
   }
 
   Map<String, dynamic> toJson() {
@@ -81,25 +74,12 @@ class Data {
     data['sensor_id'] = this.sensorId;
     data['sensor_name'] = this.sensorName;
     data['sensor_building_name'] = this.sensorBuildingName;
-    data['sensor_value'] = this.sensorValue;
     data['sensor_ip'] = this.sensorIp;
-    data['sensor_port'] = this.sensorPort;
     data['sensor_topic'] = this.sensorTopic;
     data['sensor_username'] = this.sensorUsername;
     data['sensor_password'] = this.sensorPassword;
     data['sensor_pid'] = this.sensorPid;
-    // Current sensor value
-    data['sensor_temp'] = this.sensorTemp;
-    data['sensor_humid'] = this.sensorHumid;
+    data['sensor_port'] = this.sensorPort;
     return data;
-  }
-
-  getCurrentValue() {
-    if (this.sensorValue != null) {
-      var value = this.sensorValue.substring(1, this.sensorValue.length - 1);
-      var values = value.split(',');
-      this.sensorTemp = int.parse(values[0]);
-      this.sensorHumid = int.parse(values[1]);
-    }
   }
 }

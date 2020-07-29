@@ -1,4 +1,3 @@
-import 'package:SCC_mobile/src/blocs/setting_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import '../blocs/BlocProvider.dart';
@@ -12,20 +11,31 @@ class Refresh extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var path = ModalRoute.of(context).settings.name;
-    if (path == '/settings') {
+    if (path.contains('/setting/')) {
+      var classId = path.replaceFirst('/setting/', '');
+      var room = classId.split('-');
+      var buildingName = room[0];
+      var roomName = room[1];
+
       return RefreshIndicator(
         child: child,
         onRefresh: () async {
-          final SettingBloc = BlocProvider.of(context).settingBloc;
-          SettingBloc.fetchThreshold();
+          final SettingBloc = BlocProvider.of(context).bloc.deviceBloc;
+          SettingBloc.fetchDevice(context, buildingName, roomName);
         },
       );
     } else {
+      // * path = /room/
+      var classId = path.replaceFirst('/room/', '');
+      var room = classId.split('-');
+      var buildingName = room[0];
+      var roomName = room[1];
+
       return RefreshIndicator(
         child: child,
         onRefresh: () async {
-          final SSDbBloc = BlocProvider.of(context).ssDbBloc;
-          SSDbBloc.fetchItem();
+          final SSDbBloc = BlocProvider.of(context).bloc.ssDbBloc;
+          SSDbBloc.fetchSensor(context, roomName, buildingName);
         },
       );
     }

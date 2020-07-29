@@ -1,4 +1,4 @@
-import 'package:SCC_mobile/src/screen/profile.dart';
+import 'package:SCC_mobile/src/resources/device_db_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'blocs/BlocProvider.dart';
@@ -6,9 +6,10 @@ import 'blocs/BlocProvider.dart';
 import 'screen/data_class.dart';
 import 'screen/dashboard.dart';
 import 'screen/report.dart';
-import 'screen/setting.dart';
+import 'screen/room_device.dart';
 import 'screen/profile.dart';
 import 'screen/login.dart';
+import 'screen/signup.dart';
 
 class App extends StatelessWidget {
   @override
@@ -26,38 +27,80 @@ class App extends StatelessWidget {
 
 Route routes(RouteSettings settings) {
   if (settings.name == '/')
-    return MaterialPageRoute(builder: (context) {
-      return LoginPage();
-    });
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (context) {
+        return LoginPage();
+      },
+    );
+  else if (settings.name == '/signup')
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (context) {
+        return SignUpPage();
+      },
+    );
   else if (settings.name == '/dashboard')
-    return MaterialPageRoute(builder: (context) {
-      return Dashboard();
-    });
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (context) {
+        // TODO: Fetch all building name, floor, room from DB room
+        final RoomProvider = BlocProvider.of(context).bloc.roomList;
+        RoomProvider.fetchItem(context);
+
+        return Dashboard();
+      },
+    );
   else if (settings.name == '/report')
-    return MaterialPageRoute(builder: (context) {
-      final SSDbProvider = BlocProvider.of(context).ssDbBloc;
-      SSDbProvider.fetchLog(20);
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (context) {
+        final SSDbProvider = BlocProvider.of(context).bloc.ssDbBloc;
+        SSDbProvider.fetchLog(context, 20);
 
-      return Report();
-    });
-  else if (settings.name == '/setting')
-    return MaterialPageRoute(builder: (context) {
-      final SettingProvider = BlocProvider.of(context).settingBloc;
-      SettingProvider.fetchThreshold();
+        return Report();
+      },
+    );
+  else if (settings.name.contains('/setting'))
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (context) {
+        final classId = settings.name.replaceFirst('/setting/', '');
+        var room = classId.split('-');
+        var buildingName = room[0];
+        var roomName = room[1];
 
-      return Setting();
-    });
+        final DeviceProvider = BlocProvider.of(context).bloc.deviceBloc;
+        DeviceProvider.fetchDevice(context, buildingName, roomName);
+
+        return RoomDevice(buildingName: buildingName, roomName: roomName);
+      },
+    );
   else if (settings.name == '/profile')
-    return MaterialPageRoute(builder: (context) {
-      final SSDbProvider = BlocProvider.of(context).ssDbBloc;
-      return Profile();
-    });
-  else
-    return MaterialPageRoute(builder: (context) {
-      final classId = int.parse(settings.name.replaceFirst('/room/', ''));
-      final SSDbProvider = BlocProvider.of(context).ssDbBloc;
-      SSDbProvider.fetchItem();
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (context) {
+        final SSDbProvider = BlocProvider.of(context).bloc.ssDbBloc;
+        return Profile();
+      },
+    );
+  else if (settings.name.contains('/room'))
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (context) {
+        // Get building name - room name from URL
+        final classId = settings.name.replaceFirst('/room/', '');
+        var room = classId.split('-');
+        var buildingName = room[0];
+        var roomName = room[1];
 
-      return DataClass(classId: classId);
-    });
+        final SSDbProvider = BlocProvider.of(context).bloc.ssDbBloc;
+        SSDbProvider.fetchSensor(context, roomName, buildingName);
+        // TODO: Fetch from sensor_info to get all sensor_id for this room
+        // * In DataClass view, option to choose what sensor
+        // * Fetch info from latest data from DB sensor_log
+
+        return DataClass(buildingName: buildingName, roomName: roomName);
+      },
+    );
 }

@@ -7,9 +7,12 @@ import '../widgets/main_drawer.dart';
 
 class Profile extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var userInfo;
 
   @override
   Widget build(BuildContext context) {
+    this.userInfo = BlocProvider.of(context).user.data[0].user;
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -64,7 +67,7 @@ class Profile extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 4),
                 child: Text(
-                  'PHAM TRONG NHAN',
+                  userInfo.userFullname,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -74,14 +77,14 @@ class Profile extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4),
                 child: Text(
-                  'nhan.phamcoder@hcmut.edu.vn',
+                  userInfo.userEmail,
                   style: TextStyle(fontSize: 14),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 4),
                 child: Text(
-                  '0345709425',
+                  userInfo.userMobile,
                   style: TextStyle(fontSize: 14),
                 ),
               ),
@@ -144,7 +147,7 @@ class Profile extends StatelessWidget {
             subtitle: Align(
               alignment: Alignment(-1.4, 0),
               child: Text(
-                'School Manager',
+                userInfo.userRole,
                 style: TextStyle(fontSize: 15, color: Colors.black),
               ),
             ),
@@ -167,7 +170,7 @@ class Profile extends StatelessWidget {
             subtitle: Align(
               alignment: Alignment(-5, 0),
               child: Text(
-                '20 Le Khoi St. Tan Phu Dist, HCMC',
+                userInfo.userAddress,
                 style: TextStyle(fontSize: 15, color: Colors.black),
               ),
             ),
@@ -321,7 +324,7 @@ class Profile extends StatelessWidget {
   }
 
   Widget nameField(BuildContext context) {
-    final profileBloc = BlocProvider.of(context).profileBloc;
+    final profileBloc = BlocProvider.of(context).bloc.profileBloc;
 
     return Flexible(
       child: StreamBuilder(
@@ -330,7 +333,7 @@ class Profile extends StatelessWidget {
           return TextField(
             onChanged: profileBloc.changeName,
             decoration: InputDecoration(
-              hintText: 'PHAM TRONG NHAN',
+              hintText: userInfo.userFullname,
               hintStyle: TextStyle(fontSize: 14),
               border: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey[300]),
@@ -343,7 +346,7 @@ class Profile extends StatelessWidget {
   }
 
   Widget emailField(BuildContext context) {
-    final profileBloc = BlocProvider.of(context).profileBloc;
+    final profileBloc = BlocProvider.of(context).bloc.profileBloc;
 
     return Flexible(
       child: StreamBuilder(
@@ -353,7 +356,7 @@ class Profile extends StatelessWidget {
             keyboardType: TextInputType.emailAddress,
             onChanged: profileBloc.changeEmail,
             decoration: InputDecoration(
-              hintText: 'nhan.phamcoder@hcmut.edu.vn',
+              hintText: userInfo.userEmail,
               hintStyle: TextStyle(fontSize: 14),
               // errorText: snapshot.error,
               border: OutlineInputBorder(
@@ -367,7 +370,7 @@ class Profile extends StatelessWidget {
   }
 
   Widget phoneField(BuildContext context) {
-    final profileBloc = BlocProvider.of(context).profileBloc;
+    final profileBloc = BlocProvider.of(context).bloc.profileBloc;
 
     return Flexible(
       child: StreamBuilder(
@@ -377,7 +380,7 @@ class Profile extends StatelessWidget {
             keyboardType: TextInputType.phone,
             onChanged: profileBloc.changePhone,
             decoration: InputDecoration(
-              hintText: '0345709425',
+              hintText: userInfo.userMobile,
               hintStyle: TextStyle(fontSize: 14),
               border: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey[300]),
@@ -390,7 +393,7 @@ class Profile extends StatelessWidget {
   }
 
   Widget positionField(BuildContext context) {
-    final profileBloc = BlocProvider.of(context).profileBloc;
+    final profileBloc = BlocProvider.of(context).bloc.profileBloc;
 
     return Flexible(
       child: StreamBuilder(
@@ -399,7 +402,7 @@ class Profile extends StatelessWidget {
           return TextField(
             onChanged: profileBloc.changePosition,
             decoration: InputDecoration(
-              hintText: 'School Manager',
+              hintText: userInfo.userRole,
               hintStyle: TextStyle(fontSize: 14),
               border: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey[300]),
@@ -412,7 +415,7 @@ class Profile extends StatelessWidget {
   }
 
   Widget addressField(BuildContext context) {
-    final profileBloc = BlocProvider.of(context).profileBloc;
+    final profileBloc = BlocProvider.of(context).bloc.profileBloc;
 
     return Flexible(
       child: StreamBuilder(
@@ -421,7 +424,7 @@ class Profile extends StatelessWidget {
           return TextField(
             onChanged: profileBloc.changeAddress,
             decoration: InputDecoration(
-              hintText: '20 Le Khoi St. Tan Phu Dist, HCMC',
+              hintText: userInfo.userAddress,
               hintStyle: TextStyle(fontSize: 14),
               border: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey[300]),
@@ -434,7 +437,7 @@ class Profile extends StatelessWidget {
   }
 
   Widget editButton(BuildContext context) {
-    final profileBloc = BlocProvider.of(context).profileBloc;
+    final profileBloc = BlocProvider.of(context).bloc.profileBloc;
     return StreamBuilder(
       stream: profileBloc.submitValid,
       builder: (context, snapshot) {

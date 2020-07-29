@@ -1,75 +1,89 @@
-import 'package:SCC_mobile/src/widgets/building.dart';
 import 'package:flutter/material.dart';
 
+import '../model/device_db.dart';
+import '../widgets/device.dart';
 import '../widgets/main_drawer.dart';
+import '../widgets/refresh.dart';
 import '../blocs/BlocProvider.dart';
 
-class Dashboard extends StatelessWidget {
+class RoomDevice extends StatelessWidget {
+  String buildingName;
+  String roomName;
+  List<String> deviceID;
+  var deviceWidget;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  List<String> building = <String>[];
-  List<Widget> buildingWidget;
 
-  @override
+  RoomDevice({this.buildingName, this.roomName});
+
   Widget build(BuildContext context) {
-    final roomProvider = BlocProvider.of(context).bloc.roomList;
+    return Refresh(
+      context: context,
+      child: buildSettingPage(context),
+    );
+  }
 
+  Widget buildSettingPage(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          'Dashboard',
+          'Device ${this.roomName}${this.buildingName}',
           style: TextStyle(
-            fontSize: 26.0,
             color: Colors.black,
+            fontSize: 18.0,
           ),
         ),
         backgroundColor: Colors.white,
         elevation: 2.0,
         leading: IconButton(
-          icon: const Icon(Icons.menu),
-          color: Colors.black,
-          iconSize: 28.0,
-          onPressed: () {
-            _scaffoldKey.currentState.openDrawer();
-          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+            size: 25.0,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      drawer: MainDrawer(),
-      body: StreamBuilder(
-        stream: roomProvider.roomInfo,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData)
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          else {
-            for (var room in roomProvider.getRoomInfo.data) {
-              if (!this.building.contains(room.roomBuilding)) {
-                this.building.add(room.roomBuilding);
-              }
-            }
-            return buildBuilding(context);
-          }
-        },
-      ),
+      body: buildSettingBody(context),
     );
   }
 
-  Widget buildBuilding(BuildContext context) {
-    final roomProvider = BlocProvider.of(context).bloc.roomList;
-    String dropdownValue = this.building[0];
-    var buildingView = Building(
-        allRoom: roomProvider.getRoomInfo.data, buildingName: dropdownValue);
-    this.buildingWidget = buildingView.getView(context);
+  Widget buildSettingBody(BuildContext context) {
+    final deviceBloc = BlocProvider.of(context).bloc.deviceBloc;
 
     return StreamBuilder(
-      stream: roomProvider.building,
+      stream: deviceBloc.deviceDB,
+      builder: (context, AsyncSnapshot<DeviceDB> snapshot) {
+        if (!snapshot.hasData)
+          return Center(child: CircularProgressIndicator());
+        else
+          return buildSettingDevice(context, snapshot.data);
+      },
+    );
+  }
+
+  Widget buildSettingDevice(BuildContext context, DeviceDB devices) {
+    this.deviceID = List<String>();
+    for (var item in devices.data) this.deviceID.add(item.deviceId);
+
+    // ! If no device for room
+    if (this.deviceID.length == 0) return Container();
+
+    // ! Get default device widget
+    final deviceBloc = BlocProvider.of(context).bloc.deviceBloc;
+    String dropdownValue = this.deviceID[0];
+    var deviceView = Device(deviceList: devices.data);
+    this.deviceWidget =
+        deviceView.getView(context, dropdownValue, devices.data[0].devicePid);
+
+    return StreamBuilder(
+      stream: deviceBloc.deviceID,
       builder: (context, AsyncSnapshot<String> snapshot) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // ! Select building
+            // ! Select device
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,21 +97,21 @@ class Dashboard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
-                        'Building: ',
+                        'Device: ',
                         style: TextStyle(color: Colors.white, fontSize: 18.0),
                       ),
                     ),
                   ),
                 ),
 
-                // ! Dropdown Button
+                // ! Dropdown button
                 Padding(
-                  padding: const EdgeInsets.all(5.0),
+                  padding: EdgeInsets.all(5.0),
                   child: DropdownButton<String>(
                     items: this
-                        .building
+                        .deviceID
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -106,11 +120,9 @@ class Dashboard extends StatelessWidget {
                     }).toList(),
                     onChanged: (String value) {
                       dropdownValue = value;
-                      roomProvider.getBuilding(value);
-                      buildingView = Building(
-                          allRoom: roomProvider.getRoomInfo.data,
-                          buildingName: value);
-                      this.buildingWidget = buildingView.getView(context);
+                      deviceBloc.changeDevice(value);
+                      this.deviceWidget = deviceView.getView(context, value,
+                          devices.data[this.deviceID.indexOf(value)].devicePid);
                     },
                     value: dropdownValue,
                     style: TextStyle(color: Colors.blue[900], fontSize: 18.0),
@@ -124,15 +136,10 @@ class Dashboard extends StatelessWidget {
               ],
             ),
 
-            // ! List all in building
-            SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                // TODO: building(building_name) return List<Widget>
-                children: this.buildingWidget,
-              ),
-            ),
+            // ! List all threshold
+            snapshot.hasData
+                ? this.deviceWidget
+                : Center(child: CircularProgressIndicator()),
           ],
         );
       },

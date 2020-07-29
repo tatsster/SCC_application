@@ -2,65 +2,72 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../blocs/BlocProvider.dart';
+import '../widgets/bezierShape.dart';
 
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // ! Title of app
-            Padding(
-              padding: const EdgeInsets.only(top: 100),
-              child: title(context),
-            ),
+      body: Stack(
+        children: <Widget>[
+          // ! Decorate
+          Positioned(
+            top: -MediaQuery.of(context).size.height * .15,
+            right: -MediaQuery.of(context).size.width * .4,
+            child: BezierContainer(),
+          ),
 
-            // ! Login form
-            Padding(
-              padding: const EdgeInsets.only(top: 50),
-              child: emailPasswordWidget(context),
-            ),
+          // ! Main
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  // ! Title of app
+                  Padding(
+                    padding: const EdgeInsets.only(top: 100),
+                    child: title(context),
+                  ),
 
-            // ! Submit button
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: submitButton(context),
-            ),
+                  // ! Login form
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                    child: emailPasswordWidget(context),
+                  ),
 
-            // ! Forgot password
-            Container(
-              padding: EdgeInsets.only(top: 10),
-              alignment: Alignment.centerRight,
-              child: Text(
-                'Forgot Password ?',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
+                  // ! Submit button
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: submitButton(context),
+                  ),
+
+                  // ! Forgot password
+                  forgotPassword(context),
+                  divider(),
+
+                  // ! SignUp account
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      child: createAccountLabel(context),
+                    ),
+                  ),
+                ],
               ),
             ),
-            divider(),
-
-            // ! SignUp account
-            Expanded(
-              child: Container(
-                alignment: Alignment.bottomCenter,
-                child: createAccountLabel(context),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget entryField(BuildContext context, String title,
       {bool isPassword = false}) {
-    final loginBloc = BlocProvider.of(context).loginBloc;
+    final loginBloc = BlocProvider.of(context).bloc.loginBloc;
 
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
@@ -79,6 +86,9 @@ class LoginPage extends StatelessWidget {
             stream: isPassword ? loginBloc.password : loginBloc.email,
             builder: (context, snapshot) {
               return TextField(
+                keyboardType: isPassword
+                    ? TextInputType.text
+                    : TextInputType.emailAddress,
                 obscureText: isPassword,
                 onChanged:
                     isPassword ? loginBloc.getPassword : loginBloc.getEmail,
@@ -86,6 +96,7 @@ class LoginPage extends StatelessWidget {
                   border: InputBorder.none,
                   fillColor: Color(0xfff3f3f4),
                   filled: true,
+                  errorText: isPassword ? snapshot.error : null,
                 ),
               );
             },
@@ -96,16 +107,21 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget submitButton(BuildContext context) {
-    final loginBloc = BlocProvider.of(context).loginBloc;
+    final loginBloc = BlocProvider.of(context).bloc.loginBloc;
 
     return StreamBuilder(
       stream: loginBloc.submitValid,
       builder: (context, snapshot) {
         return InkWell(
-          onTap: () {
-            if (snapshot.hasData && loginBloc.submit()) {
-              BlocProvider.updateUserId(context);
-              Navigator.pushNamed(context, '/dashboard');
+          onTap: () async {
+            if (snapshot.hasData) {
+              var userLogin = await loginBloc.submit();
+              BlocProvider.of(context).user = userLogin;
+              // id: 8gbtC8NPVmE6jw3ZAYIA
+              if (userLogin.success)
+                Navigator.pushNamed(context, '/dashboard');
+              else
+                loginBloc.loginFail(userLogin.data[0]);
             }
           },
           child: Container(
@@ -177,7 +193,9 @@ class LoginPage extends StatelessWidget {
           ),
           Padding(padding: EdgeInsets.only(right: 10)),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, '/signup');
+            },
             child: Text(
               'Register',
               style: TextStyle(
@@ -221,6 +239,23 @@ class LoginPage extends StatelessWidget {
         entryField(context, "Email"),
         entryField(context, "Password", isPassword: true),
       ],
+    );
+  }
+
+  Widget forgotPassword(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(top: 10),
+      alignment: Alignment.centerRight,
+      child: InkWell(
+        onTap: () {},
+        child: Text(
+          'Forgot Password ?',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../blocs/BlocProvider.dart';
 
 class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var userInfo = BlocProvider.of(context).user.data[0].user;
+
     return Drawer(
       child: Container(
         color: Colors.black87,
@@ -21,11 +24,11 @@ class MainDrawer extends StatelessWidget {
             // ),
             UserAccountsDrawerHeader(
               accountName: Text(
-                'nhan.pham.r6@email.com',
+                userInfo.userEmail,
                 style: TextStyle(fontSize: 20.0),
               ),
               accountEmail: Text(
-                'Pham T. Nhan',
+                userInfo.userFullname,
                 style: TextStyle(fontSize: 18.0),
               ),
               currentAccountPicture: CircleAvatar(
@@ -70,23 +73,23 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushNamed(context, '/report');
               },
             ),
-            ListTile(
-              leading: Icon(
-                Icons.settings,
-                size: 30.0,
-                color: Colors.white,
-              ),
-              title: Text(
-                'Setting',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, '/setting');
-              },
-            ),
+            // ListTile(
+            //   leading: Icon(
+            //     Icons.settings,
+            //     size: 30.0,
+            //     color: Colors.white,
+            //   ),
+            //   title: Text(
+            //     'Setting',
+            //     style: TextStyle(
+            //       fontSize: 20.0,
+            //       color: Colors.white,
+            //     ),
+            //   ),
+            //   onTap: () {
+            //     Navigator.pushNamed(context, '/setting');
+            //   },
+            // ),
             Expanded(
               child: Container(
                 padding: EdgeInsets.only(left: 3.0),
@@ -129,6 +132,7 @@ class MainDrawer extends StatelessWidget {
                         ),
                       ),
                       onTap: () {
+                        BlocProvider.of(context).user = null;
                         Navigator.pushNamed(context, '/');
                       },
                     ),

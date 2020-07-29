@@ -1,19 +1,18 @@
-import 'package:SCC_mobile/src/widgets/refresh.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sparkline/flutter_sparkline.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../widgets/tile_info.dart';
+import '../widgets/refresh.dart';
+import '../widgets/sensorData.dart';
 import '../blocs/BlocProvider.dart';
+import '../model/temp_humid_log.dart';
 import '../model/sensor_info.dart';
 
 class DataClass extends StatelessWidget {
-  final int classId;
+  String buildingName;
+  String roomName;
+  List<String> sensorIDs;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  final List<double> chart = [];
 
-  DataClass({this.classId});
+  DataClass({this.buildingName, this.roomName});
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +23,16 @@ class DataClass extends StatelessWidget {
   }
 
   Widget buildDataClassPage(BuildContext context) {
-    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
-
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         elevation: 2.0,
         backgroundColor: Colors.white,
         title: Text(
-          'Room ${this.classId}',
+          'Sensor ${this.roomName}${this.buildingName}',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 22.0,
+            fontSize: 18.0,
           ),
         ),
         leading: IconButton(
@@ -46,311 +43,188 @@ class DataClass extends StatelessWidget {
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
-      ),
-      body: StaggeredGridView.count(
-        crossAxisCount: 2,
-        crossAxisSpacing: 12.0,
-        mainAxisSpacing: 12.0,
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-
-        // ! Temperature
-        children: <Widget>[
-          TileInfo(
-            child: Padding(
-              padding: EdgeInsets.all(15.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Material(
-                        color: Colors.redAccent,
-                        shape: CircleBorder(),
-                        child: Padding(
-                          padding: EdgeInsets.all(18.0),
-                          child: FaIcon(
-                            FontAwesomeIcons.thermometerEmpty,
-                            color: Colors.white,
-                            size: 30.0,
-                          ),
-                        ),
-                      ),
-
-                      // ! Get temperature from sensor BLOC to here
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          child: temperatureValue(context),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.bottomLeft,
-                      padding: EdgeInsets.only(bottom: 8.0),
-                      child: Text(
-                        'Temperature',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // ! Humidity
-          TileInfo(
-            child: Padding(
-              padding: EdgeInsets.all(15.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Material(
-                        color: Colors.blue,
-                        shape: CircleBorder(),
-                        child: Padding(
-                          padding: EdgeInsets.all(12.0),
-                          child: FaIcon(
-                            FontAwesomeIcons.snowflake,
-                            color: Colors.white,
-                            size: 30.0,
-                          ),
-                        ),
-                      ),
-
-                      // ! Get humidity from sensor BLOC to here
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          child: humidityValue(context),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.bottomLeft,
-                      padding: EdgeInsets.only(bottom: 8.0),
-                      child: Text(
-                        'Humidity',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // ! Electricity usage
-          // buildElectricGraph(context),
-
-          // ! Turn Fan
-          TileInfo(
-            child: Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Air Conditioner',
-                    style: TextStyle(
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-
-                  // ! Use DB Bloc here
-                  airButton(context),
-                ],
-              ),
-            ),
-          ),
-
-          // ! Turn light
-          TileInfo(
-            child: Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Light',
-                    style: TextStyle(
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-
-                  // ! Use DB Bloc here
-                  lightButton(context),
-                ],
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(
+                    context, '/setting/${this.buildingName}-${this.roomName}');
+              },
+              child: Icon(
+                Icons.arrow_forward,
+                size: 25.0,
+                color: Colors.black,
               ),
             ),
           ),
         ],
-
-        staggeredTiles: [
-          StaggeredTile.extent(1, 150.0),
-          StaggeredTile.extent(1, 150.0),
-          // StaggeredTile.extent(2, 250.0),
-          StaggeredTile.extent(2, 70.0),
-          StaggeredTile.extent(2, 70.0),
-        ],
       ),
+      body: loadSensor(context),
     );
   }
 
-  Widget temperatureValue(BuildContext context) {
-    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
-    return StreamBuilder(
-      stream: SSDbBloc.sensorInfo,
-      builder: (BuildContext context, AsyncSnapshot<SensorInfo> snapshot) {
-        if (snapshot.hasData && snapshot.data.data[0].sensorTemp != null)
-          return Text(
-            '${snapshot.data.data[0].sensorTemp}\n\u00B0C',
-            style: TextStyle(
-              fontSize: 30.0,
-              fontWeight: FontWeight.w700,
-            ),
-            textAlign: TextAlign.right,
-          );
-        else
-          return Container();
-      },
-    );
-  }
-
-  Widget humidityValue(BuildContext context) {
-    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
+  Widget loadSensor(BuildContext context) {
+    // * Wait to load all sensor id in this room
+    final SSDbBloc = BlocProvider.of(context).bloc.ssDbBloc;
     return StreamBuilder(
       stream: SSDbBloc.sensorInfo,
       builder: (context, AsyncSnapshot<SensorInfo> snapshot) {
-        if (snapshot.hasData && snapshot.data.data[0].sensorHumid != null)
-          return Text(
-            '${snapshot.data.data[0].sensorHumid}\n%',
-            style: TextStyle(
-              fontSize: 30.0,
-              fontWeight: FontWeight.w700,
-            ),
-            textAlign: TextAlign.right,
-          );
+        if (!snapshot.hasData)
+          return Center(child: CircularProgressIndicator());
         else
-          return Container();
+          return loadSensorInfo(context, snapshot.data);
       },
     );
   }
 
-  Widget buildElectricGraph(BuildContext context) {
-    return TileInfo(
-      child: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
+  Widget loadSensorInfo(BuildContext context, SensorInfo sensorInfo) {
+    this.sensorIDs = List<String>();
+    for (var item in sensorInfo.data) this.sensorIDs.add(item.sensorId);
+
+    // ! If No data
+    if (this.sensorIDs.length == 0) return buildNoData(context);
+
+    // * Fetch sensor data with SENSOR_ID
+    final SSDbBloc = BlocProvider.of(context).bloc.ssDbBloc;
+    SSDbBloc.fetchSensorData(context, this.sensorIDs[0]);
+
+    String dropdownValue = this.sensorIDs[0];
+
+    return StreamBuilder(
+      stream: SSDbBloc.sensorData,
+      builder: (context, AsyncSnapshot<TempHumidLog> snapshot) {
+        return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // * Result usage
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Total Usage',
-                      style:
-                          TextStyle(color: Colors.blueAccent, fontSize: 20.0),
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: 15.0, right: 5, top: 15.0, bottom: 15.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue[900],
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                    // TODO: Insert data from DB BLOC
-                    Text(
-                      '3.6 kWh',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 32.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Sensor: ',
+                        style: TextStyle(color: Colors.white, fontSize: 18.0),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-                Material(
-                  color: Colors.yellowAccent[400],
-                  borderRadius: BorderRadius.circular(24.0),
-                  child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Icon(
-                      Icons.timeline,
-                      color: Colors.white,
-                      size: 28.0,
+
+                // ! Select sensorID
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: DropdownButton<String>(
+                    items: this
+                        .sensorIDs
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String value) {
+                      dropdownValue = value;
+                      // ! Fetch new data with sensorID = value
+                      SSDbBloc.fetchSensorData(context, value);
+                    },
+                    value: dropdownValue,
+                    style: TextStyle(color: Colors.blue[900], fontSize: 16.0),
+                    elevation: 16,
+                    underline: Container(
+                      height: 2,
+                      color: Colors.blue[900],
                     ),
                   ),
                 ),
               ],
             ),
 
-            // * Graph usage
+            // ! View data from this Sensor which is from latest TempHumidLog
+            // * Get sensorPid by find its indexOf sensorIDs == indexOf sensorInfo
+            snapshot.hasData
+                ? SensorData(
+                    sensorData: snapshot.data,
+                    sensorId: dropdownValue,
+                    sensorPid: sensorInfo
+                        .data[this.sensorIDs.indexOf(dropdownValue)].sensorPid,
+                  )
+                : Center(child: CircularProgressIndicator()),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildNoData(BuildContext context) {
+    this.sensorIDs = <String>[];
+    var dropdownValue = '';
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
             Padding(
               padding: EdgeInsets.only(
-                top: 20.0,
+                  left: 15.0, right: 5, top: 15.0, bottom: 15.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.blue[900],
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Sensor: ',
+                    style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  ),
+                ),
               ),
             ),
-            Sparkline(
-              data: chart,
-              lineWidth: 5.0,
-              lineColor: Colors.greenAccent,
+
+            // ! Select sensorID
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: DropdownButton<String>(
+                items: this
+                    .sensorIDs
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String value) {
+                  dropdownValue = value;
+                },
+                value: dropdownValue,
+                style: TextStyle(color: Colors.blue[900], fontSize: 16.0),
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.blue[900],
+                ),
+              ),
             ),
           ],
         ),
-      ),
-    );
-  }
 
-  Widget airButton(BuildContext context) {
-    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
-    return StreamBuilder(
-      stream: SSDbBloc.statusAir,
-      builder: (context, snapshot) {
-        return Transform.scale(
-          scale: 1.25,
-          child: Switch.adaptive(
-            value: snapshot.hasData == false ? false : snapshot.data,
-            onChanged: SSDbBloc.getAirStatus,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget lightButton(BuildContext context) {
-    final SSDbBloc = BlocProvider.of(context).ssDbBloc;
-    return StreamBuilder(
-      stream: SSDbBloc.statusLight,
-      builder: (context, snapshot) {
-        return Transform.scale(
-          scale: 1.25,
-          child: Switch.adaptive(
-            value: snapshot.hasData == false ? false : snapshot.data,
-            onChanged: SSDbBloc.getLightStatus,
-          ),
-        );
-      },
+        // ! No data
+        Center(child: CircularProgressIndicator()),
+      ],
     );
   }
 }

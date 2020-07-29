@@ -6,12 +6,12 @@ import '../model/login_data.dart';
 
 class LoginProvider {
   Client client = Client();
+  var url = 'http://213d94a7b2e0.ngrok.io/';
 
   Future<LoginData> login(String email, String password) async {
-    var url =
-        'http//8c5c82899b6c.ngrok.io/api/sign-in?user_password=$password&user_email=$email';
+    var request = url + 'api/sign-in?user_password=$password&user_email=$email';
     try {
-      var response = await client.post(url);
+      var response = await client.post(request);
       return LoginData.fromJson(json.decode(response.body));
     } on Exception catch (error) {
       print(error);

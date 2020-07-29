@@ -20,7 +20,7 @@ class Setting extends StatelessWidget {
   }
 
   Widget buildSettingPage(BuildContext context) {
-    final settingBloc = BlocProvider.of(context).settingBloc;
+    final settingBloc = BlocProvider.of(context).bloc.deviceBloc;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -64,7 +64,7 @@ class Setting extends StatelessWidget {
                       icon: Icon(Icons.edit),
                       onPressed: () {
                         // ! Change show dialog here
-                        showInputDialog(context, settingBloc, 0);
+                        // showInputDialog(context, settingBloc, 0);
                       },
                     ),
                   ),
@@ -101,8 +101,8 @@ class Setting extends StatelessWidget {
                   Expanded(
                     child: Align(
                       alignment: FractionalOffset.center,
-                      child: displayThreshold(
-                          context, 0, Colors.redAccent, '\u00B0C'),
+                      // child: displayThreshold(
+                      //     context, 0, Colors.redAccent, '\u00B0C'),
                     ),
                   ),
                 ],
@@ -124,7 +124,7 @@ class Setting extends StatelessWidget {
                       icon: Icon(Icons.edit),
                       onPressed: () {
                         // ! Change show dialog here
-                        showInputDialog(context, settingBloc, 1);
+                        // showInputDialog(context, settingBloc, 1);
                       },
                     ),
                   ),
@@ -161,8 +161,8 @@ class Setting extends StatelessWidget {
                   Expanded(
                     child: Align(
                       alignment: FractionalOffset.center,
-                      child:
-                          displayThreshold(context, 1, Colors.blueAccent, '%'),
+                      // child:
+                          // displayThreshold(context, 1, Colors.blueAccent, '%'),
                     ),
                   ),
                 ],
@@ -187,44 +187,44 @@ class Setting extends StatelessWidget {
                   ),
 
                   // ! Use DB Bloc here
-                  backupButton(context),
+                  // backupButton(context),
                 ],
               ),
             ),
           ),
 
           // ! Maintance mode
-          settingBloc.isAdmin == true
-              ? TileInfo(
-                  child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Maintenance mode',
-                          style: TextStyle(
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
+          // settingBloc.isAdmin == true
+          //     ? TileInfo(
+          //         child: Padding(
+          //           padding: EdgeInsets.all(20.0),
+          //           child: Row(
+          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //             crossAxisAlignment: CrossAxisAlignment.center,
+          //             children: <Widget>[
+          //               Text(
+          //                 'Maintenance mode',
+          //                 style: TextStyle(
+          //                   fontSize: 25.0,
+          //                   fontWeight: FontWeight.w700,
+          //                 ),
+          //               ),
 
-                        // ! Use DB Bloc here
-                        maintainButton(context),
-                      ],
-                    ),
-                  ),
-                )
-              : Container(),
+          //               // ! Use DB Bloc here
+          //               maintainButton(context),
+          //             ],
+          //           ),
+          //         ),
+          //       )
+          //     : Container(),
         ],
         staggeredTiles: [
           StaggeredTile.extent(2, 200.0),
           StaggeredTile.extent(2, 200.0),
           StaggeredTile.extent(2, 70.0),
-          settingBloc.isAdmin == true
-              ? StaggeredTile.extent(2, 70.0)
-              : StaggeredTile.extent(2, 0.0),
+          // settingBloc.isAdmin == true
+          //     ? StaggeredTile.extent(2, 70.0)
+          //     : StaggeredTile.extent(2, 0.0),
         ],
       ),
     );
@@ -260,55 +260,55 @@ class Setting extends StatelessWidget {
     }
   }
 
-  Widget displayThreshold(
-      BuildContext context, int type, Color textColor, String measure) {
-    final settingBloc = BlocProvider.of(context).settingBloc;
+  // Widget displayThreshold(
+  //     BuildContext context, int type, Color textColor, String measure) {
+  //   final settingBloc = BlocProvider.of(context).bloc.settingBloc;
 
-    return StreamBuilder(
-      stream: settingBloc.getThreshold(type),
-      builder: (context, AsyncSnapshot<int> snapshot) {
-        return RichText(
-          text: TextSpan(
-            style: TextStyle(
-              fontSize: 55.0,
-              color: Colors.black,
-            ),
-            children: printThresholdHelper(snapshot, textColor, measure),
-          ),
-        );
-      },
-    );
-  }
+  //   return StreamBuilder(
+  //     stream: settingBloc.getThreshold(type),
+  //     builder: (context, AsyncSnapshot<int> snapshot) {
+  //       return RichText(
+  //         text: TextSpan(
+  //           style: TextStyle(
+  //             fontSize: 55.0,
+  //             color: Colors.black,
+  //           ),
+  //           children: printThresholdHelper(snapshot, textColor, measure),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
-  Widget backupButton(BuildContext context) {
-    final settingBloc = BlocProvider.of(context).settingBloc;
-    return StreamBuilder(
-      stream: settingBloc.statusBackup,
-      builder: (context, snapshot) {
-        return Transform.scale(
-          scale: 1.25,
-          child: Switch.adaptive(
-            value: snapshot.hasData == false ? false : snapshot.data,
-            onChanged: settingBloc.getBackup,
-          ),
-        );
-      },
-    );
-  }
+  // Widget backupButton(BuildContext context) {
+  //   final settingBloc = BlocProvider.of(context).bloc.settingBloc;
+  //   return StreamBuilder(
+  //     stream: settingBloc.statusBackup,
+  //     builder: (context, snapshot) {
+  //       return Transform.scale(
+  //         scale: 1.25,
+  //         child: Switch.adaptive(
+  //           value: snapshot.hasData == false ? false : snapshot.data,
+  //           onChanged: settingBloc.getBackup,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
-  Widget maintainButton(BuildContext context) {
-    final settingBloc = BlocProvider.of(context).settingBloc;
-    return StreamBuilder(
-      stream: settingBloc.statusMaintance,
-      builder: (context, snapshot) {
-        return Transform.scale(
-          scale: 1.25,
-          child: Switch.adaptive(
-            value: snapshot.hasData == false ? false : snapshot.data,
-            onChanged: settingBloc.getMaintance,
-          ),
-        );
-      },
-    );
-  }
+  // Widget maintainButton(BuildContext context) {
+  //   final settingBloc = BlocProvider.of(context).bloc.settingBloc;
+  //   return StreamBuilder(
+  //     stream: settingBloc.statusMaintance,
+  //     builder: (context, snapshot) {
+  //       return Transform.scale(
+  //         scale: 1.25,
+  //         child: Switch.adaptive(
+  //           value: snapshot.hasData == false ? false : snapshot.data,
+  //           onChanged: settingBloc.getMaintance,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }

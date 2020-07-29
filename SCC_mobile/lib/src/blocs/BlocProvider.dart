@@ -1,9 +1,11 @@
+import '../model/login_data.dart';
 import 'package:flutter/material.dart';
 import 'AppBloc.dart';
 export 'AppBloc.dart';
 
 class BlocProvider extends InheritedWidget {
   final AppBloc bloc;
+  LoginData user;
 
   BlocProvider({Key key, Widget child})
       : bloc = AppBloc(),
@@ -12,11 +14,7 @@ class BlocProvider extends InheritedWidget {
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 
-  static AppBloc of(BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType<BlocProvider>()).bloc;
-  }
-
-  static void updateUserId(BuildContext context) {
-    (context.dependOnInheritedWidgetOfExactType<BlocProvider>()).bloc.updateUserId();
+  static BlocProvider of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<BlocProvider>();
   }
 }
