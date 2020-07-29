@@ -12,6 +12,7 @@
         "anhskohbo/no-captcha": "^3.2",
         "cocur/background-process": "^0.7.0",
         "fideloper/proxy": "^4.0",
+        "ixudra/curl": "^6.19",
         "laravel/framework": "^6.2",
         "laravel/tinker": "^2.0"
     },

@@ -647,7 +647,12 @@
                                                 </button>
                                             @elseif (session("1752051_current_device")["device_pid"] != null)
                                                 <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
-                                                    <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
+                                                    <i class="fas fa-spinner fa-pulse"></i>
+                                                    @if (session("1752051_current_device")["device_automation"] == true)
+                                                        @lang("Auto Running")
+                                                    @else
+                                                        @lang("Running")
+                                                    @endif
                                                 </button>
                                             @endif
                                         </div>
@@ -757,7 +762,12 @@
                                                             </button>
                                                         @elseif (session("1752051_current_device")["device_pid"] != null)
                                                             <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
-                                                                <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
+                                                                <i class="fas fa-spinner fa-pulse"></i>
+                                                                @if (session("1752051_current_device")["device_automation"] == true)
+                                                                    @lang("Auto Running")
+                                                                @else
+                                                                    @lang("Running")
+                                                                @endif
                                                             </button>
                                                         @endif
                                                     </th>
@@ -854,7 +864,12 @@
                                                             </button>
                                                         @elseif (session("1752051_current_device")["device_pid"] != null)
                                                             <button type="button" data-target="#modal-danger" class="btn btn-secondary btn-sm float-right" style="margin-right: 5px;">
-                                                                <i class="fas fa-spinner fa-pulse"></i> @lang("Running")
+                                                                <i class="fas fa-spinner fa-pulse"></i>
+                                                                @if (session("1752051_current_device")["device_automation"] == true)
+                                                                    @lang("Auto Running")
+                                                                @else
+                                                                    @lang("Running")
+                                                                @endif
                                                             </button>
                                                         @endif
                                                     </th>
@@ -920,14 +935,28 @@
                                             </div>
                                             <div class="col-sm-6">
                                                 <label for="device-lower-threshold" class="col-form-label">@lang("Device Lower Threshold:")</label>
-                                                <input value="{{{ session("1752051_current_device")["device_lower_threshold"] }}}" type="number" name="device_lower_threshold" class="form-control" id="device-lower-threshold">
+                                                <div class="input-group mb-3">
+                                                    <input value="{{{ session("1752051_current_device")["device_lower_threshold"] }}}" type="number" name="device_lower_threshold" class="form-control" id="device-lower-threshold">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="fas fa-temperature-high"></i>@lang("C")
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <div class="col-sm-6">
                                                 <label for="device-upper-threshold" class="col-form-label">@lang("Device Upper Threshold:")</label>
-                                                <input value="{{{ session("1752051_current_device")["device_upper_threshold"] }}}" type="number" name="device_upper_threshold" class="form-control" id="device-upper-threshold">
+                                                <div class="input-group mb-3">
+                                                    <input value="{{{ session("1752051_current_device")["device_upper_threshold"] }}}" type="number" name="device_upper_threshold" class="form-control" id="device-upper-threshold">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="fas fa-temperature-high"></i>@lang("C")
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label for="device-auto-based-on-sensor-topic" class="col-form-label">@lang("Device Auto Based On Sensor Topic:")</label>
@@ -1656,20 +1685,23 @@
             cancelButtonText: cancel
         }).then((result) => {
             if (result.value) {
-                Swal.fire({
-                    title: title_inform,
-                    text: text_inform,
-                    icon: 'success',
-                    showCancelButton: false,
-                    allowOutsideClick: false,
-                    confirmButtonColor: '#28a745',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: reconfirm
-                }).then((result) => {
-                    if (result.value) {
-                        $("#"+current_button).click();
-                    }
-                })
+
+                $("#"+current_button).click();
+
+                // Swal.fire({
+                //     title: title_inform,
+                //     text: text_inform,
+                //     icon: 'success',
+                //     showCancelButton: false,
+                //     allowOutsideClick: false,
+                //     confirmButtonColor: '#28a745',
+                //     cancelButtonColor: '#d33',
+                //     confirmButtonText: reconfirm
+                // }).then((result) => {
+                //     if (result.value) {
+                //         $("#"+current_button).click();
+                //     }
+                // })
             }
         })
 

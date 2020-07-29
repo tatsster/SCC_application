@@ -74,7 +74,7 @@ class MainController extends Controller {
 
     /* Check user session expiration or remember me token */
 
-    private function prepare_user_session(Request $request){
+    protected function prepare_user_session(Request $request){
 
         if ($request->session()->get("1752051_user_timeout") != null){
             return $this->lockscreen($request);
@@ -166,28 +166,6 @@ class MainController extends Controller {
         $current_page = "dashboard";
 
         return view("dashboard",compact("current_page","hours_usage","electrical_consumption","lang_db"));
-    }
-
-    public function report(Request $request){
-
-        /* Prepare user session */
-
-        if ($this->prepare_user_session($request) != null) {
-            return $this->prepare_user_session($request);
-        }
-
-        /* Get language options */
-
-        $lang_db = LanguageInfo::all();
-
-        /* Get other options */
-
-        $building_db = BuildingInfo::all();
-
-        $floor_db = FloorInfo::all();
-
-        $current_page = "report";
-        return view("report",compact("current_page", "lang_db", "building_db", "floor_db"));
     }
 
     public function room(Request $request){

@@ -71,36 +71,6 @@
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-{{--            <div class="col-lg-3 col-6">--}}
-{{--                <!-- small box -->--}}
-{{--                <div class="small-box bg-danger">--}}
-{{--                    <div class="inner">--}}
-{{--                        <h3>34<sup style="font-size: 20px">&#8451</sup></h3>--}}
-
-{{--                        <p>Temperature</p>--}}
-{{--                    </div>--}}
-{{--                    <div class="icon">--}}
-{{--                        <i class="fas fa-temperature-high"></i>--}}
-{{--                    </div>--}}
-{{--                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--            <!-- ./col -->--}}
-{{--          <div class="col-lg-3 col-6">--}}
-{{--            <!-- small box -->--}}
-{{--            <div class="small-box bg-info">--}}
-{{--              <div class="inner">--}}
-{{--                <h3>50<sup style="font-size: 20px">%</sup></h3>--}}
-
-{{--                <p>Humidity</p>--}}
-{{--              </div>--}}
-{{--              <div class="icon">--}}
-{{--                <i class="far fa-snowflake"></i>--}}
-{{--              </div>--}}
-{{--              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>--}}
-{{--            </div>--}}
-{{--          </div>--}}
-          <!-- ./col -->
           <div class="col-lg-6 col-6">
             <!-- small box -->
             <div class="small-box bg-success">
@@ -147,12 +117,6 @@
                       <li class="nav-item">
                           <a class="nav-link" href="#real-time2" data-toggle="tab">Real-time Humidity</a>
                       </li>
-{{--                      <li class="nav-item">--}}
-{{--                          <a class="nav-link" href="#hours-usage" data-toggle="tab">Top Hours Usage</a>--}}
-{{--                      </li>--}}
-{{--                    <li class="nav-item">--}}
-{{--                      <a class="nav-link" href="#electrical-usage" data-toggle="tab">Top Electrical Usage</a>--}}
-{{--                    </li>--}}
                   </ul>
                 </div>
               </div><!-- /.card-header -->
@@ -181,8 +145,6 @@
                     </div>
                     <div class="chart tab-pane" id="real-time2"
                          style="position: relative; height: 300px;">
-                        {{--                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
-                        {{--                        <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 344px;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
                         <div class="card-header">
                             <h3 class="card-title">
                                 <i class="far fa-chart-bar"></i>
@@ -201,24 +163,6 @@
                             <div id="interactive2" style="height: 300px; padding: 0px; position: relative;"><canvas class="flot-base" width="1486" height="600" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 743px; height: 300px;"></canvas><canvas class="flot-overlay" width="1486" height="600" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 743px; height: 300px;"></canvas><div class="flot-svg" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;"><svg style="width: 100%; height: 100%;"><g class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;"><text x="28.0234375" y="293.96875" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: center;">0</text><text x="95.05697601010101" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">10</text><text x="166.06707702020202" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">20</text><text x="237.07717803030303" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">30</text><text x="308.08727904040404" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">40</text><text x="379.0973800505051" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">50</text><text x="450.10748106060606" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">60</text><text x="521.1175820707072" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">70</text><text x="592.1276830808081" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">80</text><text x="663.1377840909091" y="293.96875" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;" transform="">90</text></g><g class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;"><text x="8.953125" y="268.03125" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: right;">0</text><text x="1" y="217.63125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">20</text><text x="1" y="167.23125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">40</text><text x="1" y="116.83125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">60</text><text x="1" y="66.43125" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;" transform="">80</text><text x="-6.953125" y="16.03125" class="flot-tick-label tickLabel" transform="" style="position: absolute; text-align: right;">100</text></g></svg></div></div>
                         </div>
                     </div>
-{{--                    <div class="chart tab-pane" id="temperature"--}}
-{{--                         style="position: relative; height: 300px;">--}}
-{{--                        --}}{{--                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
-{{--                        <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 344px;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
-{{--                    </div>--}}
-{{--                  <div class="chart tab-pane" id="humidity"--}}
-{{--                       style="position: relative; height: 300px;">--}}
-{{--                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
-{{--                      <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 344px;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
-{{--                   </div>--}}
-{{--                    <div class="chart tab-pane" id="hours-usage" style="position: relative; height: 300px;">--}}
-{{--                        --}}{{--                    <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
-{{--                        <canvas id="stackedBarChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
-{{--                    </div>--}}
-{{--                  <div class="chart tab-pane" id="electrical-usage" style="position: relative; height: 300px;">--}}
-{{--                    <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>--}}
-{{--                      <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 344px;" width="688" height="500" class="chartjs-render-monitor"></canvas>--}}
-{{--                  </div>--}}
                 </div>
               </div><!-- /.card-body -->
             </div>
