@@ -8,7 +8,7 @@
 </p>
 
 
-# SCC_Desktop_Application
+# SCC_Website_Application
 
 ## Prerequisites
 
