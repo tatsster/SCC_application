@@ -1,0 +1,31 @@
+* bab6660 : Thien upload database schema and data
+* 100e115 : Thien debug all codes and check one final time
+* 0b9d971 : Fix sensor report UI label
+* 26690fa : Update README.md
+* 6b2f4fd : Connect UI with backend and format/refactor
+* 1a42553 : Thien fix bugs and add more features
+*   ec3c7ea : Merge branch 'master' of https://github.com/Coder-Pham/SCC_application
+|\  
+| * 206d31b : Thien Update API For Mobile And Embedded Device
+| * dbad498 : Thien update all features and final report
+| * d4ebc3b : New Updates
+| * 87f5537 : Near Final Version
+* | 88a1535 : [Update] Pre-release screen and api
+|/  
+*   5f3d82c : Merge branch 'master' of https://github.com/Coder-Pham/SCC_application
+|\  
+| * d5e87c0 : [Add] Logout, Back, Room realtime data
+| * 228548e : Thien_Upload_Website
+| * fc57b64 : [Update] Predefined python back-end functions
+| * 1c06e0a : [Update] Add function for buttons qml files
+| * 8f6e32a : [Update] Add initial load functions to qml files
+* | 793d76e : [Update] Finish login and fetch data
+|/  
+*   9b34e03 : Merge branch 'master' of https://github.com/Coder-Pham/SCC_application
+|\  
+| * 98653b0 : initial basic GUI qml files
+* | c6e6f68 : [Add] Fully retrieve data from DB
+|/  
+* aeda6ac : [Update] pre-API implement demo
+* 084adde : [Init] SCC mobile version
+* 4ce6728 : Initial commit
