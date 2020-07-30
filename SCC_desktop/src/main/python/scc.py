@@ -562,7 +562,7 @@ class Bridge(QObject):
 
     @pyqtSlot(result=str)
     def getSensorReportLabel(self):
-        return str("Report Sensor " + self.current_device)
+        return str("Report Sensor " + self.current_sensor)
 
     @pyqtSlot(result=str)
     def getSensorNameLabel(self):
