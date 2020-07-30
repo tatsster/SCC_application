@@ -1,0 +1,5 @@
+5,time_update_heat_index,600,dashboard_settings
+1,backup_log_system,true,system_settings
+2,maintenance_system,false,system_settings
+3,time_update_temp,600,dashboard_settings
+4,time_update_humid,600,dashboard_settings

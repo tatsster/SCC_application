@@ -1267,10 +1267,10 @@ class APIController extends Controller{
 
                 }
 
-                $room = RoomInfo::where("room_building", $request["building"])->where("room_floor", $request["current_floor"])->where("room_name", $request["current_room"])->first();
-
-                $room["room_active"] = false;
-                $room->save();
+//                $room = RoomInfo::where("room_building", $request["building"])->where("room_floor", $request["current_floor"])->where("room_name", $request["current_room"])->first();
+//
+//                $room["room_active"] = false;
+//                $room->save();
 
                 return $this->send_response([], 'Successfully deactivate !!!');
 
@@ -1315,10 +1315,10 @@ class APIController extends Controller{
 
                 }
 
-                $room = RoomInfo::where("room_building", $request["building"])->where("room_floor", $request["current_floor"])->where("room_name", $request["current_room"])->first();
-
-                $room["room_active"] = true;
-                $room->save();
+//                $room = RoomInfo::where("room_building", $request["building"])->where("room_floor", $request["current_floor"])->where("room_name", $request["current_room"])->first();
+//
+//                $room["room_active"] = true;
+//                $room->save();
 
                 return $this->send_response([], 'Successfully activate !!!');
 
@@ -1381,20 +1381,20 @@ class APIController extends Controller{
 
                 }
 
-                $floor = FloorInfo::where("floor_building", $request["building"])->where("floor_name", $request["current_floor"])->first();
-
-                $floor["floor_active"] = false;
-                $floor->save();
-
-                $room = RoomInfo::where("room_building", $request["building"])->where("room_floor", $request["current_floor"])->get();
-
-                if (count($room) > 0) {
-
-                    foreach ($room as $each) {
-                        $each["room_active"] = false;
-                        $each->save();
-                    }
-                }
+//                $floor = FloorInfo::where("floor_building", $request["building"])->where("floor_name", $request["current_floor"])->first();
+//
+//                $floor["floor_active"] = false;
+//                $floor->save();
+//
+//                $room = RoomInfo::where("room_building", $request["building"])->where("room_floor", $request["current_floor"])->get();
+//
+//                if (count($room) > 0) {
+//
+//                    foreach ($room as $each) {
+//                        $each["room_active"] = false;
+//                        $each->save();
+//                    }
+//                }
 
                 return $this->send_response([], 'Successfully deactivate !!!');
 
@@ -1441,20 +1441,20 @@ class APIController extends Controller{
 
                 }
 
-                $floor = FloorInfo::where("floor_building", $request["building"])->where("floor_name", $request["current_floor"])->first();
-
-                $floor["floor_active"] = true;
-                $floor->save();
-
-                $room = RoomInfo::where("room_building", $request["building"])->where("room_floor", $request["current_floor"])->get();
-
-                if (count($room) > 0) {
-
-                    foreach ($room as $each) {
-                        $each["room_active"] = true;
-                        $each->save();
-                    }
-                }
+//                $floor = FloorInfo::where("floor_building", $request["building"])->where("floor_name", $request["current_floor"])->first();
+//
+//                $floor["floor_active"] = true;
+//                $floor->save();
+//
+//                $room = RoomInfo::where("room_building", $request["building"])->where("room_floor", $request["current_floor"])->get();
+//
+//                if (count($room) > 0) {
+//
+//                    foreach ($room as $each) {
+//                        $each["room_active"] = true;
+//                        $each->save();
+//                    }
+//                }
 
                 return $this->send_response([], 'Successfully activate !!!');
 
@@ -1516,32 +1516,32 @@ class APIController extends Controller{
 
                 }
 
-                $building = BuildingInfo::where("building_name", $request["building"])->first();
-
-                $building["building_active"] = false;
-                $building->save();
-
-                $floor = FloorInfo::where("floor_building", $request["building"])->get();
-
-                if (count($floor) > 0) {
-
-                    foreach ($floor as $each) {
-                        $each["floor_active"] = false;
-                        $each->save();
-                    }
-
-                }
-
-                $room = RoomInfo::where("room_building", $request["building"])->get();
-
-                if (count($room) > 0) {
-
-                    foreach ($room as $each) {
-                        $each["room_active"] = false;
-                        $each->save();
-                    }
-
-                }
+//                $building = BuildingInfo::where("building_name", $request["building"])->first();
+//
+//                $building["building_active"] = false;
+//                $building->save();
+//
+//                $floor = FloorInfo::where("floor_building", $request["building"])->get();
+//
+//                if (count($floor) > 0) {
+//
+//                    foreach ($floor as $each) {
+//                        $each["floor_active"] = false;
+//                        $each->save();
+//                    }
+//
+//                }
+//
+//                $room = RoomInfo::where("room_building", $request["building"])->get();
+//
+//                if (count($room) > 0) {
+//
+//                    foreach ($room as $each) {
+//                        $each["room_active"] = false;
+//                        $each->save();
+//                    }
+//
+//                }
 
                 return $this->send_response([], 'Successfully deactivate !!!');
 
@@ -1588,32 +1588,32 @@ class APIController extends Controller{
 
                 }
 
-                $building = BuildingInfo::where("building_name", $request["building"])->first();
-
-                $building["building_active"] = true;
-                $building->save();
-
-                $floor = FloorInfo::where("floor_building", $request["building"])->get();
-
-                if (count($floor) > 0) {
-
-                    foreach ($floor as $each) {
-                        $each["floor_active"] = true;
-                        $each->save();
-                    }
-
-                }
-
-                $room = RoomInfo::where("room_building", $request["building"])->get();
-
-                if (count($room) > 0) {
-
-                    foreach ($room as $each) {
-                        $each["room_active"] = true;
-                        $each->save();
-                    }
-
-                }
+//                $building = BuildingInfo::where("building_name", $request["building"])->first();
+//
+//                $building["building_active"] = true;
+//                $building->save();
+//
+//                $floor = FloorInfo::where("floor_building", $request["building"])->get();
+//
+//                if (count($floor) > 0) {
+//
+//                    foreach ($floor as $each) {
+//                        $each["floor_active"] = true;
+//                        $each->save();
+//                    }
+//
+//                }
+//
+//                $room = RoomInfo::where("room_building", $request["building"])->get();
+//
+//                if (count($room) > 0) {
+//
+//                    foreach ($room as $each) {
+//                        $each["room_active"] = true;
+//                        $each->save();
+//                    }
+//
+//                }
 
                 return $this->send_response([], 'Successfully activate !!!');
 
