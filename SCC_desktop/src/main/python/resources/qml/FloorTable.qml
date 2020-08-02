@@ -9,7 +9,7 @@ TableView {
     rowSpacing: 5
     boundsBehavior: Flickable.StopAtBounds
 
-    property var columnWidths: [100, 130, 150, 100, 150, 170, 270, 100, 100]
+    property var columnWidths: [170, 170, 120, 170, 170, 320, 150]
     columnWidthProvider: function (column) { return columnWidths[column] }
 
     model: floorTableModel
@@ -17,7 +17,7 @@ TableView {
 
     delegate: DelegateChooser {
         DelegateChoice {
-            column: 7
+            column: 6
 
             delegate: Rectangle {
                 color: "#007bff"
@@ -42,46 +42,13 @@ TableView {
                         parent.color = "#005bbd"
                     }
                     onReleased: {
-                        parent.color = "#007bff"
-                        // con.setCurrentRoom(model.display)
+                        con.setCurrentRoom(model.display)
                         mainViewLoader.source = "RoomReport.qml"
                     }
                 }
             }
         }
-        DelegateChoice {
-            column: 8
 
-            delegate: Rectangle {
-                color: "#dc3545"
-                radius: 10
-
-                Label {
-                    width: 48
-                    height: 20
-                    color: "#ffffff"
-                    text: "Delete"
-                    horizontalAlignment: Text.AlignHCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    font.bold: true
-                    font.pointSize: 9
-                    font.family: "Verdana"
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onPressed: {
-                        parent.color = "#ad3545"
-                    }
-                    onReleased: {
-                        parent.color = "#dc3545"
-                        confirmDeleteSingleFloorRecord.visible = true
-                        confirmDeleteSingleFloorRecord.item = model.display
-                    }
-                }
-            }
-        }
         DelegateChoice {
             delegate: Text {
                 text: model.display

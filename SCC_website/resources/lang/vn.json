@@ -178,17 +178,20 @@
     "You are activating ": "Bạn đang kích hoạt ",
     "Rename": "Đổi Tên",
     "Running": "Đang Chạy",
+    "Auto Running": "Đang Tự Động Chạy",
     "You might not want to delete these sensor logs !!!": "Bạn có thể không muốn xóa các bản ghi cảm biến này !!!",
     "You deleted these sensor logs !!!": "Bạn đã xóa các bản ghi cảm biến !!!",
     "You might not want to delete these device logs !!!": "Bạn có thể không muốn xóa các bản ghi thiết bị này !!!",
     "You deleted these device logs !!!": "Bạn đã xóa các bản ghi thiết bị !!!",
+    "You Are Not Allowed !!!": "Bạn không được phép !!!",
+    "The sensor is running !!!": "Cảm biến đang chạy !!!",
+    "The device is running !!!": "Thiết bị đang chạy !!!",
+    "Device KWH:": "Số KWH Của Thiết Bị",
+    "Successfully activate": "Kích hoạt thành công !!!",
+    "Successfully deactivate": "Hủy kích hoạt thành công !!!",
 
 
-
-
-
-
-    "Mobile Only Allows Maximum 20 Characters": "Số Điện Thoại Chỉ Cho Phép Tối Đa 20 Ký Tự",
+    "Mobile Is Only Between 3 And 14 Numbers": "Số Điện Thoại Chỉ Trong Khoảng 3 Và 14 Số",
     "Role Only Allows Maximum 255 Characters": "Vai Trò Chỉ Cho Phép Tối Đa 255 Ký Tự",
     "About Only Allows Maximum 255 Characters": "Miêu Tả Bản Thân Chỉ Cho Phép Tối Đa 255 Ký Tự",
     "Address Only Allows Maximum 255 Characters": "Địa Chỉ Nhà Cho Phép Tối Đa 255 Ký Tự",

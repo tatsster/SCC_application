@@ -13,6 +13,6 @@ Rectangle{
     Loader {
         id: reportViewLoader
         anchors.fill: parent
-        source: "BuildingInfo.qml"
+        source: "BuildingList.qml"
     }
 }

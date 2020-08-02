@@ -73,7 +73,7 @@ Route::get('sign-up','MainController@sign_up');
 
 /* Report */
 
-Route::get('report','MainController@report');
+Route::get('report','ReportController@report');
 
 /* User List */
 

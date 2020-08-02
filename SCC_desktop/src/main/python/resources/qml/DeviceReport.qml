@@ -17,7 +17,7 @@ Rectangle{
         y: 20
         width: 344
         height: 32
-        text: "Report Device LIGHT200"
+        text: ""
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         font.family: "Verdana"
         font.pointSize: 14
@@ -54,7 +54,6 @@ Rectangle{
                 parent.color = "#0262c9"
             }
             onReleased: {
-                parent.color = "#007bff"
                 mainViewLoader.source = "RoomReport.qml"
             }
         }
@@ -77,53 +76,13 @@ Rectangle{
         Label {
             id: deviceNameLabel
             y: 22
-            text: "LIGHT200 History Report"
+            text: ""
             anchors.left: parent.left
             anchors.leftMargin: 10
             anchors.verticalCenterOffset: 0
             font.pointSize: 11
             font.family: "Verdana"
             anchors.verticalCenter: parent.verticalCenter
-        }
-
-        Rectangle {
-            id: deleteAllButton
-            width: 151
-            color: "#dc3545"
-            radius: 10
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            anchors.topMargin: 8
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 8
-            anchors.top: parent.top
-            Label {
-                id: deleteAllLabel
-                x: 47
-                y: 13
-                width: 137
-                height: 16
-                color: "#ffffff"
-                text: qsTr("Delete all records")
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                font.bold: true
-                font.pointSize: 8
-                font.family: "Verdana"
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onPressed: {
-                    parent.color = "#ad3545"
-                }
-                onReleased: {
-                    parent.color = "#dc3545"
-                    confirmDeleteAllDeviceRecord.visible = true
-                }
-            }
         }
     }
 
@@ -139,29 +98,26 @@ Rectangle{
         anchors.left: parent.left
         anchors.leftMargin: 10
 
-        property var columnWidths: [170, 200, 100, 170, 180, 300, 150]
+        property var columnWidths: [190, 100, 230, 220, 230, 300]
         height: 50
         columnWidthProvider: function (column) { return columnWidths[column] }
 
         model: TableModel {
-            TableModelColumn { display: "deviceID" }
             TableModelColumn { display: "deviceName" }
             TableModelColumn { display: "status" }
+            TableModelColumn { display: "deviceStatusValue" }
             TableModelColumn { display: "eHoursUsage" }
             TableModelColumn { display: "electricalUsage" }
             TableModelColumn { display: "updateDatetime" }
-            TableModelColumn { display: "deleteButton" }
 
             rows: [
                 {
-                    // Each property is one cell/column.
-                    "deviceID": "Device's ID",
                     "deviceName": "Device's Name",
                     "status": "Status",
+                    "deviceStatusValue": "Device Status Value",
                     "eHoursUsage": "Hours Usage",
                     "electricalUsage": "Electrical Usage",
-                    "updateDatetime": "Update Time",
-                    "deleteButton": ""
+                    "updateDatetime": "Update Time"
                 }
             ]
         }
@@ -186,43 +142,20 @@ Rectangle{
 
     TableModel {
         id: deviceTableModel
-        TableModelColumn { display: "deviceID" }
         TableModelColumn { display: "deviceName" }
         TableModelColumn { display: "status" }
+        TableModelColumn { display: "deviceStatusValue" }
         TableModelColumn { display: "eHoursUsage" }
         TableModelColumn { display: "electricalUsage" }
         TableModelColumn { display: "updateDatetime" }
-        TableModelColumn { display: "deleteButton" }
 
-        // Each row is one type of fruit that can be ordered
-        rows: [
-            {
-                // Each property is one cell/column.
-                "deviceID": "LIGHT200",
-                "deviceName": "Light 1",
-                "status": "ON",
-                "eHoursUsage": "200",
-                "electricalUsage": "400 kW",
-                "updateDatetime": "29/05/2020 12:00:00 AM",
-                "deleteButton": "29/05/2020 12:00:00 AM"
-            },
-            {
-                "deviceID": "LIGHT200",
-                "deviceName": "Light 1",
-                "status": "OFF",
-                "eHoursUsage": "50",
-                "electricalUsage": "250 kW",
-                "updateDatetime": "30/05/2020 11:00:00 PM",
-                "deleteButton": "30/05/2020 11:00:00 PM"
-            }
-        ]
-
+        rows: []
     }
 
     Loader{
         id: deviceTableLoader
         anchors.top: tableHeader.bottom
-        anchors.topMargin: 5
+        anchors.topMargin: 20
         anchors.right: parent.right
         anchors.rightMargin: 10
         anchors.bottom: parent.bottom
@@ -233,44 +166,16 @@ Rectangle{
     }
 
     Component.onCompleted: {
-        /*
         reportDeviceLabel.text = con.getDeviceReportLabel()
         deviceNameLabel.text = con.getDeviceNameLabel()
         deviceTableModel.rows = con.getDeviceTable()
-        */
-    }
-
-    MessageBox {
-        id: confirmDeleteAllDeviceRecord
-        text: "Are you sure want to delete all records?"
-        onAccepted: {
-            // con.deleteAllDeviceRecord()
-            deviceTableModel.clear()
-        }
-    }
-
-    MessageBox {
-        id: confirmDeleteSingleDeviceRecord
-        property var item_timestamp: ""
-        onAccepted: {
-            // con.deleteSingleDeviceRecord(item_timestamp)
-            deviceTableModel.removeRow(getDeviceIndex(item_timestamp))
-        }
-    }
-
-    function getDeviceIndex(device_timestamp) {
-        for (var r = 0; r < deviceTableModel.rowCount; ++r) {
-            if (deviceTableModel.rows[r].updateDatetime === device_timestamp) {
-                return r;
-            }
-        }
     }
 }
 
 /*##^##
 Designer {
     D{i:0;formeditorZoom:0.75}D{i:3;anchors_height:47;anchors_width:437;anchors_y:58}
-D{i:4;anchors_x:8}D{i:8;anchors_width:214;anchors_x:484}D{i:5;anchors_height:38;anchors_width:214;anchors_x:384;anchors_y:11}
-D{i:14;anchors_width:182}
+D{i:4;anchors_x:8}D{i:5;anchors_height:38;anchors_width:214;anchors_x:384;anchors_y:11}
+D{i:11;anchors_width:182}
 }
 ##^##*/

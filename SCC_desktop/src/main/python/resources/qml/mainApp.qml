@@ -7,7 +7,7 @@ ApplicationWindow {
     visible: true
     width: 1600
     height: 900
-    title: qsTr("SCC - Smart Classroom Controller")
+    title: "SCC - Smart Classroom Controller"
     Material.theme: Material.Light
     Material.accent: Material.Amber
 

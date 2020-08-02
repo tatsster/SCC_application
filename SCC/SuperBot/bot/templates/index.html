@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Flask Chatbot</h1>
+<div>
+<div id = "chatbox">
+<p class = "botText"><span>Hi! Iam your Chatterbot.</span></p>
+</div>
+<!--<script>-->
+<!--function getBotResponse(){-->
+<!--var rawText = $("#textInput").val();-->
+<!--var userHtml = '<p class = "userText"><span>' + rawText + '</span></p>';-->
+<!--$("#textInput").val("");-->
+<!--$("#chatbox").append(userHtml);-->
+<!--document.getElementById('userInput').scrollIntoView({block:'start',behaviour:'smooth'});-->
+<!--$.post("/get",{msg:rawText}).done(function(data) {-->
+<!--var botHtml = '<p class ="botText"><span>' + data + '</span></p>';-->
+<!--$("#chatbox").append(botHtml);-->
+<!--document.getElementById('userInput').scrollIntoView({block : 'start',behaviour:'smooth'});-->
+<!--});-->
+<!--}-->
+<!--$("#textInput").keypress(function(e) {-->
+<!--&lt;!&ndash;if(e.which == 13) {&ndash;&gt;POST /get HTTP/1.1"-->
+<!--getBotResponse();-->
+<!--}-->
+<!--});-->
+<!--$("#buttonInput").click(function() {-->
+<!--getBotResponse();-->
+<!--})-->
+<!--</script>-->
+    <form action="{{ url_for('get_bot_response') }}" method="post">
+            <input type="text" name="message" placeholder="message">
+            <button>Search</button>
+    </form>
+</div>
+</body>
+</html>

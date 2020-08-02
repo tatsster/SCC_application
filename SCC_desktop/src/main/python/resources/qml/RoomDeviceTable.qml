@@ -9,21 +9,14 @@ TableView {
     rowSpacing: 5
     boundsBehavior: Flickable.StopAtBounds
     
-    property var columnWidths: [50, 170, 200, 100, 150, 150, 250, 100, 100]
+    property var columnWidths: [200, 120, 250, 250, 300, 150]
     columnWidthProvider: function (column) { return columnWidths[column] }
     
-    model: roomTableModel
+    model: roomDeviceTableModel
     
     delegate: DelegateChooser {
         DelegateChoice {
-            column: 0
-            delegate: CheckBox {
-                checked: model.display
-                onToggled: model.display = checked
-            }
-        }
-        DelegateChoice {
-            column: 3
+            column: 1
             
             delegate: Rectangle {
                 color: (model.display === "ON") ? "#28a745" : "#dc3545"
@@ -46,29 +39,27 @@ TableView {
                 MouseArea {
                     anchors.fill: parent
                     onPressed: {
-                        if (parent.color == "#28a745") {
-                            parent.color = "#288545"
-                        }
-                        else {
-                            parent.color = "#ad3545"
+                        if (turnOffRoomButton.activateRoomStatus === "ON") {
+                            if (parent.color == "#28a745") {
+                                parent.color = "#288545"
+                            }
+                            else {
+                                parent.color = "#ad3545"
+                            }
                         }
                     }
                     onReleased: {
-                        if (statusLabel.text == "ON") {
-                            model.display = "OFF"
+                        if (turnOffRoomButton.activateRoomStatus === "ON") {
+                            confirmOnOffDevice.device_name = roomDeviceTableModel.rows[index - 2].deviceName
+                            confirmOnOffDevice.current_status = roomDeviceTableModel.rows[index - 2].status
+                            confirmOnOffDevice.visible = true
                         }
-                        else {
-                            model.display = "ON"
-                        }
-                        // con.toggleDivices(roomTableModel.rows[index - 6].deviceID)
-                        roomTableLoader.source = ""
-                        roomTableLoader.source = "RoomTable.qml"
                     }
                 }
             }
         }
         DelegateChoice {
-            column: 7
+            column: 5
             
             delegate: Rectangle {
                 color: "#007bff"
@@ -93,42 +84,8 @@ TableView {
                         parent.color = "#005bbd"
                     }
                     onReleased: {
-                        parent.color = "#007bff"
-                        // con.setCurrentDevice(model.display)
+                        con.setCurrentDevice(model.display)
                         mainViewLoader.source = "DeviceReport.qml"
-                    }
-                }
-            }
-        }
-        DelegateChoice {
-            column: 8
-            
-            delegate: Rectangle {
-                color: "#dc3545"
-                radius: 10
-                
-                Label {
-                    width: 48
-                    height: 20
-                    color: "#ffffff"
-                    text: "Delete"
-                    horizontalAlignment: Text.AlignHCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    font.bold: true
-                    font.pointSize: 9
-                    font.family: "Verdana"
-                }
-                
-                MouseArea {
-                    anchors.fill: parent
-                    onPressed: {
-                        parent.color = "#ad3545"
-                    }
-                    onReleased: {
-                        parent.color = "#dc3545"
-                        confirmDeleteSingleRoomRecord.visible = true
-                        confirmDeleteSingleRoomRecord.item = model.display
                     }
                 }
             }
@@ -151,5 +108,22 @@ TableView {
     
     ScrollBar.vertical: ScrollBar {
         active: true
+    }
+
+    MessageBox {
+        id: confirmOnOffDevice
+        property  var device_name: ""
+        property  var current_status: ""
+        text: "Are you sure want to turn this device ".concat((current_status === "ON") ? "OFF?" : "ON?")
+        onAccepted: {
+            con.setCurrentDevice(device_name)
+            con.toggleDevice(device_name, current_status)
+            mainViewLoader.source = ""
+            mainViewLoader.source = "RoomReport.qml"
+        }
+        onRejected: {
+            mainViewLoader.source = ""
+            mainViewLoader.source = "RoomReport.qml"
+        }
     }
 }

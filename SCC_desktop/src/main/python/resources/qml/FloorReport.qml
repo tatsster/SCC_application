@@ -17,7 +17,7 @@ Rectangle{
         y: 20
         width: 270
         height: 32
-        text: "Report Floor F0005"
+        text: ""
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         font.family: "Verdana"
         font.pointSize: 14
@@ -54,7 +54,6 @@ Rectangle{
                 parent.color = "#0262c9"
             }
             onReleased: {
-                parent.color = "#007bff"
                 mainViewLoader.source = "BuildingReport.qml"
             }
         }
@@ -77,7 +76,9 @@ Rectangle{
         Label {
             id: floorNameLabel
             y: 22
-            text: qsTr("Rooms in Floor 5")
+            width: 700
+            height: 22
+            text: ""
             anchors.left: parent.left
             anchors.leftMargin: 10
             anchors.verticalCenterOffset: 0
@@ -87,8 +88,9 @@ Rectangle{
         }
 
         Rectangle {
-            id: deleteAllButton
-            width: 151
+            x: 852
+            id: turnOffFloorButton
+            width: 180
             color: "#dc3545"
             radius: 10
             anchors.right: parent.right
@@ -98,16 +100,16 @@ Rectangle{
             anchors.bottomMargin: 8
             anchors.top: parent.top
             Label {
-                id: deleteAllLabel
+                id: turnOffFloorLabel
                 x: 47
                 y: 13
                 width: 137
-                height: 16
+                height: 18
                 color: "#ffffff"
-                text: qsTr("Delete all records")
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                text: "Turn Off Floor"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 font.bold: true
                 font.pointSize: 8
                 font.family: "Verdana"
@@ -120,8 +122,7 @@ Rectangle{
                     parent.color = "#ad3545"
                 }
                 onReleased: {
-                    parent.color = "#dc3545"
-                    confirmDeleteAllFloorRecord.visible = true
+                    confirmTurnOffFloor.visible = true
                 }
             }
         }
@@ -138,12 +139,11 @@ Rectangle{
         anchors.left: parent.left
         anchors.leftMargin: 10
 
-        property var columnWidths: [100, 130, 150, 100, 150, 170, 270, 100, 100]
+        property var columnWidths: [170, 170, 120, 170, 170, 320, 150]
         height: 65
         columnWidthProvider: function (column) { return columnWidths[column] }
 
         model: TableModel {
-            TableModelColumn { display: "roomID" }
             TableModelColumn { display: "roomName" }
             TableModelColumn { display: "currentTemp" }
             TableModelColumn { display: "currentHumid" }
@@ -151,20 +151,16 @@ Rectangle{
             TableModelColumn { display: "electricalUsage" }
             TableModelColumn { display: "updateDatetime" }
             TableModelColumn { display: "viewButton" }
-            TableModelColumn { display: "deleteButton" }
 
             rows: [
                 {
-                    // Each property is one cell/column.
-                    "roomID": "Room's ID",
                     "roomName": "Room's Name",
                     "currentTemp": "Current Temperature",
                     "currentHumid": "Current Humidity",
-                    "eHoursUsage": "Total Hours Usage",
-                    "electricalUsage": "Total Electrical Usage",
+                    "eHoursUsage": "Total Hours Usage (hrs)",
+                    "electricalUsage": "Total Electrical Usage (kWh)",
                     "updateDatetime": "Update Time",
-                    "viewButton": "",
-                    "deleteButton": ""
+                    "viewButton": ""
                 }
             ]
         }
@@ -190,7 +186,6 @@ Rectangle{
 
     TableModel {
         id: floorTableModel
-        TableModelColumn { display: "roomID" }
         TableModelColumn { display: "roomName" }
         TableModelColumn { display: "currentTemp" }
         TableModelColumn { display: "currentHumid" }
@@ -198,34 +193,8 @@ Rectangle{
         TableModelColumn { display: "electricalUsage" }
         TableModelColumn { display: "updateDatetime" }
         TableModelColumn { display: "viewButton" }
-        TableModelColumn { display: "deleteButton" }
 
-        // Each row is one type of fruit that can be ordered
-        rows: [
-            {
-                // Each property is one cell/column.
-                "roomID": "R505",
-                "roomName": "Room 505",
-                "currentTemp": "30 °C",
-                "currentHumid": "50 %",
-                "eHoursUsage": "200",
-                "electricalUsage": "400 kW",
-                "updateDatetime": "29/05/2020 12:00:00 AM",
-                "viewButton": "R505",
-                "deleteButton": "R505"
-            },
-            {
-                "roomID": "R504",
-                "roomName": "Room 504",
-                "currentTemp": "32 °C",
-                "currentHumid": "50 %",
-                "eHoursUsage": "150",
-                "electricalUsage": "350 kW",
-                "updateDatetime": "29/05/2020 11:00:00 PM",
-                "viewButton": "R504",
-                "deleteButton": "R504"
-            }
-        ]
+        rows: []
 
     }
 
@@ -242,38 +211,22 @@ Rectangle{
         source: "FloorTable.qml"
     }
 
+    MessageBox {
+        id: confirmTurnOffFloor
+        text: "Are you sure want to turn off this floor?"
+        onAccepted: {
+            con.turnOffFloor()
+            turnOffFloorButton.color = "#dc3545"
+        }
+        onRejected: {
+            turnOffFloorButton.color = "#dc3545"
+        }
+    }
+
     Component.onCompleted: {
-        /*
-        reportFloorLabel.text = con.getFloorReportLabel()
-        floorNameLabel.text = con.getFloorNameLabel()
+        reportFloorLabel.text = con.getCurrentFloorReportLabel()
+        floorNameLabel.text = con.getCurrentFloorReportName()
         floorTableModel.rows = con.getFloorTable()
-        */
-    }
-
-    MessageBox {
-        id: confirmDeleteAllFloorRecord
-        text: "Are you sure want to delete all records?"
-        onAccepted: {
-            // con.deleteAllFloorRecord()
-            floorTableModel.clear()
-        }
-    }
-
-    MessageBox {
-        id: confirmDeleteSingleFloorRecord
-        property var item: ""
-        onAccepted: {
-            // con.deleteSingleFloorRecord(item)
-            floorTableModel.removeRow(getRoomIndex(item))
-        }
-    }
-
-    function getRoomIndex(room_id) {
-        for (var r = 0; r < floorTableModel.rowCount; ++r) {
-            if (floorTableModel.rows[r].roomID === room_id) {
-                return r;
-            }
-        }
     }
 }
 

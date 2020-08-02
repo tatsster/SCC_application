@@ -3,10 +3,10 @@ import QtQuick.Controls 2.13
 import QtGraphicalEffects 1.0
 
 Rectangle {
-    id: sidebar
     width: 400
     height: 900
     color: "#343a40"
+    property alias tabBarUserName: tabBarUserName
 
     property int currentSelectTab: 1
 
@@ -55,7 +55,7 @@ Rectangle {
         width: 377
         height: 50
         color: "#d0d4db"
-        text: qsTr("SCC")
+        text: "SCC"
         font.bold: true
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         font.family: "Verdana"
@@ -98,11 +98,11 @@ Rectangle {
     }
 
     Label {
-        id: userName
+        id: tabBarUserName
         y: 86
         height: 40
         color: "#d0d4db"
-        text: "Tran Trung Quan"
+        text: ""
         anchors.left: userAvatar.right
         anchors.leftMargin: 25
         anchors.right: parent.right
@@ -120,7 +120,7 @@ Rectangle {
         id: line1
         height: 2
         color: "#7c7c7c"
-        anchors.top: userName.bottom
+        anchors.top: tabBarUserName.bottom
         anchors.topMargin: 24
         anchors.rightMargin: 0
         anchors.leftMargin: 0
@@ -230,12 +230,9 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        /*
         userAvatar.source = con.getUserAva()
-        userName.text = con.getUserName()
-        */
+        tabBarUserName.text = con.getUserName()
     }
-
 }
 
 /*##^##

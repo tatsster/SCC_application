@@ -160,14 +160,14 @@ class ProfileController extends MainController {
             if ($current_user["user_mobile"] != $request["user_mobile"] && $request["user_mobile"] != ""){
 
                 $validator = Validator::make($request->all(), [
-                    'user_mobile' => 'max:20'
+                    'user_mobile' => 'digits_between:3,14'
                 ],
                     [
-                        'user_mobile.max' => Lang::get('Mobile Only Allows Maximum 20 Characters')
+                        'user_mobile.digits_between' => Lang::get('Mobile Is Only Between 3 And 14 Numbers')
                     ]);
 
                 if ($validator->fails()) {
-                    return redirect()->back()->with('msg_profile', Lang::get('Mobile Only Allows Maximum 20 Characters'))->with('msg_type_profile', 'danger');
+                    return redirect()->back()->with('msg_profile', Lang::get('Mobile Is Only Between 3 And 14 Numbers'))->with('msg_type_profile', 'danger');
                 }
 
                 $current_user["user_mobile"] = $request["user_mobile"];
@@ -382,14 +382,14 @@ class ProfileController extends MainController {
             if ($current_user["user_mobile"] != $request["user_mobile"] && $request["user_mobile"] != ""){
 
                 $validator = Validator::make($request->all(), [
-                    'user_mobile' => 'max:20'
+                    'user_mobile' => 'digits_between:3,14'
                 ],
                     [
-                        'user_mobile.max' => Lang::get('Mobile Only Allows Maximum 20 Characters'),
+                        'user_mobile.digits_between' => Lang::get('Mobile Is Only Between 3 And 14 Numbers')
                     ]);
 
                 if ($validator->fails()) {
-                    return redirect()->back()->with('msg_profile', Lang::get('Mobile Only Allows Maximum 20 Characters'))->with('msg_type_profile', 'danger');
+                    return redirect()->back()->with('msg_profile', Lang::get('Mobile Is Only Between 3 And 14 Numbers'))->with('msg_type_profile', 'danger');
                 }
 
                 $current_user["user_mobile"] = $request["user_mobile"];
@@ -555,6 +555,12 @@ class ProfileController extends MainController {
             }
             else {
                 $current_user->save();
+
+                $user_db = UserInfo::where('user_id', $user["user_id"])->get();
+                $current_user = $user_db->first();
+
+                $request->session()->put('current_user',$current_user);
+
                 return redirect()->back()->with('msg_profile', Lang::get('Successfully updated !!!'))->with('msg_type_profile', 'success');
             }
         } else {
@@ -572,7 +578,7 @@ class ProfileController extends MainController {
             'user_password' => 'min:3|max:255|confirmed',
             'user_address' => 'max:255',
             'user_about' => 'max:255',
-            'user_mobile' => 'max:20',
+            'user_mobile' => 'digits_between:3,14',
             'user_role' => 'max:255'
         ],
             [
@@ -583,7 +589,7 @@ class ProfileController extends MainController {
                 'user_password.max' => Lang::get('Password Only Allows Maximum 255 Characters'),
                 'user_password.confirmed' => Lang::get('Confirmed Password Wrong'),
                 'user_address.max' => Lang::get('Address Only Allows Maximum 255 Characters'),
-                'user_mobile.max' => Lang::get('Mobile Only Allows Maximum 20 Characters'),
+                'user_mobile.digits_between' => Lang::get('Mobile Is Only Between 3 And 14 Numbers'),
                 'user_role.max' => Lang::get('Role Only Allows Maximum 255 Characters'),
                 'user_about.max' => Lang::get('About Only Allows Maximum 255 Characters')
             ]);
@@ -673,7 +679,7 @@ class ProfileController extends MainController {
             'user_password' => 'min:3|max:255|confirmed',
             'user_address' => 'max:255',
             'user_about' => 'max:255',
-            'user_mobile' => 'max:20',
+            'user_mobile' => 'digits_between:3,14',
             'user_role' => 'max:255'
         ],
             [
@@ -684,7 +690,7 @@ class ProfileController extends MainController {
                 'user_password.max' => Lang::get('Password Only Allows Maximum 255 Characters'),
                 'user_password.confirmed' => Lang::get('Confirmed Password Wrong'),
                 'user_address.max' => Lang::get('Address Only Allows Maximum 255 Characters'),
-                'user_mobile.max' => Lang::get('Mobile Only Allows Maximum 20 Characters'),
+                'user_mobile.digits_between' => Lang::get('Mobile Is Only Between 3 And 14 Numbers'),
                 'user_role.max' => Lang::get('Role Only Allows Maximum 255 Characters'),
                 'user_about.max' => Lang::get('About Only Allows Maximum 255 Characters')
             ]);

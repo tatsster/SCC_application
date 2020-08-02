@@ -182,6 +182,10 @@ input[readonly].only-read{
     font-size: 2rem;
 }
 
+.custom-footer{
+    margin-left: 0px !important;
+}
+
 /*------------------------------------------------------------------
 [ Responsive ]*/
 

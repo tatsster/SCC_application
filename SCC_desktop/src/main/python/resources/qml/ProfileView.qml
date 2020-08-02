@@ -68,7 +68,7 @@ Rectangle{
             x: 91
             width: 290
             height: 42
-            text: "TRAN TRUNG QUAN"
+            text: ""
             anchors.top: userAvatar.bottom
             anchors.topMargin: 20
             anchors.horizontalCenterOffset: 0
@@ -85,7 +85,7 @@ Rectangle{
             x: 93
             width: 247
             height: 36
-            text: "quan.tran.itbk@hcmut.edu.vn"
+            text: ""
             anchors.top: userNameLabel.bottom
             anchors.topMargin: 5
             anchors.horizontalCenterOffset: 1
@@ -101,7 +101,7 @@ Rectangle{
             x: 93
             width: 247
             height: 36
-            text: "0855791231"
+            text: ""
             anchors.top: userEmailLabel.bottom
             anchors.topMargin: 5
             horizontalAlignment: Text.AlignHCenter
@@ -142,7 +142,7 @@ Rectangle{
                 width: 158
                 height: 42
                 color: "#ffffff"
-                text: qsTr("About Me")
+                text: "About Me"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 font.bold: true
@@ -170,7 +170,7 @@ Rectangle{
             y: 66
             width: 76
             height: 28
-            text: qsTr("Position")
+            text: "Position"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.bold: true
@@ -193,7 +193,7 @@ Rectangle{
             x: 55
             width: 362
             height: 36
-            text: "School Manager"
+            text: ""
             anchors.top: positionLabel.bottom
             anchors.topMargin: 5
             anchors.right: parent.right
@@ -209,7 +209,7 @@ Rectangle{
             y: 172
             width: 76
             height: 28
-            text: qsTr("Address")
+            text: "Address"
             font.bold: true
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 10
@@ -233,7 +233,7 @@ Rectangle{
             x: 54
             width: 362
             height: 56
-            text: "497 Hoa Hao St., 7 Ward, District 10, HCMC"
+            text: ""
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             anchors.top: addressLabel.bottom
             anchors.topMargin: 5
@@ -249,7 +249,7 @@ Rectangle{
     Rectangle {
         id: infoEditBox
         y: 94
-        height: 532
+        height: 396
         color: "#ffffff"
         radius: 10
         border.color: "#007bff"
@@ -275,7 +275,7 @@ Rectangle{
                 width: 158
                 height: 42
                 color: "#ffffff"
-                text: qsTr("Edit Profile")
+                text: "Edit Profile"
                 horizontalAlignment: Text.AlignHCenter
                 font.bold: true
                 anchors.verticalCenter: parent.verticalCenter
@@ -290,7 +290,7 @@ Rectangle{
             id: nameLabel
             width: 82
             height: 28
-            text: qsTr("Name")
+            text: "Name"
             anchors.top: editProfileTag.bottom
             anchors.topMargin: 40
             anchors.left: parent.left
@@ -303,27 +303,11 @@ Rectangle{
         }
 
         Text {
-            id: emailLabel
-            width: 82
-            height: 28
-            text: qsTr("Email")
-            anchors.top: nameLabel.bottom
-            anchors.topMargin: 40
-            anchors.left: parent.left
-            anchors.leftMargin: 20
-            font.bold: true
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-            font.family: "Verdana"
-            font.pixelSize: 18
-        }
-
-        Text {
             id: phoneLabel
             width: 82
             height: 28
-            text: qsTr("Phone")
-            anchors.top: emailLabel.bottom
+            text: "Phone"
+            anchors.top: nameLabel.bottom
             anchors.topMargin: 40
             anchors.left: parent.left
             anchors.leftMargin: 20
@@ -338,23 +322,7 @@ Rectangle{
             id: addressEditLabel
             width: 90
             height: 28
-            text: qsTr("Address")
-            anchors.top: positionEditLabel.bottom
-            anchors.topMargin: 40
-            anchors.left: parent.left
-            anchors.leftMargin: 20
-            font.bold: true
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-            font.family: "Verdana"
-            font.pixelSize: 18
-        }
-
-        Text {
-            id: positionEditLabel
-            width: 92
-            height: 28
-            text: qsTr("Position")
+            text: "Address"
             anchors.top: phoneLabel.bottom
             anchors.topMargin: 40
             anchors.left: parent.left
@@ -379,63 +347,10 @@ Rectangle{
             text: ""
             font.pointSize: 10
             font.family: "Verdana"
-            placeholderText: "TRAN TRUNG QUAN"
+            placeholderText: ""
             selectByMouse: true
         }
 
-        TextField {
-            id: textFieldEmail
-            x: 190
-            y: 172
-            width: 498
-            height: 40
-
-            text: ""
-            anchors.verticalCenter: emailLabel.verticalCenter
-            placeholderText: "quan.tran.itbk@hcmut.edu.vn"
-            font.pointSize: 10
-            anchors.left: editProfileTag.right
-            anchors.right: parent.right
-            font.family: "Verdana"
-            anchors.rightMargin: 20
-            anchors.leftMargin: 0
-            selectByMouse: true
-        }
-
-        TextField {
-            id: textFieldAddress
-            x: 190
-            y: 305
-            height: 40
-
-            text: ""
-            anchors.verticalCenter: addressEditLabel.verticalCenter
-            placeholderText: "497 Hoa Hao St., 7 Ward, District 10"
-            font.pointSize: 10
-            anchors.left: editProfileTag.right
-            anchors.right: parent.right
-            font.family: "Verdana"
-            anchors.rightMargin: 20
-            anchors.leftMargin: 0
-            selectByMouse: true
-        }
-
-        TextField {
-            id: textFieldPosition
-            y: 314
-            height: 40
-
-            text: ""
-            anchors.verticalCenter: positionEditLabel.verticalCenter
-            placeholderText: "School Manager"
-            font.pointSize: 10
-            anchors.left: editProfileTag.right
-            anchors.right: parent.right
-            font.family: "Verdana"
-            anchors.leftMargin: 0
-            anchors.rightMargin: 20
-            selectByMouse: true
-        }
 
         TextField {
             id: textFieldPhone
@@ -446,7 +361,26 @@ Rectangle{
 
             text: ""
             anchors.verticalCenter: phoneLabel.verticalCenter
-            placeholderText: "0855791231"
+            placeholderText: ""
+            font.pointSize: 10
+            anchors.left: editProfileTag.right
+            anchors.right: parent.right
+            font.family: "Verdana"
+            anchors.rightMargin: 20
+            anchors.leftMargin: 0
+            selectByMouse: true
+            maximumLength: 20
+        }
+
+        TextField {
+            id: textFieldAddress
+            x: 190
+            y: 305
+            height: 40
+
+            text: ""
+            anchors.verticalCenter: addressEditLabel.verticalCenter
+            placeholderText: ""
             font.pointSize: 10
             anchors.left: editProfileTag.right
             anchors.right: parent.right
@@ -491,14 +425,19 @@ Rectangle{
                 }
                 onReleased: {
                     parent.color = "#dc3545"
-//                  con.updateProfile(textFieldName.text, textFieldEmail.text, textFieldPhone.text, textFieldPosition.text, textFieldAddress.text)
+                    if (con.updateProfile(textFieldName.text, textFieldPhone.text, textFieldAddress.text)) {
+                        if (textFieldName.text) {
+                            appView.sideBar.tabBarUserName.text = textFieldName.text
+                        }
+                        mainViewLoader.source = ""
+                        mainViewLoader.source = "ProfileView.qml"
+                    }
                 }
             }
         }
     }
 
     Component.onCompleted: {
-        /*
         userAvatar.source = con.getUserAva()
         userNameLabel.text = con.getUserName()
         userEmailLabel.text = con.getUserEmail()
@@ -506,11 +445,8 @@ Rectangle{
         userPositionLabel.text = con.getUserPosition()
         userAddressLabel.text = con.getUserAddress()
         textFieldName.placeholderText = userNameLabel.text
-        textFieldEmail.placeholderText = userEmailLabel.text
         textFieldPhone.placeholderText = userPhoneLabel.text
-        textFieldPosition.placeholderText = userPositionLabel.text
         textFieldAddress.placeholderText = userAddressLabel.text
-        */
     }
 
 }
@@ -521,9 +457,8 @@ Designer {
 D{i:9;anchors_height:36;anchors_y:303}D{i:2;anchors_x:21}D{i:13;anchors_width:415;anchors_x:8}
 D{i:11;anchors_width:297;anchors_x:40;anchors_y:44}D{i:16;anchors_y:100}D{i:19;anchors_y:206}
 D{i:21;anchors_width:297;anchors_x:19;anchors_y:17}D{i:23;anchors_x:20;anchors_y:97}
-D{i:24;anchors_x:20;anchors_y:167}D{i:25;anchors_x:20;anchors_y:230}D{i:26;anchors_x:20;anchors_y:305}
-D{i:27;anchors_x:20;anchors_y:370}D{i:28;anchors_width:481;anchors_x:207}D{i:29;anchors_width:481;anchors_x:207}
-D{i:30;anchors_width:498;anchors_x:0}D{i:31;anchors_width:498;anchors_x:190}D{i:32;anchors_width:481;anchors_x:207}
-D{i:33;anchors_height:51;anchors_width:135;anchors_x:553;anchors_y:466}D{i:20;anchors_width:573;anchors_x:519}
+D{i:24;anchors_x:20;anchors_y:230}D{i:25;anchors_x:20;anchors_y:305}D{i:26;anchors_width:481;anchors_x:207}
+D{i:27;anchors_width:481;anchors_x:207}D{i:28;anchors_width:498;anchors_x:0}D{i:29;anchors_height:51;anchors_width:135;anchors_x:553;anchors_y:466}
+D{i:20;anchors_width:573;anchors_x:519}
 }
 ##^##*/

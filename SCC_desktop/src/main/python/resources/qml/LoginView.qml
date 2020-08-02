@@ -28,7 +28,7 @@ Rectangle {
             anchors.rightMargin: 30
             font.pointSize: 9
             font.family: "Verdana"
-            placeholderText: qsTr("Enter your username")
+            placeholderText: "Enter your username"
             selectByMouse: true
 
             background: Rectangle {
@@ -37,8 +37,6 @@ Rectangle {
                 implicitHeight: 40
                 border.color: usernameInput.enabled ? "#1488db" : "transparent"
             }
-
-//            onPressed: con.toggleKeyboard()
         }
 
         TextField {
@@ -97,12 +95,9 @@ Rectangle {
                     parent.color = "#1488db"
                     if (con.checkValidLogin(usernameInput.text, passwordInput.text)) {
                         appLoader.source = "AppView.qml"
-                        //TODO: Load user info
                     } else {
                         loginFailedLabel.text = "Login failed. Please try again!"
                     }
-
-
                 }
             }
         }
@@ -150,7 +145,7 @@ Rectangle {
         x: 446
         y: 321
         color: "#ffffff"
-        text: qsTr("SCC - Smart Classroom Controller")
+        text: "SCC - Smart Classroom Controller"
         anchors.bottom: loginBox.top
         anchors.bottomMargin: 55
         anchors.horizontalCenterOffset: 0

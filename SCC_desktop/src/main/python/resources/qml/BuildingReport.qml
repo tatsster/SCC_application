@@ -17,7 +17,7 @@ Rectangle{
         y: 20
         width: 260
         height: 32
-        text: "Report A4 Building"
+        text: ""
         font.family: "Verdana"
         font.pointSize: 14
     }
@@ -53,7 +53,6 @@ Rectangle{
                 parent.color = "#0262c9"
             }
             onReleased: {
-                parent.color = "#007bff"
                 mainViewLoader.source = "BuildingInfo.qml"
             }
         }
@@ -76,7 +75,7 @@ Rectangle{
         Label {
             id: buildingNameLabel
             y: 22
-            text: "A4 Building Info"
+            text: ""
             anchors.left: parent.left
             anchors.leftMargin: 10
             anchors.verticalCenterOffset: 0
@@ -86,8 +85,9 @@ Rectangle{
         }
 
         Rectangle {
-            id: deleteAllButton
-            width: 151
+            x: 852
+            id: turnOffBuildingButton
+            width: 180
             color: "#dc3545"
             radius: 10
             anchors.right: parent.right
@@ -97,16 +97,16 @@ Rectangle{
             anchors.bottomMargin: 8
             anchors.top: parent.top
             Label {
-                id: deleteAllLabel
+                id: turnOffBuildingLabel
                 x: 47
                 y: 13
                 width: 137
-                height: 16
+                height: 18
                 color: "#ffffff"
-                text: qsTr("Delete all records")
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                text: "Turn Off Building"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 font.bold: true
                 font.pointSize: 8
                 font.family: "Verdana"
@@ -119,8 +119,7 @@ Rectangle{
                     parent.color = "#ad3545"
                 }
                 onReleased: {
-                    parent.color = "#dc3545"
-                    confirmDeleteAllBuildingRecord.visible = true
+                    confirmTurnOffBuilding.visible = true
                 }
             }
         }
@@ -137,29 +136,25 @@ Rectangle{
         anchors.left: parent.left
         anchors.leftMargin: 10
 
-        property var columnWidths: [170, 200, 200, 230, 270, 100, 100]
+        property var columnWidths: [220, 280, 310, 310, 150]
         height: 50
         columnWidthProvider: function (column) { return columnWidths[column] }
 
         model: TableModel {
-            TableModelColumn { display: "floorID" }
             TableModelColumn { display: "floorName" }
             TableModelColumn { display: "eHoursUsage" }
             TableModelColumn { display: "electricalUsage" }
             TableModelColumn { display: "updateDatetime" }
             TableModelColumn { display: "viewButton" }
-            TableModelColumn { display: "deleteButton" }
 
             rows: [
                 {
                     // Each property is one cell/column.
-                    "floorID": "Floor's ID",
                     "floorName": "Floor's Name",
-                    "eHoursUsage": "Total Hours Usage",
-                    "electricalUsage": "Total Electrical Usage",
+                    "eHoursUsage": "Total Hours Usage (hrs)",
+                    "electricalUsage": "Total Electrical Usage (kWh)",
                     "updateDatetime": "Update Time",
-                    "viewButton": "",
-                    "deleteButton": ""
+                    "viewButton": ""
                 }
             ]
         }
@@ -185,36 +180,13 @@ Rectangle{
 
     TableModel {
         id: buildingTableModel
-        TableModelColumn { display: "floorID" }
         TableModelColumn { display: "floorName" }
         TableModelColumn { display: "eHoursUsage" }
         TableModelColumn { display: "electricalUsage" }
         TableModelColumn { display: "updateDatetime" }
         TableModelColumn { display: "viewButton" }
-        TableModelColumn { display: "deleteButton" }
 
-        // Each row is one type of fruit that can be ordered
-        rows: [
-            {
-                // Each property is one cell/column.
-                "floorID": "F0005",
-                "floorName": "Floor 5",
-                "eHoursUsage": "200",
-                "electricalUsage": "400 kW",
-                "updateDatetime": "29/05/2020 12:00:00 AM",
-                "viewButton": "F0005",
-                "deleteButton": "F0005"
-            },
-            {
-                "floorID": "F0004",
-                "floorName": "Floor 4",
-                "eHoursUsage": "50",
-                "electricalUsage": "250 kW",
-                "updateDatetime": "29/05/2020 12:00:00 AM",
-                "viewButton": "F0004",
-                "deleteButton": "F0004"
-            }
-        ]
+        rows: []
     }
 
     Loader{
@@ -230,36 +202,22 @@ Rectangle{
         source: "BuildingTable.qml"
     }
 
+    MessageBox {
+        id: confirmTurnOffBuilding
+        text: "Are you sure want to turn off this building?"
+        onAccepted: {
+            con.turnOffBuilding()
+            turnOffBuildingButton.color = "#dc3545"
+        }
+        onRejected: {
+            turnOffBuildingButton.color = "#dc3545"
+        }
+    }
+
     Component.onCompleted: {
-        /*
+        reportBuildingLabel.text = "Report ".concat(con.getCurrentBuildingName())
+        buildingNameLabel.text = con.getCurrentBuildingName().concat(" Info")
         buildingTableModel.rows = con.getBuildingTable()
-        */
-    }
-
-    MessageBox {
-        id: confirmDeleteAllBuildingRecord
-        text: "Are you sure want to delete all records?"
-        onAccepted: {
-            // con.deleteAllBuildingRecord()
-            buildingTableModel.clear()
-        }
-    }
-
-    MessageBox {
-        id: confirmDeleteSingleBuildingRecord
-        property var item: ""
-        onAccepted: {
-            // con.deleteSingleBuildingRecord(item)
-            buildingTableModel.removeRow(getFloorIndex(item))
-        }
-    }
-
-    function getFloorIndex(floor_id) {
-        for (var r = 0; r < buildingTableModel.rowCount; ++r) {
-            if (buildingTableModel.rows[r].floorID === floor_id) {
-                return r;
-            }
-        }
     }
 }
 

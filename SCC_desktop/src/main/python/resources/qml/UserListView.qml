@@ -32,13 +32,13 @@ Rectangle {
         anchors.topMargin: 25
         snapMode: GridView.NoSnap
         keyNavigationWraps: false
-        model: [{"name": "Tran Trung Quan","email": "quan.tran.itbk@hcmut.edu.vn","phone": "0855791615"}, {"name": "Huynh Ngoc Thien","email": "quan.tran.itbk@hcmut.edu.vn","phone": "0855791615"}]
+        model: []
         cellWidth:420
-        cellHeight:350
+        cellHeight:400
         delegate: Rectangle {
             id: avatarBox
             width: 410
-            height: 340
+            height: 390
             color: "#ffffff"
             radius: 10
             border.color: "#007bff"
@@ -54,7 +54,7 @@ Rectangle {
                 anchors.topMargin: 35
                 anchors.horizontalCenterOffset: 0
                 anchors.horizontalCenter: parent.horizontalCenter
-                source: 'ava.png'
+                source: modelData.user_avatar
                 layer.enabled: rounded
                 layer.effect: OpacityMask {
                     maskSource: Item {
@@ -74,7 +74,7 @@ Rectangle {
                 id: userNameLabel
                 width: 290
                 height: 42
-                text: modelData.name
+                text: modelData.user_fullname
                 anchors.top: userAvatar.bottom
                 anchors.topMargin: 20
                 anchors.horizontalCenterOffset: 0
@@ -86,12 +86,27 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
             }
 
+            Label {
+                id: roleLabel
+                width: 290
+                height: 42
+                text: modelData.user_role
+                anchors.top: userNameLabel.bottom
+                anchors.topMargin: 5
+                anchors.horizontalCenterOffset: 0
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pointSize: 11
+                font.family: "Verdana"
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+
             Text {
                 id: userEmailLabel
                 width: 247
                 height: 36
-                text: modelData.email
-                anchors.top: userNameLabel.bottom
+                text: modelData.user_email
+                anchors.top: roleLabel.bottom
                 anchors.topMargin: 5
                 anchors.horizontalCenterOffset: 1
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -105,7 +120,7 @@ Rectangle {
                 id: userPhoneLabel
                 width: 247
                 height: 36
-                text: modelData.phone
+                text: modelData.user_mobile
                 anchors.top: userEmailLabel.bottom
                 anchors.topMargin: 5
                 horizontalAlignment: Text.AlignHCenter
@@ -121,9 +136,8 @@ Rectangle {
     }
 
     Component.onCompleted: {
-//      userListBox.model = con.getUserList()
+        userListBox.model = con.getUserList()
     }
-
 }
 
 /*##^##

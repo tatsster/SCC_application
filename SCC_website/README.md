@@ -7,6 +7,26 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
+
+# SCC_Website_Application
+
+## Prerequisites
+
+* Include in composer.json
+* To install
+```sh
+composer update
+```
+**_Notes:_** _This project is using Laravel 6_
+
+
+## Run and Build
+
+* Build / Run the code
+```
+php artisan serve --host 0.0.0.0 --port 8000
+```
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

@@ -7,7 +7,7 @@ import QtQuick.Controls 2.2
 Dialog {
     parent: ApplicationWindow.overlay
 
-    width: 450
+    width: 500
     height: 200
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
@@ -20,7 +20,6 @@ Dialog {
 
     Label {
         id: messageText
-        text: "Are you sure want to delete?"
         font.pointSize: 11
         font.family: "Verdana"
         verticalAlignment: Text.AlignVCenter

@@ -653,56 +653,65 @@
 
     function updateNewDeviceData(){
 
-        $.ajax({
-            url: "update-device-real-time",
-            type: "POST",
-            data: {_token: "{{csrf_token()}}", device_id: "{{ session("1752051_current_device")["device_id"] }}" },
-            async: false,
-            success: function (data) {
-                // alert(data.split(";"));
-                // return data.split(",");
-                var finalData = data.split(",");
+        if (timeDevice != undefined){
 
-                if (timeDevice != finalData[6]){
+            $.ajax({
+                url: "update-device-real-time",
+                type: "POST",
+                data: {_token: "{{csrf_token()}}", device_id: "{{ session("1752051_current_device")["device_id"] }}" },
+                async: false,
+                success: function (data) {
+                    // alert(data.split(";"));
+                    // return data.split(",");
+                    var finalData = data.split(",");
 
-                    timeDevice = finalData[6];
+                    if (timeDevice != finalData[6]){
 
-                    var date = moment(parseInt(finalData[6]) * 1000);
+                        timeDevice = finalData[6];
 
-                    if (finalData[2] === "1") {
+                        var date = moment(parseInt(finalData[6]) * 1000);
 
-                        var insertHtml = '<tr> <td class="text-center"></td> <td>' + finalData[0] + '</td> <td>' + finalData[1] + '</td> <td> <input id="on-toggle' + finalData[6] + '" type="checkbox" checked data-bootstrap-switch-disabled data-off-color="danger" data-on-color="success"> </td> <td>' + finalData[3] + '</td> <td> --- </td> <td> --- </td> <td>' + date.format("DD/MM/YYYY HH:mm:ss") + '</td> <td class="project-actions text-left"> </td> </tr>';
+                        if (finalData[2] === "1") {
+
+                            var insertHtml = '<tr> <td class="text-center"></td> <td>' + finalData[0] + '</td> <td>' + finalData[1] + '</td> <td> <input id="on-toggle' + finalData[6] + '" type="checkbox" checked data-bootstrap-switch-disabled data-off-color="danger" data-on-color="success"> </td> <td>' + finalData[3] + '</td> <td> --- </td> <td> --- </td> <td>' + date.format("DD/MM/YYYY HH:mm:ss") + '</td> <td class="project-actions text-left"> </td> </tr>';
+
+                        }
+
+                        else {
+
+                            var insertHtml = '<tr> <td class="text-center"></td> <td>' + finalData[0] + '</td> <td>' + finalData[1] + '</td> <td>  <input id="off-toggle' + finalData[6] + '" type="checkbox" data-bootstrap-switch-disabled data-off-color="danger" data-on-color="success"> </td> <td>' + finalData[3] + '</td> <td>' + finalData[4] + '</td> <td>' + finalData[5] + '</td> <td>' + date.format("DD/MM/YYYY HH:mm:ss") + '</td> <td class="project-actions text-left"> </td> </tr>';
+
+                        }
+
+                        $('#device-tbody').prepend(insertHtml);
+
+                        $("#device-table").order( [ 8, 'desc' ] ).draw()
+
+                        $("#on-toggle" + finalData[6]).bootstrapSwitch('toggleDisabled',true,true);
+
+                        $("#off-toggle" + finalData[6]).bootstrapSwitch('toggleDisabled',true,true);
+
+                        $(".bootstrap-switch-success").text('@lang("ON")');
+
+                        $(".bootstrap-switch-danger").text('@lang("OFF")');
 
                     }
-
-                    else {
-
-                        var insertHtml = '<tr> <td class="text-center"></td> <td>' + finalData[0] + '</td> <td>' + finalData[1] + '</td> <td>  <input id="off-toggle' + finalData[6] + '" type="checkbox" data-bootstrap-switch-disabled data-off-color="danger" data-on-color="success"> </td> <td>' + finalData[3] + '</td> <td>' + finalData[4] + '</td> <td>' + finalData[5] + '</td> <td>' + date.format("DD/MM/YYYY HH:mm:ss") + '</td> <td class="project-actions text-left"> </td> </tr>';
-
-                    }
-
-                    $('#device-tbody').prepend(insertHtml);
-
-                    $("#on-toggle" + finalData[6]).bootstrapSwitch('toggleDisabled',true,true);
-
-                    $("#off-toggle" + finalData[6]).bootstrapSwitch('toggleDisabled',true,true);
-
-                    $(".bootstrap-switch-success").text('@lang("ON")');
-
-                    $(".bootstrap-switch-danger").text('@lang("OFF")');
-
                 }
-            }
-        })
+            })
+
+        }
 
     }
 
-    setInterval(function(){
-        updateNewDeviceData();
-        }, 1000
-    );
-
 </script>
+@if (session("1752051_current_device")["device_pid"] != null)
+    <script>
+        setInterval(function(){
+                updateNewDeviceData();
+            }, 1000
+        );
+    </script>
+@endif
 <script src="../assets/js/chartjs-plugin-streaming.js"></script>
 <script>
 
@@ -751,9 +760,14 @@
 
                 // alert(tempValue);
             }
-        })
+        });
 
-        if (timeTemperature != tempTime){
+        if (timeTemperature != tempTime && String(tempTime) !== "NaN"){
+
+            if (timeTemperature == undefined){
+                $('#sensor-tbody').empty();
+            }
+
             timeTemperature = tempTime;
             valueTemperature = tempValue;
             chart.config.data.datasets.forEach(function(dataset) {
@@ -778,6 +792,7 @@
                     var insertHtml = '<tr> <td class="text-center"></td> <td>' + finalData[0] + '</td><td>' + finalData[1] + '</td><td>' + finalData[2] + '</td><td>' + finalData[3] + '</td><td>' + finalData[4] + '</td><td>' + date.format("DD/MM/YYYY HH:mm:ss") + '</td> <td class="project-actions text-left"> </td> </tr>';
 
                     $('#sensor-tbody').prepend(insertHtml);
+                    $("#sensor-table").order( [ 7, 'desc' ] ).draw();
                 }
             })
         }
