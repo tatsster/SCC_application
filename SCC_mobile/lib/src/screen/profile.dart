@@ -168,7 +168,7 @@ class Profile extends StatelessWidget {
               ),
             ),
             subtitle: Align(
-              alignment: Alignment(-5, 0),
+              alignment: Alignment(-1.4, 0),
               child: Text(
                 userInfo.userAddress,
                 style: TextStyle(fontSize: 15, color: Colors.black),
@@ -272,27 +272,6 @@ class Profile extends StatelessWidget {
                   ],
                 ),
               ),
-              // ! Position
-              Container(
-                height: 45,
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 65,
-                      child: Text(
-                        'Position',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    positionField(context),
-                  ],
-                ),
-              ),
               // ! Address
               Container(
                 height: 45,
@@ -311,6 +290,53 @@ class Profile extends StatelessWidget {
                       ),
                     ),
                     addressField(context),
+                  ],
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(top: 15)),
+              Divider(thickness: 2),
+              Padding(padding: EdgeInsets.only(top: 15)),
+              // ! Password
+              Container(
+                height: 65,
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 65,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Password',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    pwdField(context),
+                  ],
+                ),
+              ),
+              // ! Confirm password
+              Container(
+                height: 65,
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 65,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Password Confirm',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    rePwdField(context),
                   ],
                 ),
               ),
@@ -392,18 +418,44 @@ class Profile extends StatelessWidget {
     );
   }
 
-  Widget positionField(BuildContext context) {
+  Widget pwdField(BuildContext context) {
     final profileBloc = BlocProvider.of(context).bloc.profileBloc;
 
     return Flexible(
       child: StreamBuilder(
-        stream: profileBloc.position,
+        stream: profileBloc.pwd,
+        builder: (context, AsyncSnapshot<String> snapshot) {
+          return TextField(
+            onChanged: profileBloc.changePwd,
+            obscureText: true,
+            decoration: InputDecoration(
+              helperText: ' ',
+              hintStyle: TextStyle(fontSize: 14),
+              errorText: snapshot.error,
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey[300]),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget rePwdField(BuildContext context) {
+    final profileBloc = BlocProvider.of(context).bloc.profileBloc;
+
+    return Flexible(
+      child: StreamBuilder(
+        stream: profileBloc.rePwd,
         builder: (context, snapshot) {
           return TextField(
-            onChanged: profileBloc.changePosition,
+            onChanged: profileBloc.changeRePwd,
+            obscureText: true,
             decoration: InputDecoration(
-              hintText: userInfo.userRole,
+              helperText: ' ',
               hintStyle: TextStyle(fontSize: 14),
+              errorText: snapshot.error,
               border: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey[300]),
               ),
@@ -438,21 +490,21 @@ class Profile extends StatelessWidget {
 
   Widget editButton(BuildContext context) {
     final profileBloc = BlocProvider.of(context).bloc.profileBloc;
-    return StreamBuilder(
-      stream: profileBloc.submitValid,
-      builder: (context, snapshot) {
-        return Container(
-          alignment: Alignment.bottomRight,
-          child: RaisedButton(
-            child: Text('Update'),
-            color: Colors.red,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0)),
-            onPressed:
-                snapshot.hasData && snapshot.data ? profileBloc.update : null,
-          ),
-        );
-      },
+    // return StreamBuilder(
+    //   stream: profileBloc.submitValid,
+    //   builder: (context, snapshot) {
+    //   },
+    // );
+    return Container(
+      alignment: Alignment.bottomRight,
+      child: RaisedButton(
+        child: Text('Update'),
+        color: Colors.red,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        onPressed: () {
+          profileBloc.update(context, this.userInfo);
+        },
+      ),
     );
   }
 }

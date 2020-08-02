@@ -12,16 +12,7 @@ class MainDrawer extends StatelessWidget {
         color: Colors.black87,
         child: Column(
           children: <Widget>[
-            // Container(
-            //   width: MediaQuery.of(context).size.width,
-            //   height: 250,
-            //   decoration: BoxDecoration(
-            //     image: DecorationImage(
-            //       image: AssetImage('assets/images/logo-Placeholder.png'),
-            //       fit: BoxFit.fitWidth,
-            //     ),
-            //   ),
-            // ),
+            // ! User Icon
             UserAccountsDrawerHeader(
               accountName: Text(
                 userInfo.userEmail,
@@ -39,27 +30,29 @@ class MainDrawer extends StatelessWidget {
               ),
             ),
             Padding(padding: EdgeInsets.only(top: 20.0)),
+            // ! Tab Dashboard
+            // ListTile(
+            //   leading: Icon(
+            //     Icons.settings,
+            //     size: 30.0,
+            //     color: Colors.white,
+            //   ),
+            //   title: Text(
+            //     'Dashboard',
+            //     style: TextStyle(
+            //       fontSize: 20.0,
+            //       color: Colors.white,
+            //     ),
+            //   ),
+            //   onTap: () {
+            //     Navigator.pushNamed(context, '/dashboard');
+            //   },
+            // ),
+            // ! Tab Report
             ListTile(
               leading: FaIcon(
                 FontAwesomeIcons.tachometerAlt,
                 size: 28.0,
-                color: Colors.white,
-              ),
-              title: Text(
-                'Dashboard',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, '/dashboard');
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.assignment,
-                size: 30.0,
                 color: Colors.white,
               ),
               title: Text(
@@ -73,23 +66,25 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushNamed(context, '/report');
               },
             ),
-            // ListTile(
-            //   leading: Icon(
-            //     Icons.settings,
-            //     size: 30.0,
-            //     color: Colors.white,
-            //   ),
-            //   title: Text(
-            //     'Setting',
-            //     style: TextStyle(
-            //       fontSize: 20.0,
-            //       color: Colors.white,
-            //     ),
-            //   ),
-            //   onTap: () {
-            //     Navigator.pushNamed(context, '/setting');
-            //   },
-            // ),
+            // ! Tab System log 
+            ListTile(
+              leading: Icon(
+                Icons.assignment,
+                size: 30.0,
+                color: Colors.white,
+              ),
+              title: Text(
+                'System Log',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.white,
+                ),
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/systemlog');
+              },
+            ),
+            // ! Log out and profile
             Expanded(
               child: Container(
                 padding: EdgeInsets.only(left: 3.0),

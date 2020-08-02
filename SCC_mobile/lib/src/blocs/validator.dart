@@ -21,11 +21,14 @@ class Validator {
 
   final pwdValidator = StreamTransformer<String, String>.fromHandlers(
       handleData: (password, sink) {
-    if (password.length >= 8 &&
-        password.contains(new RegExp('r[a-z]')) &&
-        password.contains(new RegExp('r[0-9]')))
-      sink.add(password);
-    else
-      sink.addError('Your password is not secured');
+    // if (password.length >= 8 &&
+    //     password.contains(new RegExp('r[a-z]')) &&
+    //     password.contains(new RegExp('r[0-9]')))
+    if (password != null) {
+      if (password.length >= 3)
+        sink.add(password);
+      else
+        sink.addError('Your password must be longer than 3 characters');
+    }
   });
 }

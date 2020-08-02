@@ -13,8 +13,8 @@ class LoginBloc with Validator {
 
   // * Getter for stream
   Stream<String> get email => _email.stream.transform(emailValidator);
-  // Stream<String> get password => _password.stream.transform(pwdValidator);
-  Stream<String> get password => _password.stream;
+  Stream<String> get password => _password.stream.transform(pwdValidator);
+  // Stream<String> get password => _password.stream;
 
   // * Getter for sink add
   Function(String) get getEmail => _email.sink.add;

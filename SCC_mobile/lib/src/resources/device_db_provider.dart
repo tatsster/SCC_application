@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:SCC_mobile/src/blocs/BlocProvider.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 import '../model/device_db.dart';
 
 class DeviceProvider {
   Client client = Client();
-  var url = 'http://213d94a7b2e0.ngrok.io/';
+  var url = 'http://4acdb62ac035.ngrok.io/';
 
   Future<DeviceDB> fetchItem(
       BuildContext context, String building, String room) async {

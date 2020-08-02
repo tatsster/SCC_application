@@ -7,7 +7,7 @@ import '../blocs/BlocProvider.dart';
 
 class LogProvider {
   Client client = Client();
-  var url = 'http://213d94a7b2e0.ngrok.io/';
+  var url = 'http://4acdb62ac035.ngrok.io/';
 
   Future<TempHumidLog> fetchItem(BuildContext context, int limit) async {
     var userId = BlocProvider.of(context).user.data[0].user.userId;

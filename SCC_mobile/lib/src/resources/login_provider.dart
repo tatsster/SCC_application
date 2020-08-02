@@ -6,7 +6,7 @@ import '../model/login_data.dart';
 
 class LoginProvider {
   Client client = Client();
-  var url = 'http://213d94a7b2e0.ngrok.io/';
+  var url = 'http://4acdb62ac035.ngrok.io/';
 
   Future<LoginData> login(String email, String password) async {
     var request = url + 'api/sign-in?user_password=$password&user_email=$email';

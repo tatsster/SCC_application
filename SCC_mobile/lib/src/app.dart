@@ -1,4 +1,4 @@
-import 'package:SCC_mobile/src/resources/device_db_provider.dart';
+import 'package:SCC_mobile/src/screen/system_log.dart';
 import 'package:flutter/material.dart';
 
 import 'blocs/BlocProvider.dart';
@@ -6,6 +6,7 @@ import 'blocs/BlocProvider.dart';
 import 'screen/data_class.dart';
 import 'screen/dashboard.dart';
 import 'screen/report.dart';
+import 'screen/system_log.dart';
 import 'screen/room_device.dart';
 import 'screen/profile.dart';
 import 'screen/login.dart';
@@ -44,10 +45,6 @@ Route routes(RouteSettings settings) {
     return MaterialPageRoute(
       settings: settings,
       builder: (context) {
-        // TODO: Fetch all building name, floor, room from DB room
-        final RoomProvider = BlocProvider.of(context).bloc.roomList;
-        RoomProvider.fetchItem(context);
-
         return Dashboard();
       },
     );
@@ -55,10 +52,21 @@ Route routes(RouteSettings settings) {
     return MaterialPageRoute(
       settings: settings,
       builder: (context) {
+        // TODO: Fetch all building name, floor, room from DB room
+        final RoomProvider = BlocProvider.of(context).bloc.roomList;
+        RoomProvider.fetchItem(context);
+
+        return Report();
+      },
+    );
+  else if (settings.name == '/systemlog')
+    return MaterialPageRoute(
+      settings: settings,
+      builder: (context) {
         final SSDbProvider = BlocProvider.of(context).bloc.ssDbBloc;
         SSDbProvider.fetchLog(context, 20);
 
-        return Report();
+        return SystemLog();
       },
     );
   else if (settings.name.contains('/setting'))
