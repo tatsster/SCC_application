@@ -50,7 +50,7 @@ class Dashboard extends StatelessWidget {
               FontAwesomeIcons.cloud, false),
           buildElectric(context, "Hours Usage", Colors.greenAccent[700],
               FontAwesomeIcons.clock, true),
-          buildElectric(context, "Hours Usage", Colors.yellow,
+          buildElectric(context, "Electrical Consumption", Colors.yellow,
               FontAwesomeIcons.bolt, false),
         ],
       ),
