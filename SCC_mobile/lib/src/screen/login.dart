@@ -119,8 +119,8 @@ class LoginPage extends StatelessWidget {
               BlocProvider.of(context).user = userLogin;
               // id: 8gbtC8NPVmE6jw3ZAYIA
               if (userLogin.success)
-                // Navigator.pushNamed(context, '/dashboard');
-                Navigator.pushNamed(context, '/report');
+                Navigator.pushNamed(context, '/dashboard');
+                // Navigator.pushNamed(context, '/report');
               else
                 loginBloc.loginFail(userLogin.data[0]);
             }

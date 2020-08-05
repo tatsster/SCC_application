@@ -5,6 +5,7 @@ import 'profile_bloc.dart';
 import 'db_bloc.dart';
 import 'device_bloc.dart';
 import 'signup_bloc.dart';
+import 'dashboard_bloc.dart';
 
 class AppBloc {
   DbBloc _ssdbBloc;
@@ -13,6 +14,7 @@ class AppBloc {
   LoginBloc _loginBloc;
   SignupBloc _signupBloc;
   RoomList _roomList;
+  DashboardBloc _dashboardBloc;
 
   AppBloc()
       : _ssdbBloc = DbBloc(),
@@ -20,7 +22,8 @@ class AppBloc {
         _profileBloc = ProfileBloc(),
         _loginBloc = LoginBloc(),
         _signupBloc = SignupBloc(),
-        _roomList = RoomList();
+        _roomList = RoomList(),
+        _dashboardBloc = DashboardBloc();
 
   DbBloc get ssDbBloc => _ssdbBloc;
   DeviceBloc get deviceBloc => _deviceBloc;
@@ -28,4 +31,5 @@ class AppBloc {
   LoginBloc get loginBloc => _loginBloc;
   SignupBloc get signupBloc => _signupBloc;
   RoomList get roomList => _roomList;
+  DashboardBloc get dashboardBloc => _dashboardBloc;
 }

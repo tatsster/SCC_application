@@ -45,6 +45,10 @@ Route routes(RouteSettings settings) {
     return MaterialPageRoute(
       settings: settings,
       builder: (context) {
+        // TODO: Fetch Weather & Electricity
+        final dashboardProvider = BlocProvider.of(context).bloc.dashboardBloc;
+        dashboardProvider.fetchData(context);
+
         return Dashboard();
       },
     );

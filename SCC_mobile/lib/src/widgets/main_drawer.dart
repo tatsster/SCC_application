@@ -31,23 +31,23 @@ class MainDrawer extends StatelessWidget {
             ),
             Padding(padding: EdgeInsets.only(top: 20.0)),
             // ! Tab Dashboard
-            // ListTile(
-            //   leading: Icon(
-            //     Icons.settings,
-            //     size: 30.0,
-            //     color: Colors.white,
-            //   ),
-            //   title: Text(
-            //     'Dashboard',
-            //     style: TextStyle(
-            //       fontSize: 20.0,
-            //       color: Colors.white,
-            //     ),
-            //   ),
-            //   onTap: () {
-            //     Navigator.pushNamed(context, '/dashboard');
-            //   },
-            // ),
+            ListTile(
+              leading: Icon(
+                Icons.settings,
+                size: 30.0,
+                color: Colors.white,
+              ),
+              title: Text(
+                'Dashboard',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.white,
+                ),
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/dashboard');
+              },
+            ),
             // ! Tab Report
             ListTile(
               leading: FaIcon(
