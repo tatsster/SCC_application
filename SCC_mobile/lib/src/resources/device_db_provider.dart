@@ -8,7 +8,7 @@ import '../model/device_db.dart';
 
 class DeviceProvider {
   Client client = Client();
-  var url = 'http://4acdb62ac035.ngrok.io/';
+  var url = 'http://192.168.1.111:8000/';
 
   Future<DeviceDB> fetchItem(
       BuildContext context, String building, String room) async {

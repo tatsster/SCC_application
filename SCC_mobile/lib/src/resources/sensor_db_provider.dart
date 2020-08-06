@@ -8,7 +8,7 @@ import '../blocs/BlocProvider.dart';
 
 class SSDbProvider {
   Client client = Client();
-  var url = 'http://4acdb62ac035.ngrok.io/';
+  var url = 'http://192.168.1.111:8000/';
 
   Future<TempHumidLog> fetchSensorData(
       BuildContext context, String sensor_id) async {

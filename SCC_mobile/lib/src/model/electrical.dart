@@ -28,7 +28,7 @@ class Electrical {
 }
 
 class Data {
-  int hoursUsage;
+  double hoursUsage;
   double electricalConsumption;
 
   Data({this.hoursUsage, this.electricalConsumption});

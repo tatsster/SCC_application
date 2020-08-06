@@ -45,7 +45,7 @@ class Dashboard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           buildWeather(context, "Temperature", Colors.red,
-              FontAwesomeIcons.thermometer, true),
+              FontAwesomeIcons.thermometerEmpty, true),
           buildWeather(context, "Humidity", Colors.blue[400],
               FontAwesomeIcons.cloud, false),
           buildElectric(context, "Hours Usage", Colors.greenAccent[700],
@@ -90,8 +90,8 @@ class Dashboard extends StatelessWidget {
                       if (snapshot.hasData)
                         return Text(
                           isTemper
-                              ? "${snapshot.data.data[0].currentTemperature}"
-                              : "${snapshot.data.data[0].currentHumidity}",
+                              ? "${snapshot.data.data[0].currentTemp} \u00B0C"
+                              : "${snapshot.data.data[0].currentHumid} %",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 36,
@@ -150,8 +150,8 @@ class Dashboard extends StatelessWidget {
                       if (snapshot.hasData)
                         return Text(
                           isHours
-                              ? "${snapshot.data.data[0].hoursUsage}"
-                              : "${snapshot.data.data[0].electricalConsumption}",
+                              ? "${snapshot.data.data[0].hoursUsage} Hrs"
+                              : "${snapshot.data.data[0].electricalConsumption} Kwh",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 36,

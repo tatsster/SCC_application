@@ -6,7 +6,7 @@ import '../blocs/BlocProvider.dart';
 
 class RoomProvider {
   Client client = Client();
-  var url = 'http://4acdb62ac035.ngrok.io/';
+  var url = 'http://192.168.1.111:8000/';
 
   Future<RoomInfo> fetchItem(BuildContext context) async {
     var userId = BlocProvider.of(context).user.data[0].user.userId;

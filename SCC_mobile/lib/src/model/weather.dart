@@ -28,22 +28,22 @@ class Weather {
 }
 
 class Data {
-  int currentTemperature;
-  int currentHumidity;
-  String timestamp;
+  int currentHumid;
+  int currentTemp;
+  int timestamp;
 
-  Data({this.currentTemperature, this.currentHumidity, this.timestamp});
+  Data({this.currentHumid, this.currentTemp, this.timestamp});
 
   Data.fromJson(Map<String, dynamic> json) {
-    currentTemperature = json['current_temperature'];
-    currentHumidity = json['current_humidity'];
+    currentHumid = json['current_humid'];
+    currentTemp = json['current_temp'];
     timestamp = json['timestamp'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['current_temperature'] = this.currentTemperature;
-    data['current_humidity'] = this.currentHumidity;
+    data['current_humid'] = this.currentHumid;
+    data['current_temp'] = this.currentTemp;
     data['timestamp'] = this.timestamp;
     return data;
   }

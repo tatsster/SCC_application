@@ -9,13 +9,14 @@ import '../blocs/BlocProvider.dart';
 
 class DashBoardProvider {
   Client client = Client();
-  var url = 'http://4acdb62ac035.ngrok.io/';
+  var url = 'http://192.168.1.111:8000/';
 
   Future<Weather> fetchWeather(BuildContext context) async {
     var userId = BlocProvider.of(context).user.data[0].user.userId;
     var request = url + 'api/get-current-weather?user_id=$userId';
 
     final response = await client.post(request);
+    print(response.body);
     return Weather.fromJson(json.decode(response.body));
   }
 

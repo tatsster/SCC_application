@@ -32,8 +32,8 @@ class MainDrawer extends StatelessWidget {
             Padding(padding: EdgeInsets.only(top: 20.0)),
             // ! Tab Dashboard
             ListTile(
-              leading: Icon(
-                Icons.settings,
+              leading: FaIcon(
+                FontAwesomeIcons.tachometerAlt,
                 size: 30.0,
                 color: Colors.white,
               ),
@@ -50,8 +50,8 @@ class MainDrawer extends StatelessWidget {
             ),
             // ! Tab Report
             ListTile(
-              leading: FaIcon(
-                FontAwesomeIcons.tachometerAlt,
+              leading: Icon(
+                Icons.assignment,
                 size: 28.0,
                 color: Colors.white,
               ),
@@ -69,7 +69,7 @@ class MainDrawer extends StatelessWidget {
             // ! Tab System log 
             ListTile(
               leading: Icon(
-                Icons.assignment,
+                Icons.settings,
                 size: 30.0,
                 color: Colors.white,
               ),
