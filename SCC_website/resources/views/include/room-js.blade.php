@@ -685,7 +685,7 @@
 
                         $('#device-tbody').prepend(insertHtml);
 
-                        $("#device-table").order( [ 8, 'desc' ] ).draw()
+                        // $("#device-table").order( [ 8, 'desc' ] ).draw()
 
                         $("#on-toggle" + finalData[6]).bootstrapSwitch('toggleDisabled',true,true);
 

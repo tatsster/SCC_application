@@ -1401,6 +1401,14 @@
 
     $(".bootstrap-switch-danger").text('@lang("OFF")');
 
+    function keyPress(e){
+        var x = e || window.event;
+        var key = (x.keyCode || x.which);
+        if(key == 13 || key == 3){
+
+        }
+    }
+
 
 </script>
 @if (session("msg_type_permission") == "success")

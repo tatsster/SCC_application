@@ -769,15 +769,15 @@ class ReportController extends MainController {
 
         $sensor_log = SensorLogInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->orderBy('sensor_timestamp', 'DESC')->get();
 
-        $request->session()->forget("1752051_sensor_start_datetime");
+        $request->session()->put("1752051_sensor_start_datetime",Carbon::now()->format('d/m/Y')." 00:00:00");
 
-        $request->session()->forget("1752051_sensor_end_datetime");
+        $request->session()->put("1752051_sensor_end_datetime",Carbon::now()->format('d/m/Y')." 23:59:59");
 
         $request->session()->put("1752051_current_sensor_log",$sensor_log);
 
         $request->session()->put("1752051_current_sensor",$sensor);
 
-        echo "Success";
+//        echo "Success";
 
     }
 
@@ -1206,9 +1206,9 @@ class ReportController extends MainController {
 
         $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->get();
 
-        $request->session()->forget("1752051_device_start_datetime");
+        $request->session()->put("1752051_device_start_datetime",Carbon::now()->format('d/m/Y')." 00:00:00");
 
-        $request->session()->forget("1752051_device_end_datetime");
+        $request->session()->put("1752051_device_end_datetime",Carbon::now()->format('d/m/Y')." 23:59:59");
 
         $request->session()->put("1752051_current_device_log",$device_log);
 

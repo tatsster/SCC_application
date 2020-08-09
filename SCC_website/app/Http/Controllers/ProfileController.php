@@ -177,10 +177,11 @@ class ProfileController extends MainController {
             if ($current_user["user_session_timeout"] != $request["user_session_timeout"] && $request["user_session_timeout"] != ""){
 
                 $validator = Validator::make($request->all(), [
-                    'user_session_timeout' => 'numeric|not_in:0'
+                    'user_session_timeout' => 'numeric|min:0|not_in:0'
                 ],
                     [
                         'user_session_timeout.not_in' => Lang::get('Session Timeout Must Be Larger Than 0'),
+                        'user_session_timeout.min' => Lang::get('Session Timeout Must Be Larger Than 0'),
                         'user_session_timeout.numeric' => Lang::get('Session Timeout Must Be Numeric'),
                     ]);
 
@@ -399,10 +400,11 @@ class ProfileController extends MainController {
             if ($current_user["user_session_timeout"] != $request["user_session_timeout"] && $request["user_session_timeout"] != ""){
 
                 $validator = Validator::make($request->all(), [
-                    'user_session_timeout' => 'numeric|not_in:0'
+                    'user_session_timeout' => 'numeric|min:0|not_in:0'
                 ],
                     [
                         'user_session_timeout.not_in' => Lang::get('Session Timeout Must Be Larger Than 0'),
+                        'user_session_timeout.min' => Lang::get('Session Timeout Must Be Larger Than 0'),
                         'user_session_timeout.numeric' => Lang::get('Session Timeout Must Be Numeric'),
                     ]);
 

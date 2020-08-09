@@ -12,6 +12,7 @@ use App\SensorInfo;
 use App\SensorLogInfo;
 use App\SettingsInfo;
 use App\UserInfo;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -197,7 +198,16 @@ class MainController extends Controller {
 
             $sensor = SensorInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->first();
 
-            $sensor_log = SensorLogInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->orderBy('sensor_timestamp', 'DESC')->get();
+            if ($request->session()->get("1752051_sensor_start_datetime") == null || $request->session()->get("1752051_sensor_end_datetime") == null){
+                $request->session()->put("1752051_sensor_start_datetime",Carbon::now()->format('d/m/Y')." 00:00:00");
+
+                $request->session()->put("1752051_sensor_end_datetime",Carbon::now()->format('d/m/Y')." 23:59:59");
+            }
+
+            $time0 = Carbon::createFromFormat('d/m/Y H:i:s', $request->session()->get("1752051_sensor_start_datetime"))->timestamp;
+            $time1 = Carbon::createFromFormat('d/m/Y H:i:s', $request->session()->get("1752051_sensor_end_datetime"))->timestamp;
+
+            $sensor_log = SensorLogInfo::where("sensor_id", $request->session()->get("1752051_current_sensor")["sensor_id"])->whereBetween("sensor_timestamp",[$time0,$time1])->orderBy('sensor_timestamp', 'DESC')->get();
 
             $request->session()->put("1752051_current_sensor",$sensor);
 
@@ -214,9 +224,18 @@ class MainController extends Controller {
         }
         else{
 
-            $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->orderBy('device_timestamp', 'DESC')->get();
-
             $device = DeviceInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->first();
+
+            if ($request->session()->get("1752051_device_start_datetime") == null || $request->session()->get("1752051_device_end_datetime") == null){
+                $request->session()->put("1752051_device_start_datetime",Carbon::now()->format('d/m/Y')." 00:00:00");
+
+                $request->session()->put("1752051_device_end_datetime",Carbon::now()->format('d/m/Y')." 23:59:59");
+            }
+
+            $time0 = Carbon::createFromFormat('d/m/Y H:i:s', $request->session()->get("1752051_device_start_datetime"))->timestamp;
+            $time1 = Carbon::createFromFormat('d/m/Y H:i:s', $request->session()->get("1752051_device_end_datetime"))->timestamp;
+
+            $device_log = DeviceLogInfo::where("device_id", $request->session()->get("1752051_current_device")["device_id"])->whereBetween("device_timestamp",[$time0,$time1])->orderBy('device_timestamp', 'DESC')->get();
 
             $request->session()->put("1752051_current_device",$device);
 
