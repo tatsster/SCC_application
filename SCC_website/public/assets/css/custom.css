@@ -1,0 +1,204 @@
+/*//////////////////////////////////////////////////////////////////
+[ FONT ]*/
+
+@font-face {
+    font-family: Poppins-Regular;
+    src: url('../fonts/poppins/Poppins-Regular.ttf');
+}
+
+@font-face {
+    font-family: Poppins-Medium;
+    src: url('../fonts/poppins/Poppins-Medium.ttf');
+}
+
+@font-face {
+    font-family: Poppins-Bold;
+    src: url('../fonts/poppins/Poppins-Bold.ttf');
+}
+
+@font-face {
+    font-family: Poppins-SemiBold;
+    src: url('../fonts/poppins/Poppins-SemiBold.ttf');
+}
+
+.setting-update-button-form-group{
+    text-align: right;
+}
+
+.maintenance{
+    cursor: not-allowed;
+}
+
+.custom-custom-file-label::after{
+    background-color: #00A80E !important;
+    Content: "" !important;
+    color: white !important;
+    cursor: pointer;
+}
+
+.custom-upload-btn{
+    background: #e71511!important;
+    color: white !important;
+    cursor: pointer;
+}
+
+.custom-upload-btn:hover{
+    background: #d31511 !important;
+    border-color: #d31511 !important;
+}
+
+
+.login-page-custom{
+    background-image: url('../../assets/background/background.jpg') !important;
+    background-repeat: no-repeat;
+    background-color: rgba(255,255,255,0.1); !important;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.login-box-msg-custom{
+    display: block;
+    /*font-family: Poppins-Medium;*/
+    font-weight: bold;
+    font-size: 30px;
+    color: #333333;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.forgot-password-box-msg{
+    display: block;
+    /*font-family: Poppins-Medium;*/
+    font-size: 20px;
+    font-weight: bold;
+    color: #333333;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.parallax-container{
+    width: 100%;
+    height: 10vh;
+    /*overflow: hidden;*/
+    /*background: url(background.jpg);*/
+    background-attachment: fixed;
+}
+
+.parallax-container ul {
+    margin-left: -38vw;
+    height: 10vw;
+}
+
+.parallax-container li, .parallax-container img {
+    height: 50vw;
+}
+
+.mixBlnd
+{
+    background-blend-mode: screen;
+}
+
+.logo-custom{
+    width: 50%;
+}
+
+.outside-body{
+    overflow: hidden;
+}
+
+/*------------------------------------------------------------------
+[  ]*/
+.login100-pic {
+    /*width: 316px;*/
+    text-align: center;
+}
+
+.login100-pic img {
+    max-width: 50%;
+    padding-bottom: 2em;
+}
+
+.sign-out-button{
+    border-radius: 2em;
+}
+
+.brand-link-custom:hover{
+    color: rgba(255,255,255,.8) !important;
+}
+
+.brand-link-custom:focus{
+    color: rgba(255,255,255,.8) !important;
+}
+
+input[readonly].only-read{
+    background-color:transparent;
+    border: 0;
+    font-size: 1em;
+}
+
+.custom-dropdown-toggle{
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0.3rem !important;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0.3rem !important;
+}
+
+.custom-login-card-body{
+    overflow: auto !important;
+    height: 90vh !important;
+}
+
+.custom-content-wrapper, custom-main-footer{
+    margin-left: 0px !important;
+}
+
+.custom-icon-delete-size{
+    font-size: 1.5em;
+    color: #d31511;
+}
+
+.custom-icon-add-size{
+    font-size: 1.5em;
+    color: #00A80E;
+}
+
+.custom-icon-activate-deactivate-size{
+    font-size: 1.5em;
+    color: #495057;
+}
+
+.custom-next-building-option{
+    margin-right: 10px;
+}
+
+.lockscreen-wrapper-custom{
+    margin-top: 2.5% !important;
+}
+
+.custom-microphone-button{
+    margin-top: 1.5rem;
+    font-size: 2rem;
+}
+
+.custom-footer{
+    margin-left: 0px !important;
+}
+
+/*------------------------------------------------------------------
+[ Responsive ]*/
+
+@media (max-width: 992px) {
+    /*.login100-pic {*/
+    /*    width: 50%;*/
+    /*}*/
+}
+
+@media (max-width: 768px) {
+    /*.login100-pic {*/
+    /*    display: none;*/
+    /*}*/
+}
+
+
