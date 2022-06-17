@@ -76,7 +76,7 @@ pyzmq==19.0.1
 queuelib==1.5.0
 scikit-learn==0.23.0
 scipy==1.4.1
-Scrapy==1.8.0
+Scrapy==2.6.1
 scrapy-rotating-proxies==0.6.2
 Scrapy-UserAgents==0.0.1
 Send2Trash==1.5.0
